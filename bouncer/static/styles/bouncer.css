@@ -1,0 +1,56 @@
+body {
+  color: #7a7a7a;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 14px;
+}
+
+p {
+  margin: 0;
+}
+
+/* Vertically and horizontally center a block such as a <div>. */
+.center {
+  display: block;
+  left: 50%;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spinner__icon {
+  height: 28px;
+  padding-top: 2px;
+  width: 24px;
+}
+.spinner__text {
+  margin-top: 116px;
+}
+.spinner__stationary-ring {
+  border: 3px solid #dbdbdb;
+  border-radius: 50%;
+  height: 74px;
+  width: 74px;
+}
+.spinner__moving-ring {
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: moving-ring;
+  animation-timing-function: linear;
+  border-left: 3px solid #a6a6a6;
+  border-radius: 100% 0 0 0;
+  border-top: 3px solid #a6a6a6;
+  height: 37px;
+  transform: translate(-3px, -3px);
+  transform-origin: bottom right;
+  width: 37px;
+}
+@keyframes moving-ring {
+  from {
+    transform: translate(-3px, -3px) rotate(0deg);
+  }
+  to {
+    transform: translate(-3px, -3px) rotate(359deg);
+  }
+}

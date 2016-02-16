@@ -1,0 +1,6 @@
+*.egg-info
+*.pyc
+node_modules
+.coverage
+bouncer/static/scripts/bundle.js
+.cache
