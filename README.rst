@@ -1,6 +1,9 @@
 .. image:: https://travis-ci.org/hypothesis/bouncer.svg?branch=master
-   :target: https://travis-ci.org/hypothesis/bouncer
-   :alt: Build Status
+    :target: https://travis-ci.org/hypothesis/bouncer
+    :alt: Build Status
+.. image:: https://codecov.io/github/hypothesis/bouncer/coverage.svg?branch=master
+    :target: https://codecov.io/github/hypothesis/bouncer?branch=master
+    :alt: Test Coverage
 
 
 Hypothesis Direct-Link Bouncer Service
