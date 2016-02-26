@@ -1,0 +1,33 @@
+{
+  "bitwise": true,
+  "curly": true,
+  "eqeqeq": true,
+  "forin": true,
+  "freeze": true,
+  "latedef": "nofunc",
+  "maxcomplexity": 10,
+  "strict": "global",
+  "undef": true,
+  "unused": true,
+  "globals": {
+    "chrome": false,
+    "chai": false,
+    "sinon": false,
+    "JSON": false
+  },
+  "browser": true,
+  "browserify": true,
+  "mocha": true,
+  "phantom": true,
+  "predef": [
+    "assert",
+    "after",
+    "afterEach",
+    "before",
+    "beforeEach",
+    "describe",
+    "it",
+    "require",
+    "sinon"
+  ]
+}

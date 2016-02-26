@@ -1,0 +1,16 @@
+<!doctype html>
+  <html lang=en>
+  <head>
+    <meta charset=utf-8>
+    <title>{{ title|safe }}</title>
+    <link rel="stylesheet"
+          type="text/css"
+          href="{{'bouncer:static/styles/bouncer.css'|static_url}}">
+  </head>
+  <body>
+    <div class="center">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+  {% block scripts %}{% endblock %}
+</html>
