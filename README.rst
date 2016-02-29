@@ -52,9 +52,6 @@ STATSD_PREFIX
   We recommend ``export STATSD_PREFIX=bouncer`` so that all bouncer's metrics
   will start with ``bouncer``.
 
-STATSD_MAXUDPSIZE
-  The maximum packet size that statsd will use (default: 512)
-
 VIA_BASE_URL
   The base URL of the Via service that bouncer will redirect users to if they
   don't have the Hypothesis Chrome extension installed
