@@ -38,6 +38,7 @@ setup(
         "gunicorn==19.4.5",
         "pyramid==1.6.1",
         "pyramid-jinja2==2.6.2",
+        "statsd==3.2.1",
     ],
 
     extras_require={
