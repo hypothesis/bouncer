@@ -7,6 +7,10 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, "README.rst"), encoding="utf-8") as f:
     long_description = f.read()
 
+version = {}
+with open("bouncer/__about__.py") as fp:
+    exec(fp.read(), version)
+
 DEV_EXTRAS = [
     "coverage",
     "mock",
@@ -23,7 +27,7 @@ setup(
     long_description=long_description,
     name="bouncer",
     url="https://github.com/hypothesis/bouncer",
-    version="0.0.1",  # PEP440-compliant version number.
+    version=version["__version__"],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: BSD License",  # Should match "license"
@@ -38,6 +42,7 @@ setup(
         "gunicorn==19.4.5",
         "pyramid==1.6.1",
         "pyramid-jinja2==2.6.2",
+        "raven==5.10.2",
         "statsd==3.2.1",
     ],
 
