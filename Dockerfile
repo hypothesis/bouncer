@@ -27,4 +27,4 @@ VOLUME ["/var/lib/bouncer/bouncer/static"]
 
 # Start the web server by default
 USER bouncer
-CMD ["gunicorn", "bouncer:app()"]
+CMD ["gunicorn", "--config", "gunicorn.conf.py", "bouncer:app()"]

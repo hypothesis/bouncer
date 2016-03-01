@@ -4,6 +4,7 @@ import elasticsearch
 from elasticsearch import exceptions
 from pyramid import httpexceptions
 from pyramid import view
+from statsd.defaults.env import statsd
 
 
 @view.view_defaults(renderer="bouncer:templates/annotation.html.jinja2")
@@ -15,7 +16,6 @@ class AnnotationController(object):
     @view.view_config(route_name="annotation_with_url")
     @view.view_config(route_name="annotation_without_url")
     def annotation(self):
-
         settings = self.request.registry.settings
 
         try:
@@ -24,6 +24,7 @@ class AnnotationController(object):
                 doc_type="annotation",
                 id=self.request.matchdict["id"])
         except exceptions.NotFoundError:
+            statsd.incr("views.annotation.404.annotation_not_found")
             raise httpexceptions.HTTPNotFound()
 
         annotation_id = document["_id"]
@@ -39,6 +40,7 @@ class AnnotationController(object):
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
+        statsd.incr("views.annotation.200.annotation_found")
         return {
             "data": json.dumps({
                 # Warning: variable names change from python_style to
@@ -59,6 +61,7 @@ def elasticsearch_client(settings):
 @view.view_config(renderer="bouncer:templates/index.html.jinja2",
                   route_name="index")
 def index(request):
+    statsd.incr("views.index.302.redirected_to_hypothesis")
     raise httpexceptions.HTTPFound(
         location=request.registry.settings["hypothesis_url"])
 
