@@ -27,6 +27,7 @@ def settings():
                                              "9200"),
         "hypothesis_url": os.environ.get("HYPOTHESIS_URL",
                                          "https://hypothes.is"),
+        "sentry_javascript_dsn": os.environ.get("SENTRY_JAVASCRIPT_DSN"),
         "via_base_url": via_base_url,
     }
 

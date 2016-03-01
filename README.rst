@@ -39,8 +39,14 @@ HYPOTHESIS_URL
   will be redirected to (default: https://hypothes.is)
 
 SENTRY_DSN
-    The DSN (Data Source Name) that bouncer will use to report crashes to
-    `Sentry <https://getsentry.com/>`_
+    The DSN (Data Source Name) that bouncer's server-side code will use to
+    report crashes to `Sentry <https://getsentry.com/>`_
+
+SENTRY_JAVASCRIPT_DSN
+    The DSN (Data Source Name) that bouncer's client-side JavaScript code will
+    use to report crashes to `Sentry <https://getsentry.com/>`_.
+    This is different to SENTRY_DSN above - it doesn't include the secret key
+    part of the DSN.
 
 STATSD_HOST
   The host of the statsd server that bouncer will report stats to
@@ -112,7 +118,7 @@ To debug the JavaScript tests in a browser, run:
 
 .. code-block:: bash
 
-   ./node_modules/karma/bin/karma start --no-single-rin
+   ./node_modules/karma/bin/karma start --no-single-run
 
 and open http://localhost:9876/ in your browser.
 

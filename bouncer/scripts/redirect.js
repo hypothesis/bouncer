@@ -9,6 +9,15 @@ function getSettings(document) {
     document.querySelector('script.js-bouncer-settings').textContent);
 }
 
+var SETTINGS = getSettings(document);
+
+/** Configure Raven to report any crashes to Sentry. */
+Raven.config(
+    SETTINGS.sentry_javascript_dsn,
+    {'release': SETTINGS.version}
+  ).install();
+
+
 /** Navigate the browser to the given URL. */
 function navigateTo(url) {
   window.location = url;
@@ -27,8 +36,6 @@ function redirect(navigateToFn) {
   // navigateTo() otherwise.
   navigateTo = navigateToFn || navigateTo;
 
-  var settings = getSettings(document);
-
   if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
     // The user is using Chrome, redirect them to our Chrome extension if they
     // have it installed, via otherwise.
@@ -39,17 +46,17 @@ function redirect(navigateToFn) {
         var url;
         if (response) {
           // The user has our Chrome extension installed :)
-          url = settings.extensionUrl;
+          url = SETTINGS.extensionUrl;
         } else {
           // The user doesn't have our Chrome extension installed :(
-          url = settings.viaUrl;
+          url = SETTINGS.viaUrl;
         }
         navigateTo(url);
       }
     );
   } else {
     // The user isn't using Chrome, just redirect them to Via.
-    navigateTo(settings.viaUrl);
+    navigateTo(SETTINGS.viaUrl);
   }
 }
 

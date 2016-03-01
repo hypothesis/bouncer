@@ -15,6 +15,7 @@
 {% endblock %}
 
 {% block scripts %}
+  <script src="//cdn.ravenjs.com/2.1.0/raven.min.js"></script>
   <!-- Render a configuration object for the redirect.js to pick up. -->
   <script class="js-bouncer-settings" type="application/json">
     {{ data | safe }}
