@@ -5,7 +5,7 @@ deps:
 	npm install
 
 dev:
-	PYRAMID_RELOAD_TEMPLATES=1 gunicorn --config gunicorn.conf.py --reload "bouncer:app()"
+	PYRAMID_RELOAD_TEMPLATES=1 gunicorn --reload "bouncer:app()"
 
 docker:
 	docker build -t hypothesis/bouncer .
