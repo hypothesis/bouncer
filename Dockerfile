@@ -14,17 +14,19 @@ WORKDIR /var/lib/bouncer
 # Copy packaging
 COPY README.rst package.json setup.* ./
 
-# Install application dependencies.
 RUN npm install --production \
-  && pip install --no-cache-dir -e . \
   && npm cache clean
+
+COPY gunicorn.conf.py ./
 
 # Copy the rest of the application files
 COPY bouncer ./bouncer/
+
+RUN pip install --no-cache-dir -e .
 
 # Persist the static directory.
 VOLUME ["/var/lib/bouncer/bouncer/static"]
 
 # Start the web server by default
 USER bouncer
-CMD ["gunicorn", "--config", "gunicorn.conf.py", "bouncer:app()"]
+CMD ["gunicorn", "bouncer:app()"]
