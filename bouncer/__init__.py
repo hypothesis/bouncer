@@ -40,4 +40,5 @@ def app():
         "static_url": "pyramid_jinja2.filters:static_url_filter"
     }
     config.include("bouncer.views")
+    config.include("bouncer.sentry")
     return config.make_wsgi_app()

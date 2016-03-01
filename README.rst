@@ -38,6 +38,10 @@ HYPOTHESIS_URL
   The URL of the Hypothesis front page that requests to bouncer's front page
   will be redirected to (default: https://hypothes.is)
 
+SENTRY_DSN
+    The DSN (Data Source Name) that bouncer will use to report crashes to
+    `Sentry <https://getsentry.com/>`_
+
 STATSD_HOST
   The host of the statsd server that bouncer will report stats to
   (default: localhost)

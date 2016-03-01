@@ -67,7 +67,6 @@ def index(request):
 
 
 @view.notfound_view_config(
-    append_slash=True,
     renderer='bouncer:templates/notfound.html.jinja2')
 def notfound(request):
     request.response.status_int = 404
@@ -77,5 +76,5 @@ def notfound(request):
 def includeme(config):
     config.add_route("index", "/")
     config.add_route("annotation_with_url", "/{id}/*url")
-    config.add_route("annotation_without_url", "/{id}/")
+    config.add_route("annotation_without_url", "/{id}")
     config.scan(__name__)
