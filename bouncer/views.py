@@ -31,8 +31,18 @@ class AnnotationController(object):
             statsd.incr("views.annotation.404.annotation_not_found")
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
-        annotation_id = document["_id"]
-        document_uri = document["_source"]["uri"]
+        try:
+            annotation_id = document["_id"]
+            document_uri = document["_source"]["uri"]
+        except KeyError:
+            statsd.incr("views.annotation.422.annotation_invalid")
+            raise httpexceptions.HTTPUnprocessableEntity(
+                _("The annotation is invalid"))
+
+        if not isinstance(document_uri, str):
+            statsd.incr("views.annotation.422.uri_not_a_string")
+            raise httpexceptions.HTTPUnprocessableEntity(
+                _("The annotation has an invalid document URI"))
 
         if not (document_uri.startswith("http://") or
                 document_uri.startswith("https://")):

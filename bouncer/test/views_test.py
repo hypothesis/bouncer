@@ -57,6 +57,20 @@ class TestAnnotationController(object):
         assert data["extensionUrl"] == (
                 "http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
+    def test_annotation_when_uri_is_None(self, elasticsearch):
+        elasticsearch.Elasticsearch.return_value.get.return_value[
+            "_source"]["uri"] = None
+
+        with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
+            views.AnnotationController(mock_request()).annotation()
+
+    def test_annotation_when_Elasticsearch_document_has_no_uri(self, elasticsearch):
+        elasticsearch.Elasticsearch.return_value.get.return_value[
+            "_source"] = {}
+
+        with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
+            views.AnnotationController(mock_request()).annotation()
+
 
 def test_index_redirects_to_hypothesis():
     with pytest.raises(httpexceptions.HTTPFound) as exc:
