@@ -1,4 +1,5 @@
 import json
+from urllib import parse
 
 import elasticsearch
 from elasticsearch import exceptions
@@ -44,6 +45,10 @@ class AnnotationController(object):
             raise httpexceptions.HTTPUnprocessableEntity(
                 _("The annotation has an invalid document URI"))
 
+        # Remove any existing #fragment identifier from the URI before we
+        # append our own.
+        document_uri = parse.urldefrag(document_uri)[0]
+
         if not (document_uri.startswith("http://") or
                 document_uri.startswith("https://")):
             statsd.incr("views.annotation.422.not_an_http_or_https_document")
@@ -52,8 +57,6 @@ class AnnotationController(object):
                   "document that is not publicly available. "
                   "To view it’s annotations, a document's address must start "
                   "with <code>http://</code> or <code>https://</code>."))
-
-        # FIXME: Strip query params, anchors from document_uri here?
 
         via_url = "{via_base_url}/{uri}#annotations:{id}".format(
             via_base_url=settings["via_base_url"],

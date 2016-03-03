@@ -71,6 +71,30 @@ class TestAnnotationController(object):
         with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
             views.AnnotationController(mock_request()).annotation()
 
+    def test_annotation_strips_fragment_identifiers(self, elasticsearch):
+        elasticsearch.Elasticsearch.return_value.get.return_value[
+                "_source"]["uri"] = "http://example.com/example.html#foobar"
+        template_data = views.AnnotationController(mock_request()).annotation()
+
+        data = json.loads(template_data["data"])
+
+        assert data["extensionUrl"] == (
+            "http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
+        assert data["viaUrl"] == (
+                "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
+
+    def test_annotation_strips_bare_fragment_identifiers(self, elasticsearch):
+        elasticsearch.Elasticsearch.return_value.get.return_value[
+                "_source"]["uri"] = "http://example.com/example.html#"
+        template_data = views.AnnotationController(mock_request()).annotation()
+
+        data = json.loads(template_data["data"])
+
+        assert data["extensionUrl"] == (
+            "http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
+        assert data["viaUrl"] == (
+                "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
+
 
 def test_index_redirects_to_hypothesis():
     with pytest.raises(httpexceptions.HTTPFound) as exc:
