@@ -3,8 +3,12 @@ import json
 import elasticsearch
 from elasticsearch import exceptions
 from pyramid import httpexceptions
+from pyramid import i18n
 from pyramid import view
 from statsd.defaults.env import statsd
+
+
+_ = i18n.TranslationStringFactory(__package__)
 
 
 @view.view_defaults(renderer="bouncer:templates/annotation.html.jinja2")
@@ -29,6 +33,15 @@ class AnnotationController(object):
 
         annotation_id = document["_id"]
         document_uri = document["_source"]["uri"]
+
+        if not (document_uri.startswith("http://") or
+                document_uri.startswith("https://")):
+            statsd.incr("views.annotation.422.not_an_http_or_https_document")
+            raise httpexceptions.HTTPUnprocessableEntity(
+                _("Sorry, but it looks like this annotation was made on a "
+                  "document that is not publicly available. "
+                  "To view it’s annotations, a document's address must start "
+                  "with <code>http://</code> or <code>https://</code>."))
 
         # FIXME: Strip query params, anchors from document_uri here?
 
