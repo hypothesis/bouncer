@@ -64,12 +64,20 @@ def test_index_redirects_to_hypothesis():
     assert exc.value.location == "https://hypothes.is"
 
 
-def test_notfound_404s():
+def test_httpexception_sets_status_code():
     request = testing.DummyRequest()
 
-    views.notfound(request)
+    views.httpexception(mock.Mock(status_int=404), request)
 
     assert request.response.status_int == 404
+
+
+def test_httpexception_returns_error_message():
+    exc = mock.Mock(status_int=404, __str__=lambda self: "Annotation not found")
+
+    template_data = views.httpexception(exc, testing.DummyRequest())
+
+    assert template_data["message"] == "Annotation not found"
 
 
 @pytest.fixture

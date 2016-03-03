@@ -29,7 +29,7 @@ class AnnotationController(object):
                 id=self.request.matchdict["id"])
         except exceptions.NotFoundError:
             statsd.incr("views.annotation.404.annotation_not_found")
-            raise httpexceptions.HTTPNotFound()
+            raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
         annotation_id = document["_id"]
         document_uri = document["_source"]["uri"]
@@ -79,11 +79,12 @@ def index(request):
         location=request.registry.settings["hypothesis_url"])
 
 
-@view.notfound_view_config(
-    renderer='bouncer:templates/notfound.html.jinja2')
-def notfound(request):
-    request.response.status_int = 404
-    return {}
+@view.view_config(
+    context=httpexceptions.HTTPException,
+    renderer='bouncer:templates/error.html.jinja2')
+def httpexception(exc, request):
+    request.response.status_int = exc.status_int
+    return {"message": str(exc)}
 
 
 def includeme(config):
