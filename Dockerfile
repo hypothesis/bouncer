@@ -1,9 +1,9 @@
-FROM frolvlad/alpine-python3
+FROM gliderlabs/alpine:3.3
 MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
-RUN apk add --update \
-    nodejs \
+RUN apk add --no-cache ca-certificates python3 nodejs curl \
+  && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3 \
   && rm -rf /var/cache/apk/*
 
 # Create the bouncer user, group, home directory and package directory.
