@@ -4,3 +4,4 @@ node_modules
 .coverage
 bouncer/static/scripts/bundle.js
 .cache
+dist
