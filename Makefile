@@ -8,7 +8,7 @@ dev:
 	PYRAMID_RELOAD_TEMPLATES=1 gunicorn --reload "bouncer:app()"
 
 docker:
-	docker build -t hypothesis/bouncer .
+	docker build -t hypothesis/bouncer:dev .
 
 test:
 	py.test --cov=bouncer bouncer
