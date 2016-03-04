@@ -25,3 +25,10 @@ dist/bouncer-$(BUILD_ID): dist/bouncer-$(BUILD_ID).tar.gz
 .PHONY: docker
 docker: dist/bouncer-$(BUILD_ID)
 	docker build -t hypothesis/bouncer:dev $<
+
+.PHONY: clean
+clean:
+	find . -type f -name "*.py[co]" -delete
+	find . -type d -name "__pycache__" -delete
+	rm -f node_modules/.uptodate bouncer.egg-info/.uptodate
+	rm -rf dist
