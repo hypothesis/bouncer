@@ -4,9 +4,6 @@
 .. image:: https://codecov.io/github/hypothesis/bouncer/coverage.svg?branch=master
     :target: https://codecov.io/github/hypothesis/bouncer?branch=master
     :alt: Test Coverage
-.. image:: https://landscape.io/github/hypothesis/bouncer/master/landscape.svg?style=flat
-   :target: https://landscape.io/github/hypothesis/bouncer/master
-   :alt: Code Health
 
 
 Hypothesis Direct-Link Bouncer Service
