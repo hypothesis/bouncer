@@ -77,6 +77,8 @@ def mock_request():
     request.registry.settings = {"elasticsearch_host": "http://localhost/",
                                  "elasticsearch_port": "9200",
                                  "elasticsearch_index": "annotator",
+                                 "sentry_dsn": "{PROTOCOL}://{PUBLIC_KEY}:{SECRET_KEY}@{HOST}/{PATH}{PROJECT_ID}",
+                                 "sentry_javascript_dsn": "{PROTOCOL}://{PUBLIC_KEY}@{HOST}/{PATH}{PROJECT_ID}",
                                  "hypothesis_url": "https://hypothes.is",
                                  "via_base_url": "https://via.hypothes.is"}
     request.matchdict = {"id": "AVLlVTs1f9G3pW-EYc6q"}

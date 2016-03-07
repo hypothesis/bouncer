@@ -6,6 +6,8 @@ from pyramid import httpexceptions
 from pyramid import view
 from statsd.defaults.env import statsd
 
+from bouncer import __about__
+
 
 @view.view_defaults(renderer="bouncer:templates/annotation.html.jinja2")
 class AnnotationController(object):
@@ -45,8 +47,11 @@ class AnnotationController(object):
             "data": json.dumps({
                 # Warning: variable names change from python_style to
                 # javaScriptStyle here!
-                "viaUrl": via_url,
                 "extensionUrl": extension_url,
+                "sentry_javascript_dsn":
+                    self.request.registry.settings["sentry_javascript_dsn"],
+                "version": __about__.__version__,
+                "viaUrl": via_url,
             })
         }
 
