@@ -6,69 +6,33 @@ from pyramid import httpexceptions
 from pyramid import testing
 import pytest
 
+from bouncer import util
 from bouncer import views
 
 
-def test_parse_document_raises_if_no_uri():
-    with pytest.raises(views.InvalidAnnotationError) as exc:
-        views.parse_document({
-            "_id": "annotation_id",
-            "_source": {}  # No "uri".
-        })
-    assert exc.value.reason == "annotation_has_no_uri"
-
-
-def test_parse_document_raises_if_uri_not_a_string():
-    with pytest.raises(views.InvalidAnnotationError) as exc:
-        views.parse_document({
-            "_id": "annotation_id",
-            "_source": {"uri": 52}  # "uri" isn't a string.
-        })
-    assert exc.value.reason == "uri_not_a_string"
-
-
-def test_parse_document_returns_annotation_id():
-    annotation_id = views.parse_document({
-        "_id": "annotation_id",
-        "_source": {"uri": "http://example.com/example.html"}
-    })[0]
-
-    assert annotation_id == "annotation_id"
-
-
-def test_parse_document_returns_document_uri():
-    document_uri = views.parse_document({
-        "_id": "annotation_id",
-        "_source": {"uri": "http://example.com/example.html"}
-    })[1]
-
-    assert document_uri == "http://example.com/example.html"
-
-
-@pytest.mark.usefixtures("elasticsearch")
+@pytest.mark.usefixtures("elasticsearch_client")
 @pytest.mark.usefixtures("parse_document")
 @pytest.mark.usefixtures("statsd")
 class TestAnnotationController(object):
 
-    def test_annotation_inits_elasticsearch_client(self, elasticsearch):
+    def test_annotation_calls_elasticsearch_client(self, elasticsearch_client):
+        request = mock_request()
+        views.AnnotationController(request).annotation()
+
+        elasticsearch_client.assert_called_once_with(request.registry.settings)
+
+    def test_annotation_calls_get(self, elasticsearch_client):
         views.AnnotationController(mock_request()).annotation()
 
-        elasticsearch.Elasticsearch.assert_called_once_with(
-            host="http://localhost/", port="9200"
-        )
-
-    def test_annotation_calls_get(self, elasticsearch):
-        views.AnnotationController(mock_request()).annotation()
-
-        elasticsearch.Elasticsearch.return_value.get.assert_called_once_with(
+        elasticsearch_client.return_value.get.assert_called_once_with(
             index="annotator",
             doc_type="annotation",
             id="AVLlVTs1f9G3pW-EYc6q"
         )
 
     def test_annotation_increments_stat_if_get_raises_NotFoundError(
-            self, elasticsearch, statsd):
-        elasticsearch.Elasticsearch.return_value.get.side_effect = (
+            self, elasticsearch_client, statsd):
+        elasticsearch_client.return_value.get.side_effect = (
             exceptions.NotFoundError)
 
         try:
@@ -80,24 +44,24 @@ class TestAnnotationController(object):
             "views.annotation.404.annotation_not_found")
 
     def test_annotation_raises_HTTPNotFound_if_get_raises_NotFoundError(
-            self, elasticsearch):
-        elasticsearch.Elasticsearch.return_value.get.side_effect = (
+            self, elasticsearch_client):
+        elasticsearch_client.return_value.get.side_effect = (
             exceptions.NotFoundError)
         with pytest.raises(httpexceptions.HTTPNotFound):
             views.AnnotationController(mock_request()).annotation()
 
     def test_annotation_calls_parse_document(self,
-                                             elasticsearch,
+                                             elasticsearch_client,
                                              parse_document):
         views.AnnotationController(mock_request()).annotation()
 
         parse_document.assert_called_once_with(
-            elasticsearch.Elasticsearch.return_value.get.return_value)
+            elasticsearch_client.return_value.get.return_value)
 
     def test_annotation_increments_stat_if_parse_document_raises(self,
                                                                  parse_document,
                                                                  statsd):
-        parse_document.side_effect = views.InvalidAnnotationError(
+        parse_document.side_effect = util.InvalidAnnotationError(
             "error message", "the_reason")
 
         try:
@@ -108,7 +72,7 @@ class TestAnnotationController(object):
         statsd.incr.assert_called_once_with("views.annotation.422.the_reason")
 
     def test_annotation_raises_if_parse_document_raises(self, parse_document):
-        parse_document.side_effect = views.InvalidAnnotationError(
+        parse_document.side_effect = util.InvalidAnnotationError(
             "error message", "the_reason")
 
         with pytest.raises(httpexceptions.HTTPUnprocessableEntity) as exc:
@@ -214,24 +178,24 @@ def test_httpexception_returns_error_message():
 
 
 @pytest.fixture
-def elasticsearch(request):
-    patcher = mock.patch("bouncer.views.elasticsearch")
-    elasticsearch = patcher.start()
+def elasticsearch_client(request):
+    patcher = mock.patch("bouncer.views.util.elasticsearch_client")
+    elasticsearch_client = patcher.start()
     request.addfinalizer(patcher.stop)
-    elasticsearch.Elasticsearch.return_value.get.return_value = {
+    elasticsearch_client.return_value.get.return_value = {
         "_id": "AVLlVTs1f9G3pW-EYc6q",
         "_source": {"uri": "http://www.example.com/example.html"}
     }
-    return elasticsearch
+    return elasticsearch_client
 
 
 @pytest.fixture
 def parse_document(request):
-    patcher = mock.patch("bouncer.views.parse_document")
+    patcher = mock.patch("bouncer.views.util.parse_document")
     parse_document = patcher.start()
+    request.addfinalizer(patcher.stop)
     parse_document.return_value = [
         "AVLlVTs1f9G3pW-EYc6q", "http://www.example.com/example.html"]
-    request.addfinalizer(patcher.stop)
     return parse_document
 
 
