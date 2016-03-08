@@ -12,6 +12,59 @@ from statsd.defaults.env import statsd
 _ = i18n.TranslationStringFactory(__package__)
 
 
+class InvalidAnnotationError(Exception):
+
+    """Raised if an annotation from Elasticsearch can't be parsed."""
+
+    def __init__(self, message, reason):
+        """
+        Return a new InvalidAnnotationError instance.
+
+        :param message: a user-friendly error message
+        :type message: string
+
+        :param reason: a computer-friendly unique string identifying the reason
+            the exception was raised
+        :type reason: string
+
+        """
+        self.message = message
+        self.reason = reason
+
+    def __str__(self):
+        return self.message
+
+
+def parse_document(document):
+    """
+    Return the ID and URI from the given Elasticsearch annotation document.
+
+    Return the annotation ID and the annotated document's URI from the given
+    Elasticsearch annotation document.
+
+    :param document: the Elasticsearch annotation document to parse
+    :type document: dict
+
+    :rtype: 2-tuple of annotation ID (string) and document URI (string)
+
+    """
+    # We assume that Elasticsearch documents always have "_id" and "_source".
+    annotation_id = document["_id"]
+    annotation = document["_source"]
+
+    try:
+        document_uri = annotation["uri"]
+    except KeyError:
+        raise InvalidAnnotationError(
+            _("The annotation has no URI"), "annotation_has_no_uri")
+
+    if not isinstance(document_uri, str):
+        raise InvalidAnnotationError(
+            _("The annotation has an invalid document URI"), "uri_not_a_string")
+
+    return (annotation_id, document_uri)
+
+
 @view.view_defaults(renderer="bouncer:templates/annotation.html.jinja2")
 class AnnotationController(object):
 
@@ -33,17 +86,10 @@ class AnnotationController(object):
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
         try:
-            annotation_id = document["_id"]
-            document_uri = document["_source"]["uri"]
-        except KeyError:
-            statsd.incr("views.annotation.422.annotation_invalid")
-            raise httpexceptions.HTTPUnprocessableEntity(
-                _("The annotation is invalid"))
-
-        if not isinstance(document_uri, str):
-            statsd.incr("views.annotation.422.uri_not_a_string")
-            raise httpexceptions.HTTPUnprocessableEntity(
-                _("The annotation has an invalid document URI"))
+            annotation_id, document_uri = parse_document(document)
+        except InvalidAnnotationError as exc:
+            statsd.incr("views.annotation.422.{}".format(exc.reason))
+            raise httpexceptions.HTTPUnprocessableEntity(str(exc))
 
         # Remove any existing #fragment identifier from the URI before we
         # append our own.

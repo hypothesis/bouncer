@@ -9,7 +9,45 @@ import pytest
 from bouncer import views
 
 
+def test_parse_document_raises_if_no_uri():
+    with pytest.raises(views.InvalidAnnotationError) as exc:
+        views.parse_document({
+            "_id": "annotation_id",
+            "_source": {}  # No "uri".
+        })
+    assert exc.value.reason == "annotation_has_no_uri"
+
+
+def test_parse_document_raises_if_uri_not_a_string():
+    with pytest.raises(views.InvalidAnnotationError) as exc:
+        views.parse_document({
+            "_id": "annotation_id",
+            "_source": {"uri": 52}  # "uri" isn't a string.
+        })
+    assert exc.value.reason == "uri_not_a_string"
+
+
+def test_parse_document_returns_annotation_id():
+    annotation_id = views.parse_document({
+        "_id": "annotation_id",
+        "_source": {"uri": "http://example.com/example.html"}
+    })[0]
+
+    assert annotation_id == "annotation_id"
+
+
+def test_parse_document_returns_document_uri():
+    document_uri = views.parse_document({
+        "_id": "annotation_id",
+        "_source": {"uri": "http://example.com/example.html"}
+    })[1]
+
+    assert document_uri == "http://example.com/example.html"
+
+
 @pytest.mark.usefixtures("elasticsearch")
+@pytest.mark.usefixtures("parse_document")
+@pytest.mark.usefixtures("statsd")
 class TestAnnotationController(object):
 
     def test_annotation_inits_elasticsearch_client(self, elasticsearch):
@@ -35,10 +73,38 @@ class TestAnnotationController(object):
         with pytest.raises(httpexceptions.HTTPNotFound):
             views.AnnotationController(mock_request()).annotation()
 
+    def test_annotation_calls_parse_document(self,
+                                             elasticsearch,
+                                             parse_document):
+        views.AnnotationController(mock_request()).annotation()
+
+        parse_document.assert_called_once_with(
+            elasticsearch.Elasticsearch.return_value.get.return_value)
+
+    def test_annotation_increments_stat_if_parse_document_raises(self,
+                                                                 parse_document,
+                                                                 statsd):
+        parse_document.side_effect = views.InvalidAnnotationError(
+            "error message", "the_reason")
+
+        try:
+            views.AnnotationController(mock_request()).annotation()
+        except:
+            pass
+
+        statsd.incr.assert_called_once_with("views.annotation.422.the_reason")
+
+    def test_annotation_raises_if_parse_document_raises(self, parse_document):
+        parse_document.side_effect = views.InvalidAnnotationError(
+            "error message", "the_reason")
+
+        with pytest.raises(httpexceptions.HTTPUnprocessableEntity) as exc:
+            views.AnnotationController(mock_request()).annotation()
+        assert str(exc.value) == "error message"
+
     def test_annotation_raises_HTTPUnprocessableEntity_for_file_URLs(
-            self, elasticsearch):
-        elasticsearch.Elasticsearch.return_value.get.return_value[
-            "_source"]["uri"] = "file:///home/seanh/Foo.pdf"
+            self, parse_document):
+        parse_document.return_value[1] = "file:///home/seanh/Foo.pdf"
 
         with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
             views.AnnotationController(mock_request()).annotation()
@@ -57,23 +123,9 @@ class TestAnnotationController(object):
         assert data["extensionUrl"] == (
                 "http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
-    def test_annotation_when_uri_is_None(self, elasticsearch):
-        elasticsearch.Elasticsearch.return_value.get.return_value[
-            "_source"]["uri"] = None
-
-        with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
-            views.AnnotationController(mock_request()).annotation()
-
-    def test_annotation_when_Elasticsearch_document_has_no_uri(self, elasticsearch):
-        elasticsearch.Elasticsearch.return_value.get.return_value[
-            "_source"] = {}
-
-        with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
-            views.AnnotationController(mock_request()).annotation()
-
-    def test_annotation_strips_fragment_identifiers(self, elasticsearch):
-        elasticsearch.Elasticsearch.return_value.get.return_value[
-                "_source"]["uri"] = "http://example.com/example.html#foobar"
+    def test_annotation_strips_fragment_identifiers(self, parse_document):
+        parse_document.return_value[1] = (
+            "http://example.com/example.html#foobar")
         template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
@@ -83,9 +135,8 @@ class TestAnnotationController(object):
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
-    def test_annotation_strips_bare_fragment_identifiers(self, elasticsearch):
-        elasticsearch.Elasticsearch.return_value.get.return_value[
-                "_source"]["uri"] = "http://example.com/example.html#"
+    def test_annotation_strips_bare_fragment_identifiers(self, parse_document):
+        parse_document.return_value[1] = "http://example.com/example.html#"
         template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
@@ -111,7 +162,8 @@ def test_httpexception_sets_status_code():
 
 
 def test_httpexception_returns_error_message():
-    exc = mock.Mock(status_int=404, __str__=lambda self: "Annotation not found")
+    exc = mock.Mock(status_int=404,
+                    __str__=lambda self: "Annotation not found")
 
     template_data = views.httpexception(exc, testing.DummyRequest())
 
@@ -128,6 +180,24 @@ def elasticsearch(request):
         "_source": {"uri": "http://www.example.com/example.html"}
     }
     return elasticsearch
+
+
+@pytest.fixture
+def parse_document(request):
+    patcher = mock.patch("bouncer.views.parse_document")
+    parse_document = patcher.start()
+    parse_document.return_value = [
+        "AVLlVTs1f9G3pW-EYc6q", "http://www.example.com/example.html"]
+    request.addfinalizer(patcher.stop)
+    return parse_document
+
+
+@pytest.fixture
+def statsd(request):
+    patcher = mock.patch("bouncer.views.statsd")
+    statsd = patcher.start()
+    request.addfinalizer(patcher.stop)
+    return statsd
 
 
 def mock_request():
