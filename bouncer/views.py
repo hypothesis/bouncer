@@ -101,7 +101,7 @@ class AnnotationController(object):
             raise httpexceptions.HTTPUnprocessableEntity(
                 _("Sorry, but it looks like this annotation was made on a "
                   "document that is not publicly available. "
-                  "To view it’s annotations, a document's address must start "
+                  "To view its annotations, a document's address must start "
                   "with <code>http://</code> or <code>https://</code>."))
 
         via_url = "{via_base_url}/{uri}#annotations:{id}".format(
