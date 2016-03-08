@@ -66,6 +66,19 @@ class TestAnnotationController(object):
             id="AVLlVTs1f9G3pW-EYc6q"
         )
 
+    def test_annotation_increments_stat_if_get_raises_NotFoundError(
+            self, elasticsearch, statsd):
+        elasticsearch.Elasticsearch.return_value.get.side_effect = (
+            exceptions.NotFoundError)
+
+        try:
+            views.AnnotationController(mock_request()).annotation()
+        except:
+            pass
+
+        statsd.incr.assert_called_once_with(
+            "views.annotation.404.annotation_not_found")
+
     def test_annotation_raises_HTTPNotFound_if_get_raises_NotFoundError(
             self, elasticsearch):
         elasticsearch.Elasticsearch.return_value.get.side_effect = (
@@ -102,12 +115,30 @@ class TestAnnotationController(object):
             views.AnnotationController(mock_request()).annotation()
         assert str(exc.value) == "error message"
 
+    def test_annotation_increments_stat_for_file_URLs(
+            self, parse_document, statsd):
+        parse_document.return_value[1] = "file:///home/seanh/Foo.pdf"
+
+        try:
+            views.AnnotationController(mock_request()).annotation()
+        except:
+            pass
+
+        statsd.incr.assert_called_once_with(
+            "views.annotation.422.not_an_http_or_https_document")
+
     def test_annotation_raises_HTTPUnprocessableEntity_for_file_URLs(
             self, parse_document):
         parse_document.return_value[1] = "file:///home/seanh/Foo.pdf"
 
         with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
             views.AnnotationController(mock_request()).annotation()
+
+    def test_annotation_increments_stat_when_annotation_found(self, statsd):
+        views.AnnotationController(mock_request()).annotation()
+
+        statsd.incr.assert_called_once_with(
+            "views.annotation.200.annotation_found")
 
     def test_annotation_returns_via_url(self):
         template_data = views.AnnotationController(mock_request()).annotation()
@@ -147,6 +178,18 @@ class TestAnnotationController(object):
                 "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
 
+@pytest.mark.usefixtures("statsd")
+def test_index_increments_stat(statsd):
+    try:
+        views.index(mock_request())
+    except:
+        pass
+
+    statsd.incr.assert_called_once_with(
+        "views.index.302.redirected_to_hypothesis")
+
+
+@pytest.mark.usefixtures("statsd")
 def test_index_redirects_to_hypothesis():
     with pytest.raises(httpexceptions.HTTPFound) as exc:
         views.index(mock_request())
