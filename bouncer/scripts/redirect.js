@@ -37,13 +37,18 @@ function redirect(navigateToFn) {
       {type: 'ping'},
       function (response) {
         var url;
-        if (response) {
+
+        if (response && !chrome.runtime.lastError) {
           // The user has our Chrome extension installed :)
           url = settings.extensionUrl;
         } else {
+          if (chrome.runtime.lastError) {
+            console.error(chrome.runtime.lastError);
+          }
           // The user doesn't have our Chrome extension installed :(
           url = settings.viaUrl;
         }
+
         navigateTo(url);
       }
     );
