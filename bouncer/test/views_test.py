@@ -9,7 +9,7 @@ import pytest
 from bouncer import views
 
 
-@mock.patch("bouncer.views.elasticsearch")
+@pytest.mark.usefixtures("elasticsearch")
 class TestAnnotationController(object):
 
     def test_annotation_inits_elasticsearch_client(self, elasticsearch):
@@ -35,22 +35,22 @@ class TestAnnotationController(object):
         with pytest.raises(httpexceptions.HTTPNotFound):
             views.AnnotationController(mock_request()).annotation()
 
-    def test_annotation_returns_via_url(self, elasticsearch):
-        elasticsearch.Elasticsearch.return_value.get.return_value = {
-            "_id": "AVLlVTs1f9G3pW-EYc6q",
-            "_source": {"uri": "http://www.example.com/example.html"}
-        }
+    def test_annotation_raises_HTTPUnprocessableEntity_for_file_URLs(
+            self, elasticsearch):
+        elasticsearch.Elasticsearch.return_value.get.return_value[
+            "_source"]["uri"] = "file:///home/seanh/Foo.pdf"
+
+        with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
+            views.AnnotationController(mock_request()).annotation()
+
+    def test_annotation_returns_via_url(self):
         template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
-    def test_annotation_returns_extension_url(self, elasticsearch):
-        elasticsearch.Elasticsearch.return_value.get.return_value = {
-            "_id": "AVLlVTs1f9G3pW-EYc6q",
-            "_source": {"uri": "http://www.example.com/example.html"}
-        }
+    def test_annotation_returns_extension_url(self):
         template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
@@ -64,12 +64,32 @@ def test_index_redirects_to_hypothesis():
     assert exc.value.location == "https://hypothes.is"
 
 
-def test_notfound_404s():
+def test_httpexception_sets_status_code():
     request = testing.DummyRequest()
 
-    views.notfound(request)
+    views.httpexception(mock.Mock(status_int=404), request)
 
     assert request.response.status_int == 404
+
+
+def test_httpexception_returns_error_message():
+    exc = mock.Mock(status_int=404, __str__=lambda self: "Annotation not found")
+
+    template_data = views.httpexception(exc, testing.DummyRequest())
+
+    assert template_data["message"] == "Annotation not found"
+
+
+@pytest.fixture
+def elasticsearch(request):
+    patcher = mock.patch("bouncer.views.elasticsearch")
+    elasticsearch = patcher.start()
+    request.addfinalizer(patcher.stop)
+    elasticsearch.Elasticsearch.return_value.get.return_value = {
+        "_id": "AVLlVTs1f9G3pW-EYc6q",
+        "_source": {"uri": "http://www.example.com/example.html"}
+    }
+    return elasticsearch
 
 
 def mock_request():

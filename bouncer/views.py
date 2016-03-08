@@ -3,8 +3,12 @@ import json
 import elasticsearch
 from elasticsearch import exceptions
 from pyramid import httpexceptions
+from pyramid import i18n
 from pyramid import view
 from statsd.defaults.env import statsd
+
+
+_ = i18n.TranslationStringFactory(__package__)
 
 
 @view.view_defaults(renderer="bouncer:templates/annotation.html.jinja2")
@@ -25,10 +29,19 @@ class AnnotationController(object):
                 id=self.request.matchdict["id"])
         except exceptions.NotFoundError:
             statsd.incr("views.annotation.404.annotation_not_found")
-            raise httpexceptions.HTTPNotFound()
+            raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
         annotation_id = document["_id"]
         document_uri = document["_source"]["uri"]
+
+        if not (document_uri.startswith("http://") or
+                document_uri.startswith("https://")):
+            statsd.incr("views.annotation.422.not_an_http_or_https_document")
+            raise httpexceptions.HTTPUnprocessableEntity(
+                _("Sorry, but it looks like this annotation was made on a "
+                  "document that is not publicly available. "
+                  "To view it’s annotations, a document's address must start "
+                  "with <code>http://</code> or <code>https://</code>."))
 
         # FIXME: Strip query params, anchors from document_uri here?
 
@@ -66,11 +79,12 @@ def index(request):
         location=request.registry.settings["hypothesis_url"])
 
 
-@view.notfound_view_config(
-    renderer='bouncer:templates/notfound.html.jinja2')
-def notfound(request):
-    request.response.status_int = 404
-    return {}
+@view.view_config(
+    context=httpexceptions.HTTPException,
+    renderer='bouncer:templates/error.html.jinja2')
+def httpexception(exc, request):
+    request.response.status_int = exc.status_int
+    return {"message": str(exc)}
 
 
 def includeme(config):
