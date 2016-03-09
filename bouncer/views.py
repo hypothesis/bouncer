@@ -1,11 +1,13 @@
 import json
+from urllib import parse
 
-import elasticsearch
 from elasticsearch import exceptions
 from pyramid import httpexceptions
 from pyramid import i18n
 from pyramid import view
 from statsd.defaults.env import statsd
+
+from bouncer import util
 
 
 _ = i18n.TranslationStringFactory(__package__)
@@ -23,7 +25,7 @@ class AnnotationController(object):
         settings = self.request.registry.settings
 
         try:
-            document = elasticsearch_client(settings).get(
+            document = util.elasticsearch_client(settings).get(
                 index=settings["elasticsearch_index"],
                 doc_type="annotation",
                 id=self.request.matchdict["id"])
@@ -31,8 +33,15 @@ class AnnotationController(object):
             statsd.incr("views.annotation.404.annotation_not_found")
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
-        annotation_id = document["_id"]
-        document_uri = document["_source"]["uri"]
+        try:
+            annotation_id, document_uri = util.parse_document(document)
+        except util.InvalidAnnotationError as exc:
+            statsd.incr("views.annotation.422.{}".format(exc.reason))
+            raise httpexceptions.HTTPUnprocessableEntity(str(exc))
+
+        # Remove any existing #fragment identifier from the URI before we
+        # append our own.
+        document_uri = parse.urldefrag(document_uri)[0]
 
         if not (document_uri.startswith("http://") or
                 document_uri.startswith("https://")):
@@ -40,10 +49,8 @@ class AnnotationController(object):
             raise httpexceptions.HTTPUnprocessableEntity(
                 _("Sorry, but it looks like this annotation was made on a "
                   "document that is not publicly available. "
-                  "To view it’s annotations, a document's address must start "
+                  "To view its annotations, a document's address must start "
                   "with <code>http://</code> or <code>https://</code>."))
-
-        # FIXME: Strip query params, anchors from document_uri here?
 
         via_url = "{via_base_url}/{uri}#annotations:{id}".format(
             via_base_url=settings["via_base_url"],
@@ -62,13 +69,6 @@ class AnnotationController(object):
                 "extensionUrl": extension_url,
             })
         }
-
-
-def elasticsearch_client(settings):
-    return elasticsearch.Elasticsearch(
-        host=settings["elasticsearch_host"],
-        port=settings["elasticsearch_port"],
-    )
 
 
 @view.view_config(renderer="bouncer:templates/index.html.jinja2",
