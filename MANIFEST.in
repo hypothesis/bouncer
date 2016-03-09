@@ -1,0 +1,10 @@
+include Makefile AUTHORS CHANGES LICENSE NOTICE
+include *.rst
+include Dockerfile
+include gunicorn.conf.py
+include package.json
+graft bouncer/static
+graft bouncer/templates
+graft bouncer/scripts
+global-exclude __pycache__
+global-exclude *.py[co]
