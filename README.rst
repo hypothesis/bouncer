@@ -76,7 +76,7 @@ container:
    git clone https://github.com/hypothesis/bouncer.git
    cd bouncer
    make docker
-   docker run --net host -p 8000:8000 hypothesis/bouncer
+   docker run -p 8000:8000 hypothesis/bouncer
 
 
 Development

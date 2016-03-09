@@ -28,5 +28,6 @@ RUN pip install --no-cache-dir -e .
 VOLUME ["/var/lib/bouncer/bouncer/static"]
 
 # Start the web server by default
+EXPOSE 8000
 USER bouncer
-CMD ["gunicorn", "bouncer:app()"]
+CMD ["gunicorn", "-b", "0.0.0.0:8000", "bouncer:app()"]
