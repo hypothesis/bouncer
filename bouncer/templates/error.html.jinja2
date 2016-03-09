@@ -3,7 +3,7 @@
 {% set title = message %}
 
 {% block content %}
-  <img src="{{'bouncer:static/images/sad-annotation.svg'|static_url}}">
+  <img src="{{'bouncer:static/images/sad-annotation.svg'|static_path}}">
   <p>
     {{ message|safe }}
   </p>
