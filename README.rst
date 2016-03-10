@@ -109,7 +109,7 @@ To debug the JavaScript tests in a browser, run:
 
 .. code-block:: bash
 
-   ./node_modules/karma/bin/karma start --no-single-run
+   ./node_modules/karma/bin/karma start --no-single-run karma.config.js
 
 and open http://localhost:9876/ in your browser.
 
