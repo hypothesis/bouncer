@@ -1,8 +1,5 @@
 'use strict';
 
-/** The ID of the Chrome extension we want to talk to. */
-var EDITOR_EXTENSION_ID = 'oldbkmekfdjiffgkconlamcngmkioffd';
-
 /** Return the settings object that the server injected into the page. */
 function getSettings(document) {
   return JSON.parse(
@@ -33,7 +30,7 @@ function redirect(navigateToFn) {
     // The user is using Chrome, redirect them to our Chrome extension if they
     // have it installed, via otherwise.
     chrome.runtime.sendMessage(
-      EDITOR_EXTENSION_ID,
+      settings.chromeExtensionId,
       {type: 'ping'},
       function (response) {
         var url;
