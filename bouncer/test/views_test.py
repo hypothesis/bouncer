@@ -104,6 +104,12 @@ class TestAnnotationController(object):
         statsd.incr.assert_called_once_with(
             "views.annotation.200.annotation_found")
 
+    def test_annotation_returns_chrome_extension_id(self):
+        template_data = views.AnnotationController(mock_request()).annotation()
+
+        data = json.loads(template_data["data"])
+        assert data["chromeExtensionId"] == "test-extension-id"
+
     def test_annotation_returns_via_url(self):
         template_data = views.AnnotationController(mock_request()).annotation()
 
@@ -209,7 +215,8 @@ def statsd(request):
 
 def mock_request():
     request = testing.DummyRequest()
-    request.registry.settings = {"elasticsearch_host": "http://localhost/",
+    request.registry.settings = {"chrome_extension_id": "test-extension-id",
+                                 "elasticsearch_host": "http://localhost/",
                                  "elasticsearch_port": "9200",
                                  "elasticsearch_index": "annotator",
                                  "hypothesis_url": "https://hypothes.is",

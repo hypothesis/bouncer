@@ -8,6 +8,7 @@ describe('redirect()', function () {
     window.document.querySelector = function () {
       return {
         textContent: JSON.stringify({
+          chromeExtensionId: 'test-extension-id',
           extensionUrl: 'http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
           viaUrl: 'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
         })
@@ -108,6 +109,24 @@ describe('redirect()', function () {
     redirect(sinon.stub());
 
     assert.equal(console.error.called, true);
+  });
+
+  it('calls chrome.runtime.sendMessage correctly', function () {
+    window.chrome = {
+      runtime: {
+        sendMessage: sinon.stub()
+      }
+    };
+
+    redirect(function () {});
+
+    assert.equal(window.chrome.runtime.sendMessage.calledOnce, true);
+    assert.equal(window.chrome.runtime.sendMessage.firstCall.args[0],
+                 'test-extension-id');
+    assert.deepEqual(window.chrome.runtime.sendMessage.firstCall.args[1],
+                     {type: 'ping'});
+    assert.equal(typeof(window.chrome.runtime.sendMessage.firstCall.args[2]),
+                 'function');
   });
 
   it('redirects to Chrome extension if installed', function () {

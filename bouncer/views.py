@@ -65,6 +65,7 @@ class AnnotationController(object):
             "data": json.dumps({
                 # Warning: variable names change from python_style to
                 # javaScriptStyle here!
+                "chromeExtensionId": settings["chrome_extension_id"],
                 "viaUrl": via_url,
                 "extensionUrl": extension_url,
             })
