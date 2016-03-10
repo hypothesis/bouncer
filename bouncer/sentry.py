@@ -5,19 +5,6 @@ import raven
 from bouncer import __about__
 
 
-def raven_tween_factory(handler, _):
-    """Return a tween that reports uncaught exceptions to Sentry."""
-    def raven_tween(request):
-        """Report uncaught exceptions to Sentry."""
-        try:
-            return handler(request)
-        except:
-            request.raven.captureException()
-            raise
-
-    return raven_tween
-
-
 def get_raven_client(request):
     """Return the Raven client for reporting crashes to Sentry."""
     client = request.registry["raven.client"]
@@ -41,7 +28,3 @@ def includeme(config):
         get_raven_client,
         name="raven",
         reify=True)
-
-    config.add_tween(
-        "bouncer.sentry.raven_tween_factory",
-        under=tweens.EXCVIEW)
