@@ -80,12 +80,40 @@ def index(request):
         location=request.registry.settings["hypothesis_url"])
 
 
-@view.view_config(
-    context=httpexceptions.HTTPException,
-    renderer='bouncer:templates/error.html.jinja2')
-def httpexception(exc, request):
-    request.response.status_int = exc.status_int
-    return {"message": str(exc)}
+@view.view_defaults(renderer='bouncer:templates/error.html.jinja2')
+class ErrorController(object):
+
+    def __init__(self, exc, request):
+        self.exc = exc
+        self.request = request
+
+    @view.view_config(context=httpexceptions.HTTPError)
+    @view.view_config(context=httpexceptions.HTTPServerError)
+    def httperror(self):
+        self.request.response.status_int = self.exc.status_int
+        # If code raises an HTTPError or HTTPServerError we assume this was
+        # deliberately raised and:
+        # 1. Show the user an error page including specific error message
+        # 2. _Do not_ report the error to Sentry.
+        return {"message": str(self.exc)}
+
+    @view.view_config(context=Exception)
+    def error(self):
+        # In debug mode re-raise exceptions so that they get printed in the
+        # terminal.
+        if self.request.registry.settings["debug"]:
+            raise
+
+        self.request.response.status_int = 500
+
+        # If code raises a non-HTTPException exception we assume it was a bug
+        # and:
+        # 1. Show the user a generic error page
+        # 2. Report the details of the error to Sentry.
+        self.request.raven.captureException()
+        return {"message": _("Sorry, but something went wrong with the link. "
+                             "The issue has been reported and we'll try to "
+                             "fix it.")}
 
 
 def includeme(config):

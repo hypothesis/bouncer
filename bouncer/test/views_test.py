@@ -166,21 +166,51 @@ def test_index_redirects_to_hypothesis():
     assert exc.value.location == "https://hypothes.is"
 
 
-def test_httpexception_sets_status_code():
-    request = testing.DummyRequest()
+class TestErrorController(object):
 
-    views.httpexception(mock.Mock(status_int=404), request)
+    def test_httperror_sets_status_code(self):
+        request = mock_request()
 
-    assert request.response.status_int == 404
+        views.ErrorController(
+            httpexceptions.HTTPNotFound(), request).httperror()
 
+        assert request.response.status_int == 404
 
-def test_httpexception_returns_error_message():
-    exc = mock.Mock(status_int=404,
-                    __str__=lambda self: "Annotation not found")
+    def test_httperror_returns_error_message(self):
+        exc = httpexceptions.HTTPNotFound("Annotation not found")
+        controller = views.ErrorController(exc, mock_request())
 
-    template_data = views.httpexception(exc, testing.DummyRequest())
+        template_data = controller.httperror()
 
-    assert template_data["message"] == "Annotation not found"
+        assert template_data["message"] == "Annotation not found"
+
+    def test_error_sets_status_code(self):
+        request = mock_request()
+
+        views.ErrorController(Exception(), request).error()
+
+        assert request.response.status_int == 500
+
+    def test_error_raises_in_debug_mode(self):
+        request = mock_request()
+        request.registry.settings["debug"] = True
+
+        with pytest.raises(Exception):
+            views.ErrorController(Exception(), request).error()
+
+    def test_error_reports_to_sentry(self):
+        request = mock_request()
+
+        views.ErrorController(Exception(), request).error()
+
+        request.raven.captureException.assert_called_once_with()
+
+    def test_error_returns_error_message(self):
+        controller = views.ErrorController(Exception(), mock_request())
+
+        template_data = controller.error()
+
+        assert template_data["message"].startswith("Sorry, but")
 
 
 @pytest.fixture
@@ -216,10 +246,12 @@ def statsd(request):
 def mock_request():
     request = testing.DummyRequest()
     request.registry.settings = {"chrome_extension_id": "test-extension-id",
+                                 "debug": False,
                                  "elasticsearch_host": "http://localhost/",
                                  "elasticsearch_port": "9200",
                                  "elasticsearch_index": "annotator",
                                  "hypothesis_url": "https://hypothes.is",
                                  "via_base_url": "https://via.hypothes.is"}
     request.matchdict = {"id": "AVLlVTs1f9G3pW-EYc6q"}
+    request.raven = mock.Mock()
     return request

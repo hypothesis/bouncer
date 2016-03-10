@@ -15,10 +15,16 @@ def settings():
     if via_base_url.endswith("/"):
         via_base_url = via_base_url[:-1]
 
+    if "DEBUG" in os.environ:
+        debug = True
+    else:
+        debug = False
+
     return {
         "chrome_extension_id": os.environ.get(
             "CHROME_EXTENSION_ID",
             "bjfhmglciegochdpefhhlphglcehbmek"),
+        "debug": debug,
         "elasticsearch_host": os.environ.get("ELASTICSEARCH_HOST",
                                              "localhost"),
         "elasticsearch_index": os.environ.get("ELASTICSEARCH_INDEX",

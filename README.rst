@@ -19,6 +19,12 @@ CHROME_EXTENSION_ID
   The ID of the Hypothesis Chrome extension that bouncer will communicate with
   (default: the ID of the `official Hypothesis Chrome extension <https://chrome.google.com/webstore/detail/hypothesis-web-pdf-annota/bjfhmglciegochdpefhhlphglcehbmek>`_)
 
+DEBUG
+  If ``DEBUG`` is set (to any value) then tracebacks will be printed to the
+  terminal for any unexpected Python exceptions. If there is no ``DEBUG``
+  variable set in the environment then unexpected Python exceptions will be
+  reported to Sentry and a generic error page shown to the user.
+
 ELASTICSEARCH_HOST
   The hostname of the Elasticsearch server that bouncer will read annotations
   from (default: localhost)
