@@ -25,6 +25,7 @@ dist/bouncer-$(BUILD_ID): dist/bouncer-$(BUILD_ID).tar.gz
 .PHONY: docker
 docker: dist/bouncer-$(BUILD_ID)
 	docker build -t hypothesis/bouncer:dev $<
+	docker tag hypothesis/bouncer:dev hypothesis/bouncer:latest
 
 .PHONY: clean
 clean:
