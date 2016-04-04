@@ -60,6 +60,11 @@ class AnnotationController(object):
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
+        parsed_url = parse.urlparse(document_uri)
+        pretty_url = parsed_url.netloc[0:20]
+        if len(parsed_url.netloc) > 20:
+          pretty_url = pretty_url+ "..."
+
         statsd.incr("views.annotation.200.annotation_found")
         return {
             "data": json.dumps({
@@ -68,7 +73,8 @@ class AnnotationController(object):
                 "chromeExtensionId": settings["chrome_extension_id"],
                 "viaUrl": via_url,
                 "extensionUrl": extension_url,
-            })
+            }),
+            "pretty_url": pretty_url
         }
 
 

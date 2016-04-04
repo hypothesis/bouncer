@@ -1,17 +1,17 @@
 {% extends "templates/base.html.jinja2" %}
 
-{% set title = _("Hypothesis: Redirecting you&hellip;") %}
+{% set title = _("Hypothesis: Annotation for %(site)s" )|format(site=pretty_url)  %}
 
 {% block content %}
   <div class="center spinner__stationary-ring">
-    <img alt="Redirecting"
+    <img alt="{% trans %}Loading annotation for {{ pretty_url }}{% endtrans %}"
           class="center spinner__icon"
           height="24"
           src="{{'bouncer:static/images/hypothesis-icon.svg'|static_path}}"
           width="28">
     <div class="spinner__moving-ring"></div>
   </div>
-  <p class="spinner__text">{% trans %}Redirecting{% endtrans %}</p>
+  <p class="spinner__text">{% trans %}Loading annotation for {{ pretty_url }}{% endtrans %}</p>
 {% endblock %}
 
 {% block scripts %}
