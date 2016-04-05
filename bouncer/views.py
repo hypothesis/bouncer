@@ -69,7 +69,7 @@ class AnnotationController(object):
         parsed_url = parse.urlparse(document_uri)
         pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
         if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
-          pretty_url = pretty_url+ jinja2.Markup("&hellip;")
+          pretty_url = pretty_url + jinja2.Markup("&hellip;")
 
         statsd.incr("views.annotation.200.annotation_found")
         return {
