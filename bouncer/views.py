@@ -13,6 +13,12 @@ from bouncer import util
 _ = i18n.TranslationStringFactory(__package__)
 
 
+#: The maximum length that the "netloc" (the www.example.com part in
+#: http://www.example.com/example) can be in the pretty URL that is displayed
+#: to the user before it gets truncated.
+NETLOC_MAX_LENGTH = 20
+
+
 @view.view_defaults(renderer="bouncer:templates/annotation.html.jinja2")
 class AnnotationController(object):
 
@@ -60,10 +66,9 @@ class AnnotationController(object):
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
-        netloc_max_length = 20
         parsed_url = parse.urlparse(document_uri)
-        pretty_url = parsed_url.netloc[:netloc_max_length]
-        if len(parsed_url.netloc) > netloc_max_length:
+        pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
+        if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
           pretty_url = pretty_url+ jinja2.Markup("&hellip;")
 
         statsd.incr("views.annotation.200.annotation_found")
