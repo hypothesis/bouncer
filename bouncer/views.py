@@ -1,6 +1,7 @@
 import json
 from urllib import parse
 
+import jinja2
 from elasticsearch import exceptions
 from pyramid import httpexceptions
 from pyramid import i18n
