@@ -147,6 +147,19 @@ class TestAnnotationController(object):
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
+    def test_annotation_returns_pretty_url(self):
+        template_data = views.AnnotationController(mock_request()).annotation()
+
+        assert template_data["pretty_url"] == "www.example.com"
+
+    def test_annotation_truncates_pretty_url(self, parse_document):
+        parse_document.return_value[1] = (
+            "http://www.abcdefghijklmnopqrst.com/example.html")
+
+        template_data = views.AnnotationController(mock_request()).annotation()
+
+        assert template_data["pretty_url"] == "www.abcdefghijklmnop&hellip;"
+
 
 @pytest.mark.usefixtures("statsd")
 def test_index_increments_stat(statsd):
