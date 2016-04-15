@@ -43,7 +43,8 @@ def app():
     config.add_static_view(name="static", path="static")
     config.include("pyramid_jinja2")
     config.registry.settings["jinja2.filters"] = {
-        "static_path": "pyramid_jinja2.filters:static_path_filter"
+        "static_path": "pyramid_jinja2.filters:static_path_filter",
+        "static_url": "pyramid_jinja2.filters:static_url_filter"
     }
     config.include("bouncer.views")
     config.include("bouncer.sentry")

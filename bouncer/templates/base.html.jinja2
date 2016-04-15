@@ -2,6 +2,19 @@
   <html lang=en>
   <head>
     <meta charset=utf-8>
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@hypothes_is" />
+    <meta name="twitter:title" content="{{ meta_title|safe }}" />
+    <meta name="twitter:description" content="Follow the link to see this annotation on the original page.  Use Hypothesis to annotate the Web and PDFs." />
+    <meta name="twitter:image" content="{{ 'bouncer:static/images/twitter.png'|static_url }}" />
+
+    <meta property="og:type" content="article"/>
+    <meta property="og:site_name" content="Hypothes.is"/>
+    <meta property="og:title" content="Checkout this annotation."/>
+    <meta property="og:description" content="Follow the link to see this annotation on the original page. Use Hypothesis to annotate the Web and PDFs."/>
+    <meta property="og:image" content="{{'bouncer:static/images/facebook.png'|static_url }}"/>
+
     <title>{{ title|safe }}</title>
     <link rel="stylesheet"
           type="text/css"
