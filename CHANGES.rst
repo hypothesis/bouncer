@@ -1,3 +1,9 @@
+0.0.3
+=====
+
+- Add facebook and twitter meta tags."
+
+
 0.0.2
 =====
 
