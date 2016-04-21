@@ -3,4 +3,4 @@
 __all__ = ["__version__"]
 
 
-__version__ = "0.0.3"  # PEP440-compliant version number.
+__version__ = "0.0.4"  # PEP440-compliant version number.
