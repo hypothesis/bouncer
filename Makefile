@@ -10,8 +10,10 @@ deps:
 dev:
 	PYRAMID_RELOAD_TEMPLATES=1 gunicorn --reload "bouncer:app()"
 
+.PHONY: test
 test:
-	py.test --cov=bouncer bouncer
+	@pip install -q tox
+	tox
 	./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: dist
