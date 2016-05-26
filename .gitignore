@@ -5,3 +5,4 @@ node_modules
 bouncer/static/scripts/bundle.js
 .cache
 dist
+.tox

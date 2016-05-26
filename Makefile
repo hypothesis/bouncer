@@ -1,4 +1,5 @@
-BUILD_ID := $(shell python -c 'import bouncer.__about__; print(bouncer.__about__.__version__)')
+BUILD_ID := $(shell python -c 'f = open("bouncer/__about__.py"); exec(f.read()); print(__version__)')
+DOCKER_TAG = dev
 
 deps:
 	pip install --upgrade pip
@@ -9,8 +10,10 @@ deps:
 dev:
 	PYRAMID_RELOAD_TEMPLATES=1 gunicorn --reload "bouncer:app()"
 
+.PHONY: test
 test:
-	py.test --cov=bouncer bouncer
+	@pip install -q tox
+	tox
 	./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: dist
@@ -24,8 +27,7 @@ dist/bouncer-$(BUILD_ID): dist/bouncer-$(BUILD_ID).tar.gz
 
 .PHONY: docker
 docker: dist/bouncer-$(BUILD_ID)
-	docker build -t hypothesis/bouncer:dev $<
-	docker tag hypothesis/bouncer:dev hypothesis/bouncer:latest
+	docker build -t hypothesis/bouncer:$(DOCKER_TAG) $<
 
 .PHONY: clean
 clean:
