@@ -31,7 +31,7 @@ ELASTICSEARCH_HOST
 
 ELASTICSEARCH_INDEX
   The name of the Elasticsearch index that bouncer will read annotations
-  from (default: annotator)
+  from (default: hypothesis)
 
 ELASTICSEARCH_PORT
   The port of the Elasticsearch server that bouncer will read annotations
