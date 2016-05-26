@@ -28,7 +28,7 @@ def settings():
         "elasticsearch_host": os.environ.get("ELASTICSEARCH_HOST",
                                              "localhost"),
         "elasticsearch_index": os.environ.get("ELASTICSEARCH_INDEX",
-                                              "annotator"),
+                                              "hypothesis"),
         "elasticsearch_port": os.environ.get("ELASTICSEARCH_PORT",
                                              "9200"),
         "hypothesis_url": os.environ.get("HYPOTHESIS_URL",
