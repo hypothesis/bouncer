@@ -1,4 +1,5 @@
 BUILD_ID := $(shell python -c 'import bouncer.__about__; print(bouncer.__about__.__version__)')
+DOCKER_TAG = dev
 
 deps:
 	pip install --upgrade pip
@@ -24,8 +25,7 @@ dist/bouncer-$(BUILD_ID): dist/bouncer-$(BUILD_ID).tar.gz
 
 .PHONY: docker
 docker: dist/bouncer-$(BUILD_ID)
-	docker build -t hypothesis/bouncer:dev $<
-	docker tag hypothesis/bouncer:dev hypothesis/bouncer:latest
+	docker build -t hypothesis/bouncer:$(DOCKER_TAG) $<
 
 .PHONY: clean
 clean:
