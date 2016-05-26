@@ -1,4 +1,4 @@
-BUILD_ID := $(shell python -c 'import bouncer.__about__; print(bouncer.__about__.__version__)')
+BUILD_ID := $(shell python -c 'f = open("bouncer/__about__.py"); exec(f.read()); print(__version__)')
 DOCKER_TAG = dev
 
 deps:
