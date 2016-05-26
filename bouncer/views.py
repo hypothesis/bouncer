@@ -55,9 +55,7 @@ class AnnotationController(object):
             statsd.incr("views.annotation.422.not_an_http_or_https_document")
             raise httpexceptions.HTTPUnprocessableEntity(
                 _("Sorry, but it looks like this annotation was made on a "
-                  "document that is not publicly available. "
-                  "To view its annotations, a document's address must start "
-                  "with <code>http://</code> or <code>https://</code>."))
+                  "document that is not publicly available."))
 
         via_url = "{via_base_url}/{uri}#annotations:{id}".format(
             via_base_url=settings["via_base_url"],
