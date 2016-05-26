@@ -25,7 +25,7 @@ class TestAnnotationController(object):
         views.AnnotationController(mock_request()).annotation()
 
         elasticsearch_client.return_value.get.assert_called_once_with(
-            index="annotator",
+            index="hypothesis",
             doc_type="annotation",
             id="AVLlVTs1f9G3pW-EYc6q"
         )
@@ -262,7 +262,7 @@ def mock_request():
                                  "debug": False,
                                  "elasticsearch_host": "http://localhost/",
                                  "elasticsearch_port": "9200",
-                                 "elasticsearch_index": "annotator",
+                                 "elasticsearch_index": "hypothesis",
                                  "hypothesis_url": "https://hypothes.is",
                                  "via_base_url": "https://via.hypothes.is"}
     request.matchdict = {"id": "AVLlVTs1f9G3pW-EYc6q"}
