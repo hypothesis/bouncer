@@ -53,7 +53,9 @@ def parse_document(document):
     annotation = document["_source"]
 
     try:
-        document_uri = annotation["uri"]
+        targets = annotation["target"]
+        if targets:
+            document_uri = targets[0]["source"]
     except KeyError:
         raise InvalidAnnotationError(
             _("The annotation has no URI"), "annotation_has_no_uri")
