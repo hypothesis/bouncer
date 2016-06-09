@@ -52,11 +52,29 @@ def parse_document(document):
     annotation_id = document["_id"]
     annotation = document["_source"]
 
+    document_uri = None
+
     try:
         targets = annotation["target"]
         if targets:
             document_uri = targets[0]["source"]
     except KeyError:
+        pass
+
+    if isinstance(document_uri, str) and document_uri.startswith("urn:x-pdf:"):
+        try:
+            links = annotation["document"]["link"]
+            for link in links:
+                href = link["href"]
+                if not isinstance(href, str):
+                    document_uri = href
+                elif href.startswith(("http://", "https://")):
+                    document_uri = href
+                    break
+        except KeyError:
+            pass
+
+    if document_uri is None:
         raise InvalidAnnotationError(
             _("The annotation has no URI"), "annotation_has_no_uri")
 
