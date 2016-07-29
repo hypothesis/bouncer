@@ -8,7 +8,7 @@ function getSettings(document) {
 
 /** Navigate the browser to the given URL. */
 function navigateTo(url) {
-  window.location = url;
+  window.location.replace(url);
 }
 
 /** Navigate the browser to the requested annotation.
