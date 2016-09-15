@@ -38,29 +38,26 @@ def test_parse_document_returns_document_uri():
 
     assert document_uri == "http://example.com/example.html"
 
-def test_parse_document_returns_document_uri_from_links_when_pdf():
+
+def test_parse_document_returns_document_uri_from_web_uri_when_pdf():
     document_uri = util.parse_document({
         "_id": "annotation_id",
         "_source": {
             "target": [{"source": "urn:x-pdf:the-fingerprint"}],
-            "document": {
-                "link": [{"href": "http://example.com/foo.pdf"}]
-            }
+            "document": {"web_uri": "http://example.com/foo.pdf"}
         }
     })[1]
 
     assert document_uri == "http://example.com/foo.pdf"
 
 
-def test_parse_document_raises_when_uri_from_links_not_string_for_pdfs():
+def test_parse_document_raises_when_uri_from_web_uri_not_string_for_pdfs():
     with pytest.raises(util.InvalidAnnotationError) as exc:
         util.parse_document({
             "_id": "annotation_id",
             "_source": {
                 "target": [{"source": "urn:x-pdf:the-fingerprint"}],
-                "document": {
-                    "link": [{"href": 52}]
-                }
+                "document": {"web_uri": 52}
             }
         })
     assert exc.value.reason == "uri_not_a_string"

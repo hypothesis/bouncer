@@ -63,14 +63,9 @@ def parse_document(document):
 
     if isinstance(document_uri, str) and document_uri.startswith("urn:x-pdf:"):
         try:
-            links = annotation["document"]["link"]
-            for link in links:
-                href = link["href"]
-                if not isinstance(href, str):
-                    document_uri = href
-                elif href.startswith(("http://", "https://")):
-                    document_uri = href
-                    break
+            web_uri = annotation["document"]["web_uri"]
+            if web_uri:
+                document_uri = web_uri
         except KeyError:
             pass
 
