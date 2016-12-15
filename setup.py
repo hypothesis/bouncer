@@ -39,10 +39,13 @@ setup(
     packages=find_packages(exclude=[]),
 
     install_requires=[
+        "certifi==2016.9.26",
         "elasticsearch>=2.0.0,<3.0.0",
         "gunicorn==19.4.5",
         "pyramid==1.6.1",
         "pyramid-jinja2==2.6.2",
+        "requests==2.12.4",
+        "requests-aws4auth==0.9",
         "raven==5.10.2",
         "statsd==3.2.1",
     ],
