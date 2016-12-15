@@ -20,21 +20,24 @@ def settings():
     else:
         debug = False
 
-    return {
+    result = {
         "chrome_extension_id": os.environ.get(
             "CHROME_EXTENSION_ID",
             "bjfhmglciegochdpefhhlphglcehbmek"),
         "debug": debug,
-        "elasticsearch_host": os.environ.get("ELASTICSEARCH_HOST",
-                                             "localhost"),
         "elasticsearch_index": os.environ.get("ELASTICSEARCH_INDEX",
                                               "hypothesis"),
-        "elasticsearch_port": os.environ.get("ELASTICSEARCH_PORT",
-                                             "9200"),
         "hypothesis_url": os.environ.get("HYPOTHESIS_URL",
                                          "https://hypothes.is"),
         "via_base_url": via_base_url,
     }
+
+    if 'ELASTICSEARCH_HOST' in os.environ:
+        result['elasticsearch_host'] = os.environ['ELASTICSEARCH_HOST']
+    if 'ELASTICSEARCH_PORT' in os.environ:
+        result['elasticsearch_port'] = int(os.environ['ELASTICSEARCH_PORT'])
+
+    return result
 
 
 def app():
@@ -46,6 +49,7 @@ def app():
         "static_path": "pyramid_jinja2.filters:static_path_filter",
         "static_url": "pyramid_jinja2.filters:static_url_filter"
     }
+    config.include("bouncer.search")
     config.include("bouncer.views")
     config.include("bouncer.sentry")
     return config.make_wsgi_app()
