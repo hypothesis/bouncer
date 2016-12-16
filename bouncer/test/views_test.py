@@ -1,6 +1,6 @@
 import json
 
-from elasticsearch import exceptions
+from elasticsearch import exceptions as es_exceptions
 import mock
 from pyramid import httpexceptions
 from pyramid import testing
@@ -26,7 +26,7 @@ class TestAnnotationController(object):
 
     def test_annotation_increments_stat_if_get_raises_NotFoundError(self, statsd):
         request = mock_request()
-        request.es.get.side_effect = exceptions.NotFoundError
+        request.es.get.side_effect = es_exceptions.NotFoundError
 
         try:
             views.AnnotationController(request).annotation()
@@ -38,7 +38,7 @@ class TestAnnotationController(object):
 
     def test_annotation_raises_HTTPNotFound_if_get_raises_NotFoundError(self):
         request = mock_request()
-        request.es.get.side_effect = exceptions.NotFoundError
+        request.es.get.side_effect = es_exceptions.NotFoundError
 
         with pytest.raises(httpexceptions.HTTPNotFound):
             views.AnnotationController(request).annotation()
@@ -216,6 +216,35 @@ class TestErrorController(object):
         template_data = controller.error()
 
         assert template_data["message"].startswith("Sorry, but")
+
+
+class TestHealthcheck(object):
+    def test_ok(self):
+        request = mock_request()
+        request.es.cluster.health.return_value = {'status': 'green'}
+
+        result = views.healthcheck(request)
+
+        assert result == {'status': 'ok'}
+
+    def test_failed_es_request(self):
+        request = mock_request()
+        exc = es_exceptions.ConnectionTimeout()
+        request.es.cluster.health.side_effect = exc
+
+        with pytest.raises(views.FailedHealthcheck) as e:
+            views.healthcheck(request)
+
+        assert e.value.__cause__ == exc
+
+    def test_wrong_cluster_status(self):
+        request = mock_request()
+        request.es.cluster.health.return_value = {'status': 'red'}
+
+        with pytest.raises(views.FailedHealthcheck) as e:
+            views.healthcheck(request)
+
+        assert 'cluster status' in str(e.value)
 
 
 @pytest.fixture

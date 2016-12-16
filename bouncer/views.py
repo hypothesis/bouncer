@@ -20,6 +20,10 @@ _ = i18n.TranslationStringFactory(__package__)
 NETLOC_MAX_LENGTH = 20
 
 
+class FailedHealthcheck(Exception):
+    """An exception raised when the healthcheck fails."""
+
+
 @view.view_defaults(renderer="bouncer:templates/annotation.html.jinja2")
 class AnnotationController(object):
 
@@ -127,8 +131,21 @@ class ErrorController(object):
                              "fix it.")}
 
 
+@view.view_config(route_name='healthcheck', renderer='json')
+def healthcheck(request):
+    index = request.registry.settings['elasticsearch_index']
+    try:
+        status = request.es.cluster.health(index=index)['status']
+    except exceptions.ElasticsearchException as exc:
+        raise FailedHealthcheck('elasticsearch exception') from exc
+    if status not in ('yellow', 'green'):
+        raise FailedHealthcheck('cluster status was {!r}'.format(status))
+    return {'status': 'ok'}
+
+
 def includeme(config):
     config.add_route("index", "/")
+    config.add_route("healthcheck", "/_status")
     config.add_route("annotation_with_url", "/{id}/*url")
     config.add_route("annotation_without_url", "/{id}")
     config.scan(__name__)
