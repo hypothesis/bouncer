@@ -36,6 +36,12 @@ def settings():
         result['elasticsearch_host'] = os.environ['ELASTICSEARCH_HOST']
     if 'ELASTICSEARCH_PORT' in os.environ:
         result['elasticsearch_port'] = int(os.environ['ELASTICSEARCH_PORT'])
+    if 'ELASTICSEARCH_AWS_ACCESS_KEY_ID' in os.environ:
+        result['elasticsearch_aws_access_key_id'] = os.environ['ELASTICSEARCH_AWS_ACCESS_KEY_ID']
+    if 'ELASTICSEARCH_AWS_SECRET_ACCESS_KEY' in os.environ:
+        result['elasticsearch_aws_secret_access_key'] = os.environ['ELASTICSEARCH_AWS_SECRET_ACCESS_KEY']
+    if 'ELASTICSEARCH_AWS_REGION' in os.environ:
+        result['elasticsearch_aws_region'] = os.environ['ELASTICSEARCH_AWS_REGION']
 
     return result
 

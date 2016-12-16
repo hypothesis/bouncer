@@ -37,6 +37,12 @@ ELASTICSEARCH_PORT
   The port of the Elasticsearch server that bouncer will read annotations
   from (default: 9200)
 
+ELASTICSEARCH_AWS_{ACCESS_KEY_ID,SECRET_ACCESS_KEY,REGION}
+  If all three of these environment variables are set, bouncer will assume that
+  it must connect to Elasticsearch over HTTPS and will enable AWS Auth v4
+  request signing with the given credentials. This allows making requests to an
+  AWS Elasticsearch domain as an IAM user.
+
 HYPOTHESIS_URL
   The URL of the Hypothesis front page that requests to bouncer's front page
   will be redirected to (default: https://hypothes.is)
