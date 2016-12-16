@@ -32,7 +32,7 @@ class AnnotationController(object):
         settings = self.request.registry.settings
 
         try:
-            document = util.elasticsearch_client(settings).get(
+            document = self.request.es.get(
                 index=settings["elasticsearch_index"],
                 doc_type="annotation",
                 id=self.request.matchdict["id"])

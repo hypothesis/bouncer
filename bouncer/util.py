@@ -1,15 +1,7 @@
-import elasticsearch
 from pyramid import i18n
 
 
 _ = i18n.TranslationStringFactory(__package__)
-
-
-def elasticsearch_client(settings):
-    return elasticsearch.Elasticsearch(
-        host=settings["elasticsearch_host"],
-        port=settings["elasticsearch_port"],
-    )
 
 
 class InvalidAnnotationError(Exception):
