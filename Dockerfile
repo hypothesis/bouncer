@@ -2,7 +2,7 @@ FROM gliderlabs/alpine:3.4
 MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
-RUN apk-install ca-certificates curl nodejs python3 supervisor
+RUN apk-install ca-certificates collectd curl nodejs python3 supervisor
 
 # Create the bouncer user, group, home directory and package directory.
 RUN addgroup -S bouncer \
@@ -17,6 +17,11 @@ RUN npm install --production \
 
 RUN pip3 install --no-cache-dir -U pip \
   && pip3 install --no-cache-dir -r requirements.txt
+
+# Copy collectd config
+COPY conf/collectd.conf /etc/collectd/collectd.conf
+RUN mkdir /etc/collectd/collectd.conf.d \
+ && chown bouncer:bouncer /etc/collectd/collectd.conf.d
 
 COPY . .
 
