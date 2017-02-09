@@ -1,0 +1,7 @@
+-r requirements.txt
+
+coverage
+mock
+prospector
+pytest
+pytest-cov

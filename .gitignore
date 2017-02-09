@@ -1,8 +1,9 @@
-*.egg-info
 *.pyc
-node_modules
+
 .coverage
-bouncer/static/scripts/bundle.js
+.coverage.*
 .cache
-dist
 .tox
+
+node_modules
+bouncer/static/scripts/bundle.js
