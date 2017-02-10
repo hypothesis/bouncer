@@ -2,7 +2,7 @@ FROM gliderlabs/alpine:3.4
 MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
-RUN apk-install ca-certificates curl nodejs python3
+RUN apk-install ca-certificates curl nodejs python3 supervisor
 
 # Create the bouncer user, group, home directory and package directory.
 RUN addgroup -S bouncer \
@@ -26,4 +26,4 @@ VOLUME ["/var/lib/bouncer/bouncer/static"]
 # Start the web server by default
 EXPOSE 8000
 USER bouncer
-CMD ["gunicorn", "-b", "0.0.0.0:8000", "bouncer:app()"]
+CMD ["supervisord", "-c" , "conf/supervisord.conf"]
