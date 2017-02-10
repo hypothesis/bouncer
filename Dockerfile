@@ -12,17 +12,14 @@ RUN addgroup -S bouncer \
 WORKDIR /var/lib/bouncer
 
 # Copy packaging
-COPY README.rst package.json setup.* ./
+COPY README.rst package.json requirements.txt ./
 
 RUN npm install --production \
   && npm cache clean
 
-COPY gunicorn.conf.py ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application files
-COPY bouncer ./bouncer/
-
-RUN pip install --no-cache-dir -e .
+COPY . .
 
 # Persist the static directory.
 VOLUME ["/var/lib/bouncer/bouncer/static"]

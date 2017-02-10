@@ -2,7 +2,7 @@
 from pyramid import tweens
 import raven
 
-from bouncer import __about__
+from bouncer import __version__
 
 
 def get_raven_client(request):
@@ -22,7 +22,7 @@ def get_raven_client(request):
 
 def includeme(config):
     config.registry["raven.client"] = raven.Client(
-        release=__about__.__version__)
+        release=__version__)
 
     config.add_request_method(
         get_raven_client,
