@@ -25,9 +25,6 @@ RUN mkdir /etc/collectd/collectd.conf.d \
 
 COPY . .
 
-# Persist the static directory.
-VOLUME ["/var/lib/bouncer/bouncer/static"]
-
 # Start the web server by default
 EXPOSE 8000
 USER bouncer
