@@ -1,5 +1,7 @@
 """Report exceptions to Sentry/Raven."""
-from pyramid import tweens
+
+import os
+
 import raven
 
 from bouncer import __version__
@@ -21,8 +23,10 @@ def get_raven_client(request):
 
 
 def includeme(config):
-    config.registry["raven.client"] = raven.Client(
-        release=__version__)
+    environment = os.environ.get('ENV', 'dev')
+
+    config.registry["raven.client"] = raven.Client(environment=environment,
+                                                   release=__version__)
 
     config.add_request_method(
         get_raven_client,
