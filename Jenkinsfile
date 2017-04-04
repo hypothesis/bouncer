@@ -15,7 +15,7 @@ node {
     // Run our Python tests inside the built container
     img.inside("-u root") {
         sh 'pip install -q tox'
-        sh 'tox'
+        sh 'cd /var/lib/bouncer && tox'
     }
 
     // We only push the image to the Docker Hub if we're on master
