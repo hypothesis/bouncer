@@ -46,7 +46,8 @@ class AnnotationController(object):
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
         try:
-            annotation_id, document_uri = util.parse_document(document)
+            annotation_id, document_uri, quote, text \
+                = util.parse_document(document)
         except util.InvalidAnnotationError as exc:
             statsd.incr("views.annotation.422.{}".format(exc.reason))
             raise httpexceptions.HTTPUnprocessableEntity(str(exc))
@@ -80,7 +81,9 @@ class AnnotationController(object):
                 "viaUrl": via_url,
                 "extensionUrl": extension_url,
             }),
-            "pretty_url": pretty_url
+            "pretty_url": pretty_url,
+            "quote": quote,
+            "text": text
         }
 
 

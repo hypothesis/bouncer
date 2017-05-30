@@ -3,6 +3,9 @@
 {% set title = _("Hypothesis: Annotation for %(site)s" )|format(site=pretty_url)  %}
 {% set meta_title = _("Annotation for %(site)s" )|format(site=pretty_url)  %}
 
+{% set quote = quote  %}
+{% set text = text  %}
+
 {% block content %}
   <div class="center spinner__stationary-ring">
     <img alt="{% trans %}Loading annotation for {{ pretty_url }}{% endtrans %}"

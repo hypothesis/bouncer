@@ -29,10 +29,13 @@ class InvalidAnnotationError(Exception):
 
 def parse_document(document):
     """
-    Return the ID and URI from the given Elasticsearch annotation document.
+    Return the ID, URI, quote, and text from the given Elasticsearch
+    annotation document.
 
     Return the annotation ID and the annotated document's URI from the given
     Elasticsearch annotation document.
+
+    Also return quote (if available) and text to enhance the share card.
 
     :param document: the Elasticsearch annotation document to parse
     :type document: dict
@@ -41,15 +44,26 @@ def parse_document(document):
 
     """
     # We assume that Elasticsearch documents always have "_id" and "_source".
+
     annotation_id = document["_id"]
     annotation = document["_source"]
 
     document_uri = None
 
+    quote = None
+    if annotation["text"] == "":
+        text = "Follow this link to see the annotation on the original page."
+    else:
+        text = annotation["text"]
+
     try:
         targets = annotation["target"]
         if targets:
             document_uri = targets[0]["source"]
+            selectors = targets[0]["selector"]
+            for selector in selectors:
+                if selector["type"] == "TextQuoteSelector":
+                    quote = selector["exact"]
     except KeyError:
         pass
 
@@ -61,6 +75,9 @@ def parse_document(document):
         except KeyError:
             pass
 
+    if quote is None:
+        quote = "Annotation for " + document_uri
+
     if document_uri is None:
         raise InvalidAnnotationError(
             _("The annotation has no URI"), "annotation_has_no_uri")
@@ -70,4 +87,4 @@ def parse_document(document):
             _("The annotation has an invalid document URI"),
             "uri_not_a_string")
 
-    return (annotation_id, document_uri)
+    return (annotation_id, document_uri, quote, text)
