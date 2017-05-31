@@ -321,7 +321,8 @@ def parse_document(request):
     parse_document = patcher.start()
     request.addfinalizer(patcher.stop)
     parse_document.return_value = [
-        "AVLlVTs1f9G3pW-EYc6q", "http://www.example.com/example.html"]
+        "AVLlVTs1f9G3pW-EYc6q", "http://www.example.com/example.html",
+        "sample quote", "sample text"]
     return parse_document
 
 
@@ -346,7 +347,9 @@ def mock_request():
     request.es = mock.Mock()
     request.es.get.return_value = {
         "_id": "AVLlVTs1f9G3pW-EYc6q",
-        "_source": {"uri": "http://www.example.com/example.html"}
+        "_source": {"uri": "http://www.example.com/example.html"},
+        "quote": "sample quote",
+        "text": "sample text"
     }
     request.raven = mock.Mock()
     return request

@@ -47,11 +47,12 @@ def parse_document(document):
 
     annotation_id = document["_id"]
     annotation = document["_source"]
+    quote = ""
+    text = ""
 
     document_uri = None
 
-    quote = None
-    if annotation["text"] == "":
+    if "text" not in annotation:
         text = "Follow this link to see the annotation on the original page."
     else:
         text = annotation["text"]
@@ -75,8 +76,8 @@ def parse_document(document):
         except KeyError:
             pass
 
-    if quote is None:
-        quote = "Annotation for " + document_uri
+    if quote == "":
+        quote = "Annotation for {}".format(document_uri)
 
     if document_uri is None:
         raise InvalidAnnotationError(
