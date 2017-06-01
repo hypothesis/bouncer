@@ -9,6 +9,7 @@ from pyramid import view
 from statsd.defaults.env import statsd
 
 from bouncer import util
+from bouncer import __version__ as bouncer_version
 
 
 _ = i18n.TranslationStringFactory(__package__)
@@ -140,7 +141,7 @@ def healthcheck(request):
         raise FailedHealthcheck('elasticsearch exception') from exc
     if status not in ('yellow', 'green'):
         raise FailedHealthcheck('cluster status was {!r}'.format(status))
-    return {'status': 'ok'}
+    return {'status': 'ok', 'version': bouncer_version}
 
 
 def includeme(config):
