@@ -7,6 +7,7 @@ from pyramid import httpexceptions
 from pyramid import i18n
 from pyramid import view
 from statsd.defaults.env import statsd
+import re
 
 from bouncer import util
 
@@ -34,20 +35,27 @@ class AnnotationController(object):
     @view.view_config(route_name="annotation_without_url")
     def annotation(self):
         settings = self.request.registry.settings
+        id=self.request.matchdict["id"]
+        print(id)
+        if re.match("(query:|q:)", id, re.IGNORECASE):
+            annotation_id = id
+            document_uri = parse.urldefrag(
+                parse.urlsplit('/'.join(
+                self.request.matchdict['url'])).geturl())[0]
+        else:
+            try:
+                document = self.request.es.get(
+                                               index=settings["elasticsearch_index"],
+                                               doc_type="annotation",
+                                               id=self.request.matchdict["id"])
+            except exceptions.NotFoundError:
+                statsd.incr("views.annotation.404.annotation_not_found")
+                raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
-        try:
-            document = self.request.es.get(
-                index=settings["elasticsearch_index"],
-                doc_type="annotation",
-                id=self.request.matchdict["id"])
-        except exceptions.NotFoundError:
-            statsd.incr("views.annotation.404.annotation_not_found")
-            raise httpexceptions.HTTPNotFound(_("Annotation not found"))
-
-        try:
-            annotation_id, document_uri = util.parse_document(document)
-        except util.InvalidAnnotationError as exc:
-            statsd.incr("views.annotation.422.{}".format(exc.reason))
+            try:
+                annotation_id, document_uri = util.parse_document(document)
+            except util.InvalidAnnotationError as exc:
+                statsd.incr("views.annotation.422.{}".format(exc.reason))
             raise httpexceptions.HTTPUnprocessableEntity(str(exc))
 
         # Remove any existing #fragment identifier from the URI before we
