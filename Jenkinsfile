@@ -4,12 +4,21 @@ node {
     stage 'Build'
     checkout scm
 
-    // Store the short commit id for use tagging images
-    sh 'git rev-parse --short HEAD > GIT_SHA'
-    gitSha = readFile('GIT_SHA').trim()
+    buildVersion = sh(
+        script: 'python3 -c "import bouncer; print(bouncer.__version__)"',
+        returnStdout: true
+    ).trim()
 
-    sh "make docker DOCKER_TAG=${gitSha}"
-    img = docker.image "hypothesis/bouncer:${gitSha}"
+    // Docker tags may not contain '+'
+    dockerTag = buildVersion.replace('+', '-')
+
+    // Set build metadata
+    currentBuild.displayName = buildVersion
+    currentBuild.description = "Docker: ${dockerTag}"
+
+    // Build docker image
+    sh "make docker DOCKER_TAG=${dockerTag}"
+    img = docker.image "hypothesis/bouncer:${dockerTag}"
 
     stage 'Test'
     // Run our Python tests inside the built container
@@ -24,6 +33,7 @@ node {
     }
     stage 'Push'
     docker.withRegistry('', 'docker-hub-build') {
-        img.push('auto')
+        img.push()
+        img.push('latest')
     }
 }

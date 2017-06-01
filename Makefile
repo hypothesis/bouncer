@@ -7,7 +7,7 @@ deps:
 	npm install
 
 dev:
-	PYRAMID_RELOAD_TEMPLATES=1 gunicorn --reload "bouncer:app()"
+	PYRAMID_RELOAD_TEMPLATES=1 gunicorn --reload "bouncer.app:app()"
 
 .PHONY: test
 test:
