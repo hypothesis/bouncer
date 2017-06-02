@@ -49,6 +49,7 @@ if (env.BRANCH_NAME != 'master') {
 stage 'QA Deploy'
 build job: 'deployment',
       parameters: [[$class: 'StringParameterValue', name: 'APP', value: 'bouncer'],
+                   [$class: 'StringParameterValue', name: 'TYPE', value: 'exact-version'],
                    [$class: 'StringParameterValue', name: 'APP_DOCKER_VERSION', value: dockerTag],
                    [$class: 'StringParameterValue', name: 'ENV', value: 'qa']]
 
