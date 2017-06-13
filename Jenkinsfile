@@ -1,5 +1,7 @@
 #!groovy
 
+@Library('github.com/hypothesis/pipeline-library@master')
+
 def dockerTag = null
 
 node {
@@ -29,14 +31,10 @@ node {
         sh 'cd /var/lib/bouncer && tox'
     }
 
-    // We only push the image to the Docker Hub if we're on master
-    if (env.BRANCH_NAME != 'master') {
-        return
-    }
     stage 'Push'
-    docker.withRegistry('', 'docker-hub-build') {
-        img.push()
-        img.push('latest')
+    // We only push the image to the Docker Hub if we're on master
+    if (env.BRANCH_NAME == 'master') {
+        dockerHubPush(img)
     }
 }
 
