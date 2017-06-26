@@ -48,6 +48,7 @@ class AnnotationController(object):
         try:
             annotation_id, document_uri, quote, text \
                 = util.parse_document(document)
+
         except util.InvalidAnnotationError as exc:
             statsd.incr("views.annotation.422.{}".format(exc.reason))
             raise httpexceptions.HTTPUnprocessableEntity(str(exc))
@@ -73,6 +74,10 @@ class AnnotationController(object):
         pretty_url = _pretty_url(document_uri)
 
         statsd.incr("views.annotation.200.annotation_found")
+        if ( 'private' in self.request.GET.keys() and 
+              self.request.GET['private'] == 'true' ):
+            quote = 'private'
+            text = 'private'
         return {
             "data": json.dumps({
                 # Warning: variable names change from python_style to
