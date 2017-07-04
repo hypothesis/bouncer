@@ -1,6 +1,3 @@
-javascript:
-  config_file: .jshintrc
-  ignore_file: .jshintignore
-jscs:
+eslint:
   enabled: true
-  config_file: .jscsrc
+  config_file: .eslintrc
