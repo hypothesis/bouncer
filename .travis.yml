@@ -3,7 +3,10 @@ language:
   - python
 python:
   - "3.5"
+env:
+  - NODE_VERSION="6.9"
 before_install:
+  - nvm install $NODE_VERSION
   - pip install codecov
 install:
   - make deps
