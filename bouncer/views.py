@@ -55,8 +55,7 @@ class AnnotationController(object):
         # append our own.
         document_uri = parse.urldefrag(document_uri)[0]
 
-        if not (document_uri.startswith("http://") or
-                document_uri.startswith("https://")):
+        if not _is_http_url(document_uri):
             statsd.incr("views.annotation.422.not_an_http_or_https_document")
             raise httpexceptions.HTTPUnprocessableEntity(
                 _("Sorry, but it looks like this annotation was made on a "
@@ -70,10 +69,7 @@ class AnnotationController(object):
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
-        parsed_url = parse.urlparse(document_uri)
-        pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
-        if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
-          pretty_url = pretty_url + jinja2.Markup("&hellip;")
+        pretty_url = _pretty_url(document_uri)
 
         statsd.incr("views.annotation.200.annotation_found")
         return {
@@ -94,6 +90,54 @@ def index(request):
     statsd.incr("views.index.302.redirected_to_hypothesis")
     raise httpexceptions.HTTPFound(
         location=request.registry.settings["hypothesis_url"])
+
+
+@view.view_config(renderer="bouncer:templates/annotation.html.jinja2",
+                  route_name="goto_url")
+def goto_url(request):
+    """
+    View that takes the user to a URL with the annotation layer enabled.
+
+    Optional configuration for the client may be specified via additional query
+    params:
+
+    "q" - Initial query for the filter input in the client.
+    """
+    settings = request.registry.settings
+    url = request.params.get('url')
+
+    if url is None:
+        raise httpexceptions.HTTPBadRequest('"url" parameter is missing')
+
+    # Remove any existing #fragment identifier from the URI before we
+    # append our own.
+    url = parse.urldefrag(url)[0]
+
+    if not _is_http_url(url):
+        raise httpexceptions.HTTPBadRequest(
+            _('Sorry, but this service can only show annotations on '
+              'HTTP URLs.'))
+
+    query = parse.quote(request.params.get('q', ''))
+
+    via_url = '{via_base_url}/{url}#annotations:query:{query}'.format(
+        via_base_url=settings['via_base_url'],
+        url=url,
+        query=query)
+
+    extension_url = '{url}#annotations:query:{query}'.format(
+        url=url, query=query)
+
+    pretty_url = _pretty_url(url)
+
+    return {
+        'data': json.dumps({
+            'chromeExtensionId': settings['chrome_extension_id'],
+            'viaUrl': via_url,
+            'extensionUrl': extension_url,
+        }),
+        'pretty_url': pretty_url
+    }
 
 
 @view.view_defaults(renderer='bouncer:templates/error.html.jinja2')
@@ -144,9 +188,25 @@ def healthcheck(request):
     return {'status': 'ok', 'version': bouncer_version}
 
 
+def _is_http_url(url):
+    return url.startswith('http://') or url.startswith('https://')
+
+
+def _pretty_url(url):
+    """
+    Return the domain name from `url` for display.
+    """
+    parsed_url = parse.urlparse(url)
+    pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
+    if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
+        pretty_url = pretty_url + jinja2.Markup("&hellip;")
+    return pretty_url
+
+
 def includeme(config):
     config.add_route("index", "/")
     config.add_route("healthcheck", "/_status")
+    config.add_route("goto_url", "/go")
     config.add_route("annotation_with_url", "/{id}/*url")
     config.add_route("annotation_without_url", "/{id}")
     config.scan(__name__)
