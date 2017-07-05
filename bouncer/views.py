@@ -74,10 +74,12 @@ class AnnotationController(object):
         pretty_url = _pretty_url(document_uri)
 
         statsd.incr("views.annotation.200.annotation_found")
+        visibility = 'public'
         if ( 'private' in self.request.GET.keys() and 
               self.request.GET['private'] == 'true' ):
-            quote = 'private'
-            text = 'private'
+            visibility = 'private'
+            quote = None
+            text = None
         return {
             "data": json.dumps({
                 # Warning: variable names change from python_style to
@@ -88,7 +90,8 @@ class AnnotationController(object):
             }),
             "pretty_url": pretty_url,
             "quote": quote,
-            "text": text
+            "text": text,
+            "visibility": visibility
         }
 
 

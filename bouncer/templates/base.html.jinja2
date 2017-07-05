@@ -3,6 +3,8 @@
   <head>
     <meta charset=utf-8>
 
+    {% if visibility != 'private' %}
+
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@hypothes_is" />
     <meta name="twitter:title" content="{{ quote }}" />
@@ -14,6 +16,8 @@
     <meta property="og:title" content="{{ quote }}"/>
     <meta property="og:description" content="{{ text }}"/>
     <meta property="og:image" content="{{'bouncer:static/images/facebook.png'|static_url }}"/>
+
+    {% endif %}
 
     <title>{{ title|safe }}</title>
     <link rel="stylesheet"
