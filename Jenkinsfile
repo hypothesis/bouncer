@@ -27,18 +27,13 @@ node {
 onlyOnMaster {
     milestone()
     stage('qa deploy') {
-        lock(resource: 'bouncer-qa-deploy', inversePrecedence: true) {
-            milestone()
-            deployApp(image: img, app: 'bouncer', env: 'qa')
-        }
+        deployApp(image: img, app: 'bouncer', env: 'qa')
     }
 
     milestone()
     stage('prod deploy') {
         input(message: "Deploy to prod?")
-        lock(resource: 'bouncer-prod-deploy', inversePrecedence: true) {
-            milestone()
-            deployApp(image: img, app: 'bouncer', env: 'prod')
-        }
+        milestone()
+        deployApp(image: img, app: 'bouncer', env: 'prod')
     }
 }
