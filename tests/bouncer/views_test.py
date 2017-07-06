@@ -171,6 +171,73 @@ def test_index_redirects_to_hypothesis():
     assert exc.value.location == "https://hypothes.is"
 
 
+class TestGotoUrlController(object):
+
+    def test_it_shows_redirect_page(self):
+        request = mock_request()
+        request.GET['url'] = 'https://example.com/'
+
+        ctx = views.goto_url(request)
+
+        assert ctx == {'data': json.dumps({
+                         'chromeExtensionId': 'test-extension-id',
+                         'viaUrl': 'https://via.hypothes.is/https://example.com/#annotations:query:',
+                         'extensionUrl': 'https://example.com/#annotations:query:'}),
+                       'pretty_url': 'example.com'}
+
+    def test_it_sets_query_in_fragment(self):
+        request = mock_request()
+        request.GET['url'] = 'https://example.com/article.html'
+        request.GET['q'] = 'user:jsmith'
+
+        ctx = views.goto_url(request)
+
+        data = json.loads(ctx['data'])
+        expected_frag = '#annotations:query:user%3Ajsmith'
+        assert data['viaUrl'].endswith(expected_frag)
+        assert data['extensionUrl'].endswith(expected_frag)
+
+    def test_it_rejects_invalid_or_missing_urls(self):
+        invalid_urls = [None,
+
+                        # Unsupported protocols.
+                        'ftp://foo.bar',
+                        'doi:10.1.2/345',
+                        'file://foo.bar',
+
+                        # Malformed URLs.
+                        'http://goo\[g']
+
+        for url in invalid_urls:
+            request = mock_request()
+            request.GET['url'] = url
+
+            with pytest.raises(httpexceptions.HTTPBadRequest):
+                views.goto_url(request)
+
+    def test_it_allows_valid_http_urls(self):
+        valid_urls = ['http://publisher.org',
+                      'https://publisher.org',
+                      'HTTP://PUBLISHER.ORG',
+                      'HTTPS://example.com']
+
+        for url in valid_urls:
+            request = mock_request()
+            request.GET['url'] = url
+
+            views.goto_url(request)
+
+    def test_it_strips_existing_fragment(self):
+        request = mock_request()
+        request.GET['url'] = 'https://example.com/#foobar'
+
+        ctx = views.goto_url(request)
+
+        data = json.loads(ctx['data'])
+        assert data['viaUrl'] == 'https://via.hypothes.is/https://example.com/#annotations:query:'
+        assert data['extensionUrl'] == 'https://example.com/#annotations:query:'
+
+
 class TestErrorController(object):
 
     def test_httperror_sets_status_code(self):
