@@ -197,9 +197,16 @@ class TestGotoUrlController(object):
         assert data['viaUrl'].endswith(expected_frag)
         assert data['extensionUrl'].endswith(expected_frag)
 
-    def test_it_validates_url(self):
-        invalid_urls = [None, 'ftp://foo.bar', 'doi:10.1.2/345',
-                        'file://foo.bar']
+    def test_it_rejects_invalid_or_missing_urls(self):
+        invalid_urls = [None,
+
+                        # Unsupported protocols.
+                        'ftp://foo.bar',
+                        'doi:10.1.2/345',
+                        'file://foo.bar',
+
+                        # Malformed URLs.
+                        'http://goo\[g']
 
         for url in invalid_urls:
             request = mock_request()
@@ -207,6 +214,18 @@ class TestGotoUrlController(object):
 
             with pytest.raises(httpexceptions.HTTPBadRequest):
                 views.goto_url(request)
+
+    def test_it_allows_valid_http_urls(self):
+        valid_urls = ['http://publisher.org',
+                      'https://publisher.org',
+                      'HTTP://PUBLISHER.ORG',
+                      'HTTPS://example.com']
+
+        for url in valid_urls:
+            request = mock_request()
+            request.GET['url'] = url
+
+            views.goto_url(request)
 
     def test_it_strips_existing_fragment(self):
         request = mock_request()

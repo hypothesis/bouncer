@@ -55,7 +55,7 @@ class AnnotationController(object):
         # append our own.
         document_uri = parse.urldefrag(document_uri)[0]
 
-        if not _is_http_url(document_uri):
+        if not _is_valid_http_url(document_uri):
             statsd.incr("views.annotation.422.not_an_http_or_https_document")
             raise httpexceptions.HTTPUnprocessableEntity(
                 _("Sorry, but it looks like this annotation was made on a "
@@ -109,10 +109,10 @@ def goto_url(request):
     if url is None:
         raise httpexceptions.HTTPBadRequest('"url" parameter is missing')
 
-    if not _is_http_url(url):
+    if not _is_valid_http_url(url):
         raise httpexceptions.HTTPBadRequest(
             _('Sorry, but this service can only show annotations on '
-              'HTTP URLs.'))
+              'valid HTTP or HTTPs URLs.'))
 
     # Remove any existing #fragment identifier from the URI before we
     # append our own.
@@ -188,8 +188,18 @@ def healthcheck(request):
     return {'status': 'ok', 'version': bouncer_version}
 
 
-def _is_http_url(url):
-    return url.startswith('http://') or url.startswith('https://')
+def _is_valid_http_url(url):
+    """
+    Return `True` if `url` is a valid HTTP or HTTPS URL.
+
+    Parsing is currently very lenient as the URL only has to be accepted by
+    `urlparse()`.
+    """
+    try:
+        parsed_url = parse.urlparse(url)
+        return parsed_url.scheme == 'http' or parsed_url.scheme == 'https'
+    except:
+        return False
 
 
 def _pretty_url(url):
