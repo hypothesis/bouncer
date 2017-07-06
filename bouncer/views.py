@@ -109,14 +109,14 @@ def goto_url(request):
     if url is None:
         raise httpexceptions.HTTPBadRequest('"url" parameter is missing')
 
-    # Remove any existing #fragment identifier from the URI before we
-    # append our own.
-    url = parse.urldefrag(url)[0]
-
     if not _is_http_url(url):
         raise httpexceptions.HTTPBadRequest(
             _('Sorry, but this service can only show annotations on '
               'HTTP URLs.'))
+
+    # Remove any existing #fragment identifier from the URI before we
+    # append our own.
+    url = parse.urldefrag(url)[0]
 
     query = parse.quote(request.params.get('q', ''))
 
