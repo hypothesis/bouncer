@@ -16,7 +16,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: false,
-    browsers: ['PhantomJS2'],
+    browsers: ['PhantomJS'],
     singleRun: true,
     concurrency: Infinity
   });
