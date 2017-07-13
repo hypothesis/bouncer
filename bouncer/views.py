@@ -58,7 +58,6 @@ class AnnotationController(object):
             statsd.incr("views.annotation.422.{}".format(exc.reason))
             raise httpexceptions.HTTPUnprocessableEntity(str(exc))
 
-
         # Remove any existing #fragment identifier from the URI before we
         # append our own.
         document_uri = parse.urldefrag(document_uri)[0]
