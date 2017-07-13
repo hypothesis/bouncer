@@ -46,12 +46,18 @@ class AnnotationController(object):
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
         try:
-            annotation_id, document_uri, quote, text \
-                = util.parse_document(document)
+            parsed_document = util.parse_document(document)
+            annotation_id = parsed_document["annotation_id"]
+            document_uri = parsed_document["document_uri"]
+            group = parsed_document["group"]
+            shared = parsed_document["shared"]
+            quote = parsed_document["quote"]
+            text = parsed_document["text"]
 
         except util.InvalidAnnotationError as exc:
             statsd.incr("views.annotation.422.{}".format(exc.reason))
             raise httpexceptions.HTTPUnprocessableEntity(str(exc))
+
 
         # Remove any existing #fragment identifier from the URI before we
         # append our own.
@@ -74,12 +80,6 @@ class AnnotationController(object):
         pretty_url = _pretty_url(document_uri)
 
         statsd.incr("views.annotation.200.annotation_found")
-        visibility = 'public'
-        if ( 'private' in self.request.GET.keys() and 
-              self.request.GET['private'] == 'true' ):
-            visibility = 'private'
-            quote = None
-            text = None
         return {
             "data": json.dumps({
                 # Warning: variable names change from python_style to
@@ -91,7 +91,8 @@ class AnnotationController(object):
             "pretty_url": pretty_url,
             "quote": quote,
             "text": text,
-            "visibility": visibility
+            "shared": shared,
+            "group": group
         }
 
 

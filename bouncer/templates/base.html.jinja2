@@ -3,7 +3,7 @@
   <head>
     <meta charset=utf-8>
 
-    {% if visibility != 'private' %}
+    {% if shared and group == '__world__'  %}
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@hypothes_is" />
