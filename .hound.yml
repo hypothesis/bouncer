@@ -1,6 +1,5 @@
-javascript:
-  config_file: .jshintrc
-  ignore_file: .jshintignore
-jscs:
-  enabled: true
-  config_file: .jscsrc
+jshint:
+  enabled: false
+eslint:
+  # We use ESLint, but Hound does not support custom ESLint config packages :(
+  enabled: false

@@ -11,7 +11,7 @@ describe('redirect()', function () {
           chromeExtensionId: 'test-extension-id',
           extensionUrl: 'http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
           viaUrl: 'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
-        })
+        }),
       };
     };
     sinon.stub(window.console, 'error');
@@ -35,7 +35,7 @@ describe('redirect()', function () {
 
   it('redirects to Via if window.chrome but no chrome.runtime', function () {
     // Some browsers define window.chrome but not chrome.runtime.
-    window.chrome = {}
+    window.chrome = {};
     var navigateTo = sinon.stub();
 
     redirect(navigateTo);
@@ -48,7 +48,7 @@ describe('redirect()', function () {
 
   it('redirects to Via if window.chrome but no sendMessage', function () {
     // Some browsers might window.chrome but not chrome.runtime.sendMessage.
-    window.chrome = {runtime: {}}
+    window.chrome = {runtime: {}};
     var navigateTo = sinon.stub();
 
     redirect(navigateTo);
@@ -64,8 +64,8 @@ describe('redirect()', function () {
       runtime: {
         sendMessage: function (id, message, callbackFunction) {
           callbackFunction(null);
-        }
-      }
+        },
+      },
     };
     var navigateTo = sinon.stub();
 
@@ -83,8 +83,8 @@ describe('redirect()', function () {
         sendMessage: function (id, message, callbackFunction) {
           callbackFunction('Hey!');
         },
-        lastError: {message: 'There was an error'}
-      }
+        lastError: {message: 'There was an error'},
+      },
     };
     var navigateTo = sinon.stub();
 
@@ -102,8 +102,8 @@ describe('redirect()', function () {
         sendMessage: function (id, message, callbackFunction) {
           callbackFunction('Hey!');
         },
-        lastError: {message: 'There was an error'}
-      }
+        lastError: {message: 'There was an error'},
+      },
     };
 
     redirect(sinon.stub());
@@ -114,19 +114,19 @@ describe('redirect()', function () {
   it('calls chrome.runtime.sendMessage correctly', function () {
     window.chrome = {
       runtime: {
-        sendMessage: sinon.stub()
-      }
+        sendMessage: sinon.stub(),
+      },
     };
 
     redirect(function () {});
 
     assert.equal(window.chrome.runtime.sendMessage.calledOnce, true);
     assert.equal(window.chrome.runtime.sendMessage.firstCall.args[0],
-                 'test-extension-id');
+      'test-extension-id');
     assert.deepEqual(window.chrome.runtime.sendMessage.firstCall.args[1],
-                     {type: 'ping'});
+      {type: 'ping'});
     assert.equal(typeof(window.chrome.runtime.sendMessage.firstCall.args[2]),
-                 'function');
+      'function');
   });
 
   it('redirects to Chrome extension if installed', function () {
@@ -134,8 +134,8 @@ describe('redirect()', function () {
       runtime: {
         sendMessage: function (id, message, callbackFunction) {
           callbackFunction('Hey!');
-        }
-      }
+        },
+      },
     };
     var navigateTo = sinon.stub();
 

@@ -2,8 +2,8 @@
   "devDependencies": {
     "browserify": "^14.4.0",
     "chai": "^4.0.2",
-    "jscs": "^1.13.1",
-    "jshint": "^2.9.1",
+    "eslint": "^4.1.1",
+    "eslint-config-hypothesis": "^1.0.0",
     "karma": "^1.7.0",
     "karma-browserify": "^5.1.1",
     "karma-chai": "^0.1.0",

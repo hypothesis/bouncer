@@ -7,7 +7,7 @@ function getSettings(document) {
 }
 
 /** Navigate the browser to the given URL. */
-function navigateTo(url) {
+function defaultNavigateTo(url) {
   window.location.replace(url);
 }
 
@@ -22,11 +22,12 @@ function navigateTo(url) {
 function redirect(navigateToFn) {
   // Use the test navigateTo() function if one was passed in, the real
   // navigateTo() otherwise.
-  navigateTo = navigateToFn || navigateTo;
+  var navigateTo = navigateToFn || defaultNavigateTo;
 
   var settings = getSettings(document);
 
-  if (window.chrome && chrome.runtime && chrome.runtime.sendMessage) {
+  var chrome = window.chrome;
+  if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
     // The user is using Chrome, redirect them to our Chrome extension if they
     // have it installed, via otherwise.
     chrome.runtime.sendMessage(

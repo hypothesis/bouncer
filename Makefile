@@ -13,6 +13,7 @@ dev:
 test:
 	@pip install -q tox
 	tox
+	./node_modules/.bin/eslint bouncer/scripts
 	./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: docker
