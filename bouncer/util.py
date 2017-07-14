@@ -49,7 +49,9 @@ def parse_document(document):
     group = annotation["group"]
     shared = annotation["shared"]
 
-    text = annotation.get('text', 'Follow this link to see the annotation on the original page.')
+    boilerplate_text = (
+        'Follow this link to see the annotation on the original page.')
+    text = (annotation.get('text', boilerplate_text))
 
     document_uri = None
     quote = None
@@ -60,10 +62,10 @@ def parse_document(document):
             document_uri = targets[0]["source"]
             if 'selector' in targets[0]:
                 selectors = targets[0]["selector"]
-                for selector in selectors:
-                    if "type" in selector and selector["type"] == "TextQuoteSelector":
-                        if "exact" in selector:
-                            quote = selector["exact"]
+                for sel in selectors:
+                    if "type" in sel and sel["type"] == ("TextQuoteSelector"):
+                        if "exact" in sel:
+                            quote = sel["exact"]
     except KeyError:
         pass
 
@@ -84,7 +86,8 @@ def parse_document(document):
 
     if quote is None:
         raise InvalidAnnotationError(
-            _("The annotation has a TextQuoteSelector but no exact quote"), "annotation_has_no_quote")  
+            _("The annotation has a TextQuoteSelector but no exact quote"),
+            "annotation_has_no_quote")
 
     if not isinstance(document_uri, str):
         raise InvalidAnnotationError(
