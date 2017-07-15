@@ -67,7 +67,7 @@ def test_parse_document_returns_document_uri():
 
 
 def test_parse_document_returns_quote():
-    quote = util.parse_document({
+    parsed_document = util.parse_document({
         "_id": "annotation_id",
         "_source": {
             "target": [{
@@ -80,7 +80,8 @@ def test_parse_document_returns_quote():
             "group": "__world__",
             "shared": True
         }
-    })["quote"]
+    })
+    quote = parsed_document["quote"]
 
     assert quote == "test_quote"
 
@@ -100,7 +101,7 @@ def test_parse_document_returns_boilerplate_when_no_quote():
     quote = parsed_document["quote"]
     document_uri = parsed_document["document_uri"]
 
-    assert quote == "Annotation for {}".format(document_uri)
+    assert quote == util.make_boilerplate_quote(document_uri)
 
 
 def test_parse_document_returns_text():
@@ -129,16 +130,15 @@ def test_parse_document_returns_boilerplate_when_no_text():
                 "selector": [{}]
             }],
             "group": "__world__",
-            "shared": True
+            "shared": True,
+            "text": ""
         }
     })["text"]
 
-    assert text == (
-        "Follow this link to see the annotation on the original page.")
+    assert text == util.make_boilerplate_text()
 
-
-def test_parse_document_returns_shared():
-    shared = util.parse_document({
+def test_parse_document_returns_can_reveal_true_when_shared_and_world():
+    can_reveal_metadata = util.parse_document({
         "_id": "annotation_id",
         "_source": {
             "target": [{
@@ -148,25 +148,9 @@ def test_parse_document_returns_shared():
             "group": "__world__",
             "shared": True
         }
-    })["shared"]
+    })["can_reveal_metadata"]
 
-    assert shared is True
-
-
-def test_parse_document_returns_group():
-    group = util.parse_document({
-        "_id": "annotation_id",
-        "_source": {
-            "target": [{
-                                "source": "http://example.com/example.html",
-                                "selector": [{}]
-                                }],
-            "group": "__world__",
-            "shared": True
-        }
-    })["group"]
-
-    assert group == "__world__"
+    assert can_reveal_metadata == True
 
 
 def test_parse_document_returns_document_uri_from_web_uri_when_pdf():

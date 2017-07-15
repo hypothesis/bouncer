@@ -15,12 +15,6 @@ from bouncer import __version__ as bouncer_version
 _ = i18n.TranslationStringFactory(__package__)
 
 
-#: The maximum length that the "netloc" (the www.example.com part in
-#: http://www.example.com/example) can be in the pretty URL that is displayed
-#: to the user before it gets truncated.
-NETLOC_MAX_LENGTH = 20
-
-
 class FailedHealthcheck(Exception):
     """An exception raised when the healthcheck fails."""
 
@@ -49,8 +43,7 @@ class AnnotationController(object):
             parsed_document = util.parse_document(document)
             annotation_id = parsed_document["annotation_id"]
             document_uri = parsed_document["document_uri"]
-            group = parsed_document["group"]
-            shared = parsed_document["shared"]
+            can_reveal_metadata = parsed_document["can_reveal_metadata"]
             quote = parsed_document["quote"]
             text = parsed_document["text"]
 
@@ -73,10 +66,15 @@ class AnnotationController(object):
             uri=document_uri,
             id=annotation_id)
 
+        pretty_url = util.make_pretty_url(document_uri)
+
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
-        pretty_url = _pretty_url(document_uri)
+        if can_reveal_metadata:
+            title = "Hypothesis annotation for {site}".format(site=pretty_url)
+        else:
+            title = "Hypothesis annotation"
 
         statsd.incr("views.annotation.200.annotation_found")
         return {
@@ -87,11 +85,10 @@ class AnnotationController(object):
                 "viaUrl": via_url,
                 "extensionUrl": extension_url,
             }),
-            "pretty_url": pretty_url,
+            "can_reveal_metadata": can_reveal_metadata,
             "quote": quote,
             "text": text,
-            "shared": shared,
-            "group": group
+            "title": title
         }
 
 

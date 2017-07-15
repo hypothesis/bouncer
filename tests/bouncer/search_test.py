@@ -50,7 +50,8 @@ class TestGetClient(object):
                                         use_ssl=True,
                                         verify_certs=True,
                                         ca_certs=certifi.where(),
-                                        connection_class=RequestsHttpConnection)
+                                        connection_class=(
+                                            RequestsHttpConnection))
 
 
 def test_includeme():
@@ -61,4 +62,3 @@ def test_includeme():
     configurator.add_request_method.assert_called_once_with(ANY,
                                                             name='es',
                                                             reify=True)
-

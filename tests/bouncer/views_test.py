@@ -37,7 +37,7 @@ class TestAnnotationController(object):
         statsd.incr.assert_called_once_with(
             "views.annotation.404.annotation_not_found")
 
-    def test_annotation_raises_http_not_found_if_get_raises_not_found_error(self):
+    def test_annotation_raises_http_not_found_if_get_raises_not_found(self):
         request = mock_request()
         request.es.get.side_effect = es_exceptions.NotFoundError
 
@@ -106,6 +106,13 @@ class TestAnnotationController(object):
         data = json.loads(template_data["data"])
         assert data["chromeExtensionId"] == "test-extension-id"
 
+    def test_annotation_returns_quote(self):
+        template_data = (
+            views.AnnotationController(mock_request()).annotation())
+
+        quote = template_data["quote"]
+        assert quote == "Hypothesis annotation for www.example.com"
+
     def test_annotation_returns_via_url(self):
         template_data = (
             views.AnnotationController(mock_request()).annotation())
@@ -147,21 +154,6 @@ class TestAnnotationController(object):
             "http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
-
-    def test_annotation_returns_pretty_url(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
-        assert template_data["pretty_url"] == "www.example.com"
-
-    def test_annotation_truncates_pretty_url(self, parse_document):
-        parse_document.return_value["document_uri"] = (
-            "http://www.abcdefghijklmnopqrst.com/example.html")
-
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
-        assert template_data["pretty_url"] == "www.abcdefghijklmnop&hellip;"
 
 
 @pytest.mark.usefixtures("statsd")
@@ -334,9 +326,8 @@ def parse_document(request):
     parse_document.return_value = {
         "annotation_id": "AVLlVTs1f9G3pW-EYc6q",
         "document_uri": "http://www.example.com/example.html",
-        "group": "__world__",
-        "shared": True,
-        "quote": "test_quote",
+        "can_reveal_metadata": True,
+        "quote": "Hypothesis annotation for www.example.com",
         "text": "test_text"
     }
     return parse_document
@@ -370,7 +361,7 @@ def mock_request():
                 "selector": [],
             }],
             "uri": "http://www.example.com/example.html",
-            "group": "__world__"
+            "group": "__world__",
         }
     }
     request.raven = mock.Mock()

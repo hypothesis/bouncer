@@ -1,7 +1,15 @@
+from urllib import parse
 from pyramid import i18n
+import jinja2
 
 
 _ = i18n.TranslationStringFactory(__package__)
+
+
+#: The maximum length that the "netloc" (the www.example.com part in
+#: http://www.example.com/example) can be in the pretty URL that is displayed
+#: to the user before it gets truncated.
+NETLOC_MAX_LENGTH = 30
 
 
 class InvalidAnnotationError(Exception):
@@ -47,14 +55,15 @@ def parse_document(document):
 
     # And that annotations always have "group" and "shared"
     group = annotation["group"]
-    shared = annotation["shared"]
+    is_shared = annotation["shared"] is True
 
-    boilerplate_text = (
-        'Follow this link to see the annotation on the original page.')
-    text = (annotation.get('text', boilerplate_text))
+    can_reveal_metadata = is_shared and group == "__world__"
 
     document_uri = None
     quote = None
+    text = annotation.get('text', make_boilerplate_text())
+    if text == "":
+        text = make_boilerplate_text()
 
     try:
         targets = annotation["target"]
@@ -62,15 +71,18 @@ def parse_document(document):
             document_uri = targets[0]["source"]
             if 'selector' in targets[0]:
                 selectors = targets[0]["selector"]
-                for sel in selectors:
-                    if "type" in sel and sel["type"] == ("TextQuoteSelector"):
-                        if "exact" in sel:
-                            quote = sel["exact"]
+                for selector in selectors:
+                    if selector.get('type') != "TextQuoteSelector":
+                        continue
+                    quote = selector.get("exact")
     except KeyError:
         pass
 
     if quote is None:
-        quote = "Annotation for {}".format(document_uri)
+        quote = make_boilerplate_quote(document_uri)
+
+    if text is None:
+        text = make_boilerplate_text()
 
     if isinstance(document_uri, str) and document_uri.startswith("urn:x-pdf:"):
         try:
@@ -84,11 +96,6 @@ def parse_document(document):
         raise InvalidAnnotationError(
             _("The annotation has no URI"), "annotation_has_no_uri")
 
-    if quote is None:
-        raise InvalidAnnotationError(
-            _("The annotation has a TextQuoteSelector but no exact quote"),
-            "annotation_has_no_quote")
-
     if not isinstance(document_uri, str):
         raise InvalidAnnotationError(
             _("The annotation has an invalid document URI"),
@@ -97,8 +104,32 @@ def parse_document(document):
     return {
             "annotation_id": annotation_id,
             "document_uri": document_uri,
-            "group": group,
-            "shared": shared,
+            "can_reveal_metadata": can_reveal_metadata,
             "quote": quote,
             "text": text
             }
+
+
+def make_pretty_url(url):
+    """
+    Return the domain name from `url` for display.
+    """
+    try:
+        parsed_url = parse.urlparse(url)
+        pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
+        if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
+            pretty_url = pretty_url + jinja2.Markup("&hellip;")
+    except:
+        return "CannotParseURL"
+    return pretty_url
+
+
+def make_boilerplate_quote(document_uri):
+    if document_uri is None:
+        return "Hypothesis annotation"
+    else:
+        pretty_url = make_pretty_url(document_uri)
+        return "Hypothesis annotation for {site}".format(site=pretty_url)
+
+def make_boilerplate_text():
+    return 'Follow this link to see the annotation in context'

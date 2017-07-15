@@ -3,7 +3,7 @@
   <head>
     <meta charset=utf-8>
 
-    {% if shared and group == '__world__'  %}
+    {% if can_reveal_metadata == True %}
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@hypothes_is" />
@@ -30,4 +30,9 @@
     </div>
   </body>
   {% block scripts %}{% endblock %}
+
+<div> can_reveal_metadata {{ can_reveal_metadata }}</div>
+<div>quote {{ quote }}</div>
+<div>text {{ text }}</div>
+<div>title {{ title }}</div>
 </html>
