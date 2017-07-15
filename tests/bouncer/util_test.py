@@ -137,6 +137,7 @@ def test_parse_document_returns_boilerplate_when_no_text():
 
     assert text == util.make_boilerplate_text()
 
+
 def test_parse_document_returns_can_reveal_true_when_shared_and_world():
     can_reveal_metadata = util.parse_document({
         "_id": "annotation_id",
