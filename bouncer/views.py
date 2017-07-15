@@ -71,6 +71,8 @@ class AnnotationController(object):
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
+        pretty_url = util.make_pretty_url(document_uri)
+
         if can_reveal_metadata:
             title = "Hypothesis annotation for {site}".format(site=pretty_url)
         else:
@@ -136,7 +138,7 @@ def goto_url(request):
     extension_url = '{url}#annotations:query:{query}'.format(
         url=url, query=query)
 
-    pretty_url = _pretty_url(url)
+    pretty_url = util.make_pretty_url(url)
 
     return {
         'data': json.dumps({
