@@ -326,7 +326,7 @@ def parse_document(request):
     parse_document.return_value = {
         "annotation_id": "AVLlVTs1f9G3pW-EYc6q",
         "document_uri": "http://www.example.com/example.html",
-        "can_reveal_metadata": True,
+        "show_metadata": True,
         "quote": "Hypothesis annotation for www.example.com",
         "text": "test_text"
     }

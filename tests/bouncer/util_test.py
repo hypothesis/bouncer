@@ -86,22 +86,20 @@ def test_parse_document_returns_quote():
     assert quote == "test_quote"
 
 
-def test_parse_document_returns_boilerplate_when_no_quote():
+def test_parse_document_returns_boilerplate_quote_when_no_quote():
     parsed_document = util.parse_document({
         "_id": "annotation_id",
         "_source": {
             "target": [{
-                "source": "http://example.com/example.html",
-                "selector": []
-            }],
+                                "source": "http://example.com/example.html",
+                                }],
             "group": "__world__",
             "shared": True
         }
     })
     quote = parsed_document["quote"]
-    document_uri = parsed_document["document_uri"]
 
-    assert quote == util.make_boilerplate_quote(document_uri)
+    assert quote == "Hypothesis annotation for example.com"
 
 
 def test_parse_document_returns_text():
@@ -135,11 +133,11 @@ def test_parse_document_returns_boilerplate_when_no_text():
         }
     })["text"]
 
-    assert text == util.make_boilerplate_text()
+    assert text == util.ANNOTATION_BOILERPLATE_TEXT
 
 
-def test_parse_document_returns_can_reveal_true_when_shared_and_world():
-    can_reveal_metadata = util.parse_document({
+def test_parse_document_returns_show_metadata_true_when_shared_and_world():
+    show_metadata = util.parse_document({
         "_id": "annotation_id",
         "_source": {
             "target": [{
@@ -149,9 +147,9 @@ def test_parse_document_returns_can_reveal_true_when_shared_and_world():
             "group": "__world__",
             "shared": True
         }
-    })["can_reveal_metadata"]
+    })["show_metadata"]
 
-    assert can_reveal_metadata == True
+    assert show_metadata is True
 
 
 def test_parse_document_returns_document_uri_from_web_uri_when_pdf():

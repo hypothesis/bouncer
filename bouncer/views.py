@@ -43,7 +43,7 @@ class AnnotationController(object):
             parsed_document = util.parse_document(document)
             annotation_id = parsed_document["annotation_id"]
             document_uri = parsed_document["document_uri"]
-            can_reveal_metadata = parsed_document["can_reveal_metadata"]
+            show_metadata = parsed_document["show_metadata"]
             quote = parsed_document["quote"]
             text = parsed_document["text"]
 
@@ -71,12 +71,9 @@ class AnnotationController(object):
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
-        pretty_url = util.make_pretty_url(document_uri)
+        pretty_url = util.get_pretty_url(document_uri)
 
-        if can_reveal_metadata:
-            title = "Hypothesis annotation for {site}".format(site=pretty_url)
-        else:
-            title = "Hypothesis annotation"
+        title = util.get_boilerplate_quote(document_uri)
 
         statsd.incr("views.annotation.200.annotation_found")
         return {
@@ -87,7 +84,7 @@ class AnnotationController(object):
                 "viaUrl": via_url,
                 "extensionUrl": extension_url,
             }),
-            "can_reveal_metadata": can_reveal_metadata,
+            "show_metadata": show_metadata,
             "quote": quote,
             "text": text,
             "title": title
@@ -138,7 +135,7 @@ def goto_url(request):
     extension_url = '{url}#annotations:query:{query}'.format(
         url=url, query=query)
 
-    pretty_url = util.make_pretty_url(url)
+    pretty_url = util.get_pretty_url(url)
 
     return {
         'data': json.dumps({
