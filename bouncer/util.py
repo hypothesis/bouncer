@@ -128,12 +128,12 @@ def get_pretty_url(url):
     """
     try:
         parsed_url = parse.urlparse(url)
-        pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
-        if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
-            pretty_url = pretty_url + jinja2.Markup("&hellip;")
-    except (ValueError, AttributeError) as e:
+    except (AttributeError, ValueError) as e:
         return None
 
+    pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
+    if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
+        pretty_url += jinja2.Markup("&hellip;")
     return pretty_url
 
 
