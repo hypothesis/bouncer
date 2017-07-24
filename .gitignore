@@ -4,6 +4,7 @@
 .coverage.*
 .cache
 .tox
+.pydeps
 
 node_modules
 bouncer/static/scripts/bundle.js

@@ -7,10 +7,7 @@ env:
   - NODE_VERSION="6.9"
 before_install:
   - nvm install $NODE_VERSION
-  - pip install codecov
-install:
-  - make deps
 script:
   - make test
 after_success:
-  - codecov
+  - make codecov
