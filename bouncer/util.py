@@ -11,14 +11,14 @@ _ = i18n.TranslationStringFactory(__package__)
 #: to the user before it gets truncated.
 NETLOC_MAX_LENGTH = 30
 
-# The metadata we are populating has fields that play the roles of Title and
-# Description on Twitter and Facebook share cards. We map the annotation's `quote`
-# field to Title. If we lack a quote we try to form one from `document_uri`
-# If that fails, we fall back to this minimal version.
+#: The metadata we are populating has fields that play the roles of Title and
+#: Description on Twitter and Facebook share cards. We map the annotation's `quote`
+#: field to Title. If we lack a quote we try to form one from `document_uri`
+#: If that fails, we fall back to this minimal version.
 ANNOTATION_BOILERPLATE_QUOTE = _("Hypothesis annotation")
 
-# We map the annotation's `text` field to Description. If it's empty, we fall back
-# to this minimal version.
+#: We map the annotation's `text` field to Description. If it's empty, we fall back
+#: to this minimal version.
 ANNOTATION_BOILERPLATE_TEXT = (
     _('Follow this link to see the annotation in context'))
 
@@ -53,6 +53,10 @@ def parse_document(document):
 
     Also return annotation quote (if available, else empty) and text
     to enhance the share card.
+
+    Tools for checking how FB and Twitter display share metadata:
+      https://developers.facebook.com/tools/debug/sharing/
+      https://cards-dev.twitter.com/validator
 
     :param document: the Elasticsearch annotation document to parse
     :type document: dict

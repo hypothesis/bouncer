@@ -66,8 +66,6 @@ class AnnotationController(object):
             uri=document_uri,
             id=annotation_id)
 
-        pretty_url = util.make_pretty_url(document_uri)
-
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
@@ -85,6 +83,7 @@ class AnnotationController(object):
                 "extensionUrl": extension_url,
             }),
             "show_metadata": show_metadata,
+            "pretty_url": pretty_url,
             "quote": quote,
             "text": text,
             "title": title
