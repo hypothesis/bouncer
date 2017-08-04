@@ -39,6 +39,9 @@ class AnnotationController(object):
             statsd.incr("views.annotation.404.annotation_not_found")
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
+        if ('deleted' in document['_source'] and document['_source']['deleted']):
+            raise httpexceptions.HTTPNotFound(_("Annotation not found"))
+
         try:
             parsed_document = util.parse_document(document)
             annotation_id = parsed_document["annotation_id"]
