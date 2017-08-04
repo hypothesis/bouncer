@@ -24,7 +24,8 @@ class TestAnnotationController(object):
             id="AVLlVTs1f9G3pW-EYc6q"
         )
 
-    def test_annotation_increments_stat_if_get_raises_NotFoundError(self, statsd):
+    def test_annotation_increments_stat_if_get_raises_not_found_error(self,
+                                                                      statsd):
         request = mock_request()
         request.es.get.side_effect = es_exceptions.NotFoundError
 
@@ -36,7 +37,7 @@ class TestAnnotationController(object):
         statsd.incr.assert_called_once_with(
             "views.annotation.404.annotation_not_found")
 
-    def test_annotation_raises_HTTPNotFound_if_get_raises_NotFoundError(self):
+    def test_annotation_raises_http_not_found_if_get_raises_not_found(self):
         request = mock_request()
         request.es.get.side_effect = es_exceptions.NotFoundError
 
@@ -50,9 +51,9 @@ class TestAnnotationController(object):
 
         parse_document.assert_called_once_with(request.es.get.return_value)
 
-    def test_annotation_increments_stat_if_parse_document_raises(self,
-                                                                 parse_document,
-                                                                 statsd):
+    def test_annotation_bumps_stat_if_parse_document_raises(self,
+                                                            parse_document,
+                                                            statsd):
         parse_document.side_effect = util.InvalidAnnotationError(
             "error message", "the_reason")
 
@@ -71,9 +72,10 @@ class TestAnnotationController(object):
             views.AnnotationController(mock_request()).annotation()
         assert str(exc.value) == "error message"
 
-    def test_annotation_increments_stat_for_file_URLs(
+    def test_annotation_increments_stat_for_file_urls(
             self, parse_document, statsd):
-        parse_document.return_value[1] = "file:///home/seanh/Foo.pdf"
+        parse_document.return_value["document_uri"] = (
+            "file:///home/seanh/Foo.pdf")
 
         try:
             views.AnnotationController(mock_request()).annotation()
@@ -83,9 +85,10 @@ class TestAnnotationController(object):
         statsd.incr.assert_called_once_with(
             "views.annotation.422.not_an_http_or_https_document")
 
-    def test_annotation_raises_HTTPUnprocessableEntity_for_file_URLs(
+    def test_annotation_raises_http_unprocessable_entity_for_file_urls(
             self, parse_document):
-        parse_document.return_value[1] = "file:///home/seanh/Foo.pdf"
+        parse_document.return_value["document_uri"] = (
+            "file:///home/seanh/Foo.pdf")
 
         with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
             views.AnnotationController(mock_request()).annotation()
@@ -97,29 +100,40 @@ class TestAnnotationController(object):
             "views.annotation.200.annotation_found")
 
     def test_annotation_returns_chrome_extension_id(self):
-        template_data = views.AnnotationController(mock_request()).annotation()
+        template_data = (
+            views.AnnotationController(mock_request()).annotation())
 
         data = json.loads(template_data["data"])
         assert data["chromeExtensionId"] == "test-extension-id"
 
+    def test_annotation_returns_quote(self):
+        template_data = (
+            views.AnnotationController(mock_request()).annotation())
+
+        quote = template_data["quote"]
+        assert quote == "Hypothesis annotation for www.example.com"
+
     def test_annotation_returns_via_url(self):
-        template_data = views.AnnotationController(mock_request()).annotation()
+        template_data = (
+            views.AnnotationController(mock_request()).annotation())
 
         data = json.loads(template_data["data"])
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
     def test_annotation_returns_extension_url(self):
-        template_data = views.AnnotationController(mock_request()).annotation()
+        template_data = (
+            views.AnnotationController(mock_request()).annotation())
 
         data = json.loads(template_data["data"])
         assert data["extensionUrl"] == (
                 "http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
     def test_annotation_strips_fragment_identifiers(self, parse_document):
-        parse_document.return_value[1] = (
+        parse_document.return_value["document_uri"] = (
             "http://example.com/example.html#foobar")
-        template_data = views.AnnotationController(mock_request()).annotation()
+        template_data = (
+            views.AnnotationController(mock_request()).annotation())
 
         data = json.loads(template_data["data"])
 
@@ -129,8 +143,10 @@ class TestAnnotationController(object):
                 "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
     def test_annotation_strips_bare_fragment_identifiers(self, parse_document):
-        parse_document.return_value[1] = "http://example.com/example.html#"
-        template_data = views.AnnotationController(mock_request()).annotation()
+        parse_document.return_value["document_uri"] = (
+           "http://example.com/example.html#")
+        template_data = (
+            views.AnnotationController(mock_request()).annotation())
 
         data = json.loads(template_data["data"])
 
@@ -138,19 +154,6 @@ class TestAnnotationController(object):
             "http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
-
-    def test_annotation_returns_pretty_url(self):
-        template_data = views.AnnotationController(mock_request()).annotation()
-
-        assert template_data["pretty_url"] == "www.example.com"
-
-    def test_annotation_truncates_pretty_url(self, parse_document):
-        parse_document.return_value[1] = (
-            "http://www.abcdefghijklmnopqrst.com/example.html")
-
-        template_data = views.AnnotationController(mock_request()).annotation()
-
-        assert template_data["pretty_url"] == "www.abcdefghijklmnop&hellip;"
 
 
 @pytest.mark.usefixtures("statsd")
@@ -320,8 +323,13 @@ def parse_document(request):
     patcher = mock.patch("bouncer.views.util.parse_document")
     parse_document = patcher.start()
     request.addfinalizer(patcher.stop)
-    parse_document.return_value = [
-        "AVLlVTs1f9G3pW-EYc6q", "http://www.example.com/example.html"]
+    parse_document.return_value = {
+        "annotation_id": "AVLlVTs1f9G3pW-EYc6q",
+        "document_uri": "http://www.example.com/example.html",
+        "show_metadata": True,
+        "quote": "Hypothesis annotation for www.example.com",
+        "text": "test_text"
+    }
     return parse_document
 
 
@@ -344,9 +352,17 @@ def mock_request():
                                  "via_base_url": "https://via.hypothes.is"}
     request.matchdict = {"id": "AVLlVTs1f9G3pW-EYc6q"}
     request.es = mock.Mock()
+
     request.es.get.return_value = {
         "_id": "AVLlVTs1f9G3pW-EYc6q",
-        "_source": {"uri": "http://www.example.com/example.html"}
+        "_source": {
+            "target": [{
+                "source": "http://example.com/example.html",
+                "selector": [],
+            }],
+            "uri": "http://www.example.com/example.html",
+            "group": "__world__",
+        }
     }
     request.raven = mock.Mock()
     return request

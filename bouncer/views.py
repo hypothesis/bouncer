@@ -15,12 +15,6 @@ from bouncer import __version__ as bouncer_version
 _ = i18n.TranslationStringFactory(__package__)
 
 
-#: The maximum length that the "netloc" (the www.example.com part in
-#: http://www.example.com/example) can be in the pretty URL that is displayed
-#: to the user before it gets truncated.
-NETLOC_MAX_LENGTH = 20
-
-
 class FailedHealthcheck(Exception):
     """An exception raised when the healthcheck fails."""
 
@@ -46,7 +40,13 @@ class AnnotationController(object):
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
         try:
-            annotation_id, document_uri = util.parse_document(document)
+            parsed_document = util.parse_document(document)
+            annotation_id = parsed_document["annotation_id"]
+            document_uri = parsed_document["document_uri"]
+            show_metadata = parsed_document["show_metadata"]
+            quote = parsed_document["quote"]
+            text = parsed_document["text"]
+
         except util.InvalidAnnotationError as exc:
             statsd.incr("views.annotation.422.{}".format(exc.reason))
             raise httpexceptions.HTTPUnprocessableEntity(str(exc))
@@ -69,7 +69,9 @@ class AnnotationController(object):
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
 
-        pretty_url = _pretty_url(document_uri)
+        pretty_url = util.get_pretty_url(document_uri)
+
+        title = util.get_boilerplate_quote(document_uri)
 
         statsd.incr("views.annotation.200.annotation_found")
         return {
@@ -80,7 +82,11 @@ class AnnotationController(object):
                 "viaUrl": via_url,
                 "extensionUrl": extension_url,
             }),
-            "pretty_url": pretty_url
+            "show_metadata": show_metadata,
+            "pretty_url": pretty_url,
+            "quote": quote,
+            "text": text,
+            "title": title
         }
 
 
@@ -128,7 +134,7 @@ def goto_url(request):
     extension_url = '{url}#annotations:query:{query}'.format(
         url=url, query=query)
 
-    pretty_url = _pretty_url(url)
+    pretty_url = util.get_pretty_url(url)
 
     return {
         'data': json.dumps({
