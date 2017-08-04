@@ -37,6 +37,13 @@ class TestAnnotationController(object):
         statsd.incr.assert_called_once_with(
             "views.annotation.404.annotation_not_found")
 
+    def test_annotation_raises_http_not_found_if_annotation_deleted(
+            self, parse_document):
+        parse_document.side_effect = util.DeletedAnnotationError()
+
+        with pytest.raises(httpexceptions.HTTPNotFound):
+            views.AnnotationController(mock_request()).annotation()
+
     def test_annotation_raises_http_not_found_if_get_raises_not_found(self):
         request = mock_request()
         request.es.get.side_effect = es_exceptions.NotFoundError

@@ -23,6 +23,11 @@ ANNOTATION_BOILERPLATE_TEXT = (
     _('Follow this link to see the annotation in context'))
 
 
+class DeletedAnnotationError(Exception):
+
+    """Raised if an annotation has been marked as deleted in Elasticsearch."""
+
+
 class InvalidAnnotationError(Exception):
 
     """Raised if an annotation from Elasticsearch can't be parsed."""
@@ -68,7 +73,11 @@ def parse_document(document):
     annotation_id = document["_id"]
     annotation = document["_source"]
 
-    # And that annotations always have "group" and "shared"
+    if document['_source'].get('deleted', False) is True:
+        raise DeletedAnnotationError()
+
+    # If an annotation isn't deleted then we assume that it always has "group"
+    # and "shared".
     group = annotation["group"]
     is_shared = annotation["shared"] is True
 
