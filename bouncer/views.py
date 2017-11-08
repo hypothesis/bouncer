@@ -47,6 +47,10 @@ class AnnotationController(object):
             quote = parsed_document["quote"]
             text = parsed_document["text"]
 
+        except util.DeletedAnnotationError:
+            statsd.incr("views.annotation.404.annotation_not_found")
+            raise httpexceptions.HTTPNotFound(_("Annotation not found"))
+
         except util.InvalidAnnotationError as exc:
             statsd.incr("views.annotation.422.{}".format(exc.reason))
             raise httpexceptions.HTTPUnprocessableEntity(str(exc))
