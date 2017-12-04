@@ -31,20 +31,20 @@ function defaultNavigateTo(url) {
   window.location.replace(url);
 }
 
-/** Navigate the browser to the requested annotation.
+/**
+ * Navigate the browser to the requested annotation.
  *
  * If the browser is Chrome and our Chrome extension is installed then
  * navigate to the annotation's direct link for the Chrome extension.
  * If the Chrome extension isn't installed or the browser isn't Chrome then
  * navigate to the annotation's Via direct link.
  *
+ * @param {(url: string) => void} [navigateTo]
+ * @param {Settings} [settings]
  */
-function redirect(navigateToFn) {
-  // Use the test navigateTo() function if one was passed in, the real
-  // navigateTo() otherwise.
-  var navigateTo = navigateToFn || defaultNavigateTo;
-
-  var settings = getSettings(document);
+function redirect(navigateTo, settings) {
+  navigateTo = navigateTo || defaultNavigateTo; // Test seam
+  settings = settings || getSettings(document); // Test seam
 
   var chrome = window.chrome;
   if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
