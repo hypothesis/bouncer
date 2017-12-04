@@ -161,4 +161,14 @@ describe('#redirect', function () {
       navigateTo.calledWithExactly('http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'),
       true);
   });
+
+  it('redirects to original URL if no Via URL provided', function () {
+    settings.viaUrl = null;
+    var navigateTo = sinon.stub();
+
+    redirect(navigateTo, settings);
+
+    assert.isTrue(navigateTo.calledOnce);
+    assert.isTrue(navigateTo.calledWithExactly(settings.extensionUrl));
+  });
 });

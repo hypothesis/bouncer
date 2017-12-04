@@ -103,6 +103,11 @@ def test_parse_document_raises_when_uri_from_web_uri_not_string_for_pdfs(es_anno
     assert exc.value.reason == "uri_not_a_string"
 
 
+def test_parse_document_returns_authority(es_annotation_doc):
+    authority = util.parse_document(es_annotation_doc)["authority"]
+    assert authority == "hypothes.is"
+
+
 @pytest.fixture
 def es_annotation_doc():
     """
@@ -113,6 +118,7 @@ def es_annotation_doc():
     return {
         "_id": "annotation_id",
         "_source": {
+            "authority": "hypothes.is",
             "target": [
                 {
                     "source": "http://example.com/example.html",

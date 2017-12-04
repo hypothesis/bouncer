@@ -76,6 +76,8 @@ def parse_document(document):
     if document['_source'].get('deleted', False) is True:
         raise DeletedAnnotationError()
 
+    authority = annotation["authority"]
+
     # If an annotation isn't deleted then we assume that it always has "group"
     # and "shared".
     group = annotation["group"]
@@ -127,6 +129,7 @@ def parse_document(document):
             "uri_not_a_string")
 
     return {
+            "authority": authority,
             "annotation_id": annotation_id,
             "document_uri": document_uri,
             "show_metadata": show_metadata,

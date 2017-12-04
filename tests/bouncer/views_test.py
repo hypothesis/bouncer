@@ -162,6 +162,15 @@ class TestAnnotationController(object):
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
+    def test_annotation_omits_via_url_for_third_party_annotations(self, parse_document):
+        parse_document.return_value["authority"] = "partner.org"
+        template_data = (
+            views.AnnotationController(mock_request()).annotation())
+
+        data = json.loads(template_data["data"])
+
+        assert data["viaUrl"] is None
+
 
 @pytest.mark.usefixtures("statsd")
 def test_index_increments_stat(statsd):
@@ -332,6 +341,7 @@ def parse_document(request):
     request.addfinalizer(patcher.stop)
     parse_document.return_value = {
         "annotation_id": "AVLlVTs1f9G3pW-EYc6q",
+        "authority": "localhost",
         "document_uri": "http://www.example.com/example.html",
         "show_metadata": True,
         "quote": "Hypothesis annotation for www.example.com",
@@ -355,6 +365,7 @@ def mock_request():
                                  "elasticsearch_host": "http://localhost/",
                                  "elasticsearch_port": "9200",
                                  "elasticsearch_index": "hypothesis",
+                                 "hypothesis_authority": "localhost",
                                  "hypothesis_url": "https://hypothes.is",
                                  "via_base_url": "https://via.hypothes.is"}
     request.matchdict = {"id": "AVLlVTs1f9G3pW-EYc6q"}

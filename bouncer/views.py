@@ -41,6 +41,7 @@ class AnnotationController(object):
 
         try:
             parsed_document = util.parse_document(document)
+            authority = parsed_document["authority"]
             annotation_id = parsed_document["annotation_id"]
             document_uri = parsed_document["document_uri"]
             show_metadata = parsed_document["show_metadata"]
@@ -65,10 +66,12 @@ class AnnotationController(object):
                 _("Sorry, but it looks like this annotation was made on a "
                   "document that is not publicly available."))
 
-        via_url = "{via_base_url}/{uri}#annotations:{id}".format(
-            via_base_url=settings["via_base_url"],
-            uri=document_uri,
-            id=annotation_id)
+        via_url = None
+        if _can_use_proxy(settings, authority=authority):
+            via_url = "{via_base_url}/{uri}#annotations:{id}".format(
+                via_base_url=settings["via_base_url"],
+                uri=document_uri,
+                id=annotation_id)
 
         extension_url = "{uri}#annotations:{id}".format(
             uri=document_uri, id=annotation_id)
@@ -221,6 +224,24 @@ def _pretty_url(url):
     if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
         pretty_url = pretty_url + jinja2.Markup("&hellip;")
     return pretty_url
+
+
+def _can_use_proxy(settings, authority):
+    """
+    Return `True` if an annotation can be shown via the proxy service.
+
+    This currently only considers the authority but in future it could also
+    incorporate checks for whether the target page embeds Hypothesis.
+
+    :param settings: App settings dict
+    :param authority: Authority of annotation's user
+    """
+
+    # The proxy service can only be used with pages that use first party
+    # accounts, because third-party accounts require the host page to supply
+    # login information to the client, which in turn relies on the user's cookie
+    # session and therefore does not work properly through the proxy.
+    return settings['hypothesis_authority'] == authority
 
 
 def includeme(config):

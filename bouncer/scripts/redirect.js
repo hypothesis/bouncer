@@ -13,7 +13,8 @@
  * @prop {string} extensionUrl - Original URL of the page plus a fragment that
  *   triggers the extension to activate when the user visits the page. This is
  *   also used in cases where the original URL embeds the client.
- * @prop {string} viaUrl - Proxy URL.
+ * @prop {string|null} viaUrl - Proxy URL of `null` if the proxy cannot be used
+ *   to display this annotation in context.
  */
 
 /**
@@ -45,6 +46,13 @@ function defaultNavigateTo(url) {
 function redirect(navigateTo, settings) {
   navigateTo = navigateTo || defaultNavigateTo; // Test seam
   settings = settings || getSettings(document); // Test seam
+
+  // If the proxy cannot be used with this URL, send the user directly to the
+  // original page.
+  if (!settings.viaUrl) {
+    navigateTo(settings.extensionUrl);
+    return;
+  }
 
   var chrome = window.chrome;
   if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
