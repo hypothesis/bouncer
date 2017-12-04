@@ -66,7 +66,7 @@ def parse_document(document):
     :param document: the Elasticsearch annotation document to parse
     :type document: dict
 
-    :rtype: 2-tuple of annotation ID (string) and document URI (string)
+    :returns: A dict with extracted metadata properties
 
     """
     # We assume that Elasticsearch documents always have "_id" and "_source".
