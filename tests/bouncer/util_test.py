@@ -103,10 +103,11 @@ def es_annotation_doc():
     return {
         "_id": "annotation_id",
         "_source": {
-            "target": [{
-                "source": "http://example.com/example.html",
-                "selector": [{}]
-            }],
+            "target": [
+                {
+                    "source": "http://example.com/example.html",
+                }
+            ],
             "group": "__world__",
             "shared": True,
         }
