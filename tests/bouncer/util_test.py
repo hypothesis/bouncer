@@ -53,7 +53,17 @@ def test_parse_document_returns_quote(es_annotation_doc):
     assert quote == "test_quote"
 
 
-def test_parse_document_returns_boilerplate_quote_when_no_quote(es_annotation_doc):
+@pytest.mark.parametrize('selector', [
+    # No selector (ie. a page note).
+    None,
+
+    # No quote selector. Allowed by the service even though a quote is required
+    # to anchor the annotation.
+    [{"type": "TextPositionSelector"}],
+])
+def test_parse_document_returns_boilerplate_quote_when_no_quote(es_annotation_doc, selector):
+    if selector:
+        es_annotation_doc["_source"]["target"][0]["selector"] = selector
     quote = util.parse_document(es_annotation_doc)["quote"]
     assert quote == "Hypothesis annotation for example.com"
 
