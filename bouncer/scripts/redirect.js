@@ -1,6 +1,26 @@
 'use strict';
 
-/** Return the settings object that the server injected into the page. */
+/**
+ * Configuration information for the client-side code that detects the best way
+ * to route the user to a URL with Hypothesis activated and specified
+ * annotations selected.
+ *
+ * This is rendered into Bouncer's interstitial page by the backend service.
+ *
+ * @typedef {Object} Settings
+ * @prop {string} chromeExtensionId - ID of the Chrome extension that Bouncer
+ *   should check for in the user's browser.
+ * @prop {string} extensionUrl - Original URL of the page plus a fragment that
+ *   triggers the extension to activate when the user visits the page. This is
+ *   also used in cases where the original URL embeds the client.
+ * @prop {string} viaUrl - Proxy URL.
+ */
+
+/**
+ * Return the settings object that the server injected into the page.
+ *
+ * @return {Settings}
+ */
 function getSettings(document) {
   return JSON.parse(
     document.querySelector('script.js-bouncer-settings').textContent);
