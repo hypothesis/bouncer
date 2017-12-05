@@ -100,12 +100,14 @@ def es_annotation_doc():
 
     This contains only fields which can be assumed to exist on all annotations.
     """
-    return {"_id": "annotation_id",
-            "_source": {
-                "target": [{
-                    "source": "http://example.com/example.html",
-                    "selector": [{}]
-                }],
-                "group": "__world__",
-                "shared": True,
-            }}
+    return {
+        "_id": "annotation_id",
+        "_source": {
+            "target": [{
+                "source": "http://example.com/example.html",
+                "selector": [{}]
+            }],
+            "group": "__world__",
+            "shared": True,
+        }
+    }
