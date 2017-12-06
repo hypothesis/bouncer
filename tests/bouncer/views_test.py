@@ -107,31 +107,23 @@ class TestAnnotationController(object):
             "views.annotation.200.annotation_found")
 
     def test_annotation_returns_chrome_extension_id(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
+        template_data = views.AnnotationController(mock_request()).annotation()
         data = json.loads(template_data["data"])
         assert data["chromeExtensionId"] == "test-extension-id"
 
     def test_annotation_returns_quote(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
+        template_data = views.AnnotationController(mock_request()).annotation()
         quote = template_data["quote"]
         assert quote == "Hypothesis annotation for www.example.com"
 
     def test_annotation_returns_via_url(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
+        template_data = views.AnnotationController(mock_request()).annotation()
         data = json.loads(template_data["data"])
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
     def test_annotation_returns_extension_url(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
+        template_data = views.AnnotationController(mock_request()).annotation()
         data = json.loads(template_data["data"])
         assert data["extensionUrl"] == (
                 "http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
@@ -139,8 +131,7 @@ class TestAnnotationController(object):
     def test_annotation_strips_fragment_identifiers(self, parse_document):
         parse_document.return_value["document_uri"] = (
             "http://example.com/example.html#foobar")
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
+        template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
 
@@ -152,8 +143,7 @@ class TestAnnotationController(object):
     def test_annotation_strips_bare_fragment_identifiers(self, parse_document):
         parse_document.return_value["document_uri"] = (
            "http://example.com/example.html#")
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
+        template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
 
@@ -164,8 +154,7 @@ class TestAnnotationController(object):
 
     def test_annotation_omits_via_url_for_third_party_annotations(self, parse_document):
         parse_document.return_value["authority"] = "partner.org"
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
+        template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
 
