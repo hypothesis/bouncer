@@ -107,31 +107,23 @@ class TestAnnotationController(object):
             "views.annotation.200.annotation_found")
 
     def test_annotation_returns_chrome_extension_id(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
+        template_data = views.AnnotationController(mock_request()).annotation()
         data = json.loads(template_data["data"])
         assert data["chromeExtensionId"] == "test-extension-id"
 
     def test_annotation_returns_quote(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
+        template_data = views.AnnotationController(mock_request()).annotation()
         quote = template_data["quote"]
         assert quote == "Hypothesis annotation for www.example.com"
 
     def test_annotation_returns_via_url(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
+        template_data = views.AnnotationController(mock_request()).annotation()
         data = json.loads(template_data["data"])
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
 
     def test_annotation_returns_extension_url(self):
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
-
+        template_data = views.AnnotationController(mock_request()).annotation()
         data = json.loads(template_data["data"])
         assert data["extensionUrl"] == (
                 "http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
@@ -139,8 +131,7 @@ class TestAnnotationController(object):
     def test_annotation_strips_fragment_identifiers(self, parse_document):
         parse_document.return_value["document_uri"] = (
             "http://example.com/example.html#foobar")
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
+        template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
 
@@ -152,8 +143,7 @@ class TestAnnotationController(object):
     def test_annotation_strips_bare_fragment_identifiers(self, parse_document):
         parse_document.return_value["document_uri"] = (
            "http://example.com/example.html#")
-        template_data = (
-            views.AnnotationController(mock_request()).annotation())
+        template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])
 
@@ -161,6 +151,14 @@ class TestAnnotationController(object):
             "http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
         assert data["viaUrl"] == (
                 "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
+
+    def test_annotation_omits_via_url_for_third_party_annotations(self, parse_document):
+        parse_document.return_value["authority"] = "partner.org"
+        template_data = views.AnnotationController(mock_request()).annotation()
+
+        data = json.loads(template_data["data"])
+
+        assert data["viaUrl"] is None
 
 
 @pytest.mark.usefixtures("statsd")
@@ -332,6 +330,7 @@ def parse_document(request):
     request.addfinalizer(patcher.stop)
     parse_document.return_value = {
         "annotation_id": "AVLlVTs1f9G3pW-EYc6q",
+        "authority": "localhost",
         "document_uri": "http://www.example.com/example.html",
         "show_metadata": True,
         "quote": "Hypothesis annotation for www.example.com",
@@ -355,6 +354,7 @@ def mock_request():
                                  "elasticsearch_host": "http://localhost/",
                                  "elasticsearch_port": "9200",
                                  "elasticsearch_index": "hypothesis",
+                                 "hypothesis_authority": "localhost",
                                  "hypothesis_url": "https://hypothes.is",
                                  "via_base_url": "https://via.hypothes.is"}
     request.matchdict = {"id": "AVLlVTs1f9G3pW-EYc6q"}

@@ -43,6 +43,11 @@ ELASTICSEARCH_AWS_{ACCESS_KEY_ID,SECRET_ACCESS_KEY,REGION}
   request signing with the given credentials. This allows making requests to an
   AWS Elasticsearch domain as an IAM user.
 
+HYPOTHESIS_AUTHORITY
+  The domain name of the Hypothesis service's first party authority.
+  This is usually the same as the domain name of the Hypothesis service
+  (default: localhost).
+
 HYPOTHESIS_URL
   The URL of the Hypothesis front page that requests to bouncer's front page
   will be redirected to (default: https://hypothes.is)

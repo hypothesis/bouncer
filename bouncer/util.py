@@ -66,7 +66,7 @@ def parse_document(document):
     :param document: the Elasticsearch annotation document to parse
     :type document: dict
 
-    :rtype: 2-tuple of annotation ID (string) and document URI (string)
+    :returns: A dict with extracted metadata properties
 
     """
     # We assume that Elasticsearch documents always have "_id" and "_source".
@@ -75,6 +75,8 @@ def parse_document(document):
 
     if document['_source'].get('deleted', False) is True:
         raise DeletedAnnotationError()
+
+    authority = annotation["authority"]
 
     # If an annotation isn't deleted then we assume that it always has "group"
     # and "shared".
@@ -127,6 +129,7 @@ def parse_document(document):
             "uri_not_a_string")
 
     return {
+            "authority": authority,
             "annotation_id": annotation_id,
             "document_uri": document_uri,
             "show_metadata": show_metadata,

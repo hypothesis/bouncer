@@ -2,17 +2,14 @@
 
 var redirect = require('../redirect.js');
 
-describe('redirect()', function () {
+describe('#redirect', function () {
+  var settings;
   beforeEach(function () {
     window.chrome = undefined;
-    window.document.querySelector = function () {
-      return {
-        textContent: JSON.stringify({
-          chromeExtensionId: 'test-extension-id',
-          extensionUrl: 'http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
-          viaUrl: 'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
-        }),
-      };
+    settings = {
+      chromeExtensionId: 'test-extension-id',
+      extensionUrl: 'http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
+      viaUrl: 'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
     };
     sinon.stub(window.console, 'error');
   });
@@ -21,11 +18,29 @@ describe('redirect()', function () {
     window.console.error.restore();
   });
 
+  it('reads settings from the page by default', function () {
+    var settings = {
+      chromeExtensionId: 'a-b-c',
+      extensionUrl: 'https://example.org/#annotations:123',
+      viaUrl: 'https://proxy.it/#annotations:123',
+    };
+    var settingsEl = document.createElement('script');
+    settingsEl.type = 'application/json';
+    settingsEl.className = 'js-bouncer-settings';
+    settingsEl.textContent = JSON.stringify(settings);
+    document.body.appendChild(settingsEl);
+    var navigateTo = sinon.stub();
+
+    redirect(navigateTo);
+
+    assert.isTrue(navigateTo.calledWith(settings.viaUrl));
+  });
+
   it('redirects to Via if not Chrome', function () {
     window.chrome = undefined;  // The user isn't using Chrome.
     var navigateTo = sinon.stub();
 
-    redirect(navigateTo);
+    redirect(navigateTo, settings);
 
     assert.equal(navigateTo.calledOnce, true);
     assert.equal(
@@ -38,7 +53,7 @@ describe('redirect()', function () {
     window.chrome = {};
     var navigateTo = sinon.stub();
 
-    redirect(navigateTo);
+    redirect(navigateTo, settings);
 
     assert.equal(navigateTo.calledOnce, true);
     assert.equal(
@@ -51,7 +66,7 @@ describe('redirect()', function () {
     window.chrome = {runtime: {}};
     var navigateTo = sinon.stub();
 
-    redirect(navigateTo);
+    redirect(navigateTo, settings);
 
     assert.equal(navigateTo.calledOnce, true);
     assert.equal(
@@ -69,7 +84,7 @@ describe('redirect()', function () {
     };
     var navigateTo = sinon.stub();
 
-    redirect(navigateTo);
+    redirect(navigateTo, settings);
 
     assert.equal(navigateTo.calledOnce, true);
     assert.equal(
@@ -88,7 +103,7 @@ describe('redirect()', function () {
     };
     var navigateTo = sinon.stub();
 
-    redirect(navigateTo);
+    redirect(navigateTo, settings);
 
     assert.equal(navigateTo.calledOnce, true);
     assert.equal(
@@ -106,7 +121,7 @@ describe('redirect()', function () {
       },
     };
 
-    redirect(sinon.stub());
+    redirect(sinon.stub(), settings);
 
     assert.equal(console.error.called, true);
   });
@@ -118,7 +133,7 @@ describe('redirect()', function () {
       },
     };
 
-    redirect(function () {});
+    redirect(function () {}, settings);
 
     assert.equal(window.chrome.runtime.sendMessage.calledOnce, true);
     assert.equal(window.chrome.runtime.sendMessage.firstCall.args[0],
@@ -139,11 +154,21 @@ describe('redirect()', function () {
     };
     var navigateTo = sinon.stub();
 
-    redirect(navigateTo);
+    redirect(navigateTo, settings);
 
     assert.equal(navigateTo.calledOnce, true);
     assert.equal(
       navigateTo.calledWithExactly('http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'),
       true);
+  });
+
+  it('redirects to original URL if no Via URL provided', function () {
+    settings.viaUrl = null;
+    var navigateTo = sinon.stub();
+
+    redirect(navigateTo, settings);
+
+    assert.isTrue(navigateTo.calledOnce);
+    assert.isTrue(navigateTo.calledWithExactly(settings.extensionUrl));
   });
 });

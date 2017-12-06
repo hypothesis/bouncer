@@ -27,6 +27,8 @@ def settings():
         "debug": debug,
         "elasticsearch_index": os.environ.get("ELASTICSEARCH_INDEX",
                                               "hypothesis"),
+        "hypothesis_authority": os.environ.get("HYPOTHESIS_AUTHORITY",
+                                               "localhost"),
         "hypothesis_url": os.environ.get("HYPOTHESIS_URL",
                                          "https://hypothes.is"),
         "via_base_url": via_base_url,
