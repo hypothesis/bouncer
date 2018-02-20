@@ -5,5 +5,5 @@ pyramid==1.6.1
 pyramid-jinja2==2.6.2
 requests==2.12.4
 requests-aws4auth==0.9
-raven==6.0.0
+raven==6.5.0
 statsd==3.2.2
