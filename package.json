@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "browserify": "^14.4.0",
-    "chai": "^4.0.2",
+    "chai": "^4.1.2",
     "eslint": "^4.1.1",
     "eslint-config-hypothesis": "^1.0.0",
     "karma": "^1.7.0",
