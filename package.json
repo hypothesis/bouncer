@@ -10,7 +10,7 @@
     "karma-mocha": "^1.3.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.4",
-    "mocha": "^5.0.1",
+    "mocha": "^5.0.2",
     "sinon": "^4.4.2",
     "watchify": "^3.11.0"
   },
