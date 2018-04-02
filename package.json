@@ -11,7 +11,7 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.4",
     "mocha": "^5.0.4",
-    "sinon": "^4.4.3",
+    "sinon": "^4.5.0",
     "watchify": "^3.11.0"
   },
   "license": "BSD-2-Clause",
