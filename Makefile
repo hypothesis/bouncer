@@ -3,7 +3,7 @@ DOCKER_TAG = dev
 deps:
 	pip install --upgrade pip
 	pip install --upgrade wheel
-	pip install --use-wheel -r requirements-dev.txt
+	pip install -r requirements-dev.txt
 	npm install
 
 dev:
