@@ -1,6 +1,6 @@
 certifi==2018.4.16
 elasticsearch>=2.0.0,<7.0.0
-gunicorn==19.7.1
+gunicorn==19.8.0
 pyramid==1.9.2
 pyramid-jinja2==2.7
 requests==2.18.4
