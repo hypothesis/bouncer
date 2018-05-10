@@ -2,6 +2,7 @@ output-format: grouped
 strictness: veryhigh
 doc-warnings: true
 test-warnings: true
+member-warnings: true
 max-line-length: 79
 pep8:
   full: true
