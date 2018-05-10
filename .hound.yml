@@ -1,5 +1,0 @@
-jshint:
-  enabled: false
-eslint:
-  # We use ESLint, but Hound does not support custom ESLint config packages :(
-  enabled: false
