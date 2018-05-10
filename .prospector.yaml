@@ -14,6 +14,7 @@ pylint:
                      # unavoidable long lines (such as URLs).
     - R0903  # Too few public methods
     - W0142  # Used * or ** magic
+    - missing-docstring
   options:
     # Some good names that pylint would otherwise reject:
     #
@@ -39,5 +40,9 @@ pep257:
     - D101  # Missing docstring in public class
     - D102  # Missing docstring in public method
     - D103  # Missing docstring in public function
+    - D104  # Missing docstring in public package
+    - D105  # Missing docstring in magic method
+    - D106  # Missing docstring in public nested class
+    - D107  # Missing docstring in __init__
 ignore-patterns:
   - '.*\.egg'
