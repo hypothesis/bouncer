@@ -12,5 +12,6 @@ install:
   - make deps
 script:
   - make test
+  - make lint
 after_success:
   - codecov
