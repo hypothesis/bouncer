@@ -44,5 +44,3 @@ pep257:
     - D105  # Missing docstring in magic method
     - D106  # Missing docstring in public nested class
     - D107  # Missing docstring in __init__
-ignore-patterns:
-  - '.*\.egg'
