@@ -4,6 +4,7 @@
 .coverage.*
 .cache
 .tox
+.pytest_cache
 
 node_modules
 bouncer/static/scripts/bundle.js
