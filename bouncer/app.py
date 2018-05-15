@@ -15,10 +15,7 @@ def settings():
     if via_base_url.endswith("/"):
         via_base_url = via_base_url[:-1]
 
-    if "DEBUG" in os.environ:
-        debug = True
-    else:
-        debug = False
+    debug = bool("DEBUG" in os.environ)
 
     result = {
         "chrome_extension_id": os.environ.get(
