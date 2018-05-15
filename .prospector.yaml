@@ -3,7 +3,7 @@ strictness: veryhigh
 doc-warnings: true
 test-warnings: true
 member-warnings: true
-max-line-length: 79
+max-line-length: 100
 pep8:
   full: true
 pylint:
