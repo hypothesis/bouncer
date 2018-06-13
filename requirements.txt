@@ -3,7 +3,7 @@ elasticsearch>=2.0.0,<7.0.0
 gunicorn==19.8.1
 pyramid==1.9.2
 pyramid-jinja2==2.7
-requests==2.18.4
+requests==2.19.0
 requests-aws4auth==0.9
 raven==6.8.0
 statsd==3.2.2
