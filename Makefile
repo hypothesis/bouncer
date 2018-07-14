@@ -3,7 +3,7 @@ DOCKER_TAG = dev
 deps:
 	pip install --upgrade pip
 	pip install --upgrade wheel
-	pip install -r requirements-dev.txt
+	pip install -r requirements.txt
 	npm install
 
 dev:
@@ -25,3 +25,8 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 	rm -f node_modules/.uptodate
+
+.PHONY: lint
+lint:
+	@pip install -q tox
+	tox -e lint

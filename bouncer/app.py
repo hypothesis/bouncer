@@ -15,10 +15,7 @@ def settings():
     if via_base_url.endswith("/"):
         via_base_url = via_base_url[:-1]
 
-    if "DEBUG" in os.environ:
-        debug = True
-    else:
-        debug = False
+    debug = bool("DEBUG" in os.environ)
 
     result = {
         "chrome_extension_id": os.environ.get(
@@ -41,7 +38,8 @@ def settings():
     if 'ELASTICSEARCH_AWS_ACCESS_KEY_ID' in os.environ:
         result['elasticsearch_aws_access_key_id'] = os.environ['ELASTICSEARCH_AWS_ACCESS_KEY_ID']
     if 'ELASTICSEARCH_AWS_SECRET_ACCESS_KEY' in os.environ:
-        result['elasticsearch_aws_secret_access_key'] = os.environ['ELASTICSEARCH_AWS_SECRET_ACCESS_KEY']
+        result['elasticsearch_aws_secret_access_key'] = os.environ[
+            'ELASTICSEARCH_AWS_SECRET_ACCESS_KEY']
     if 'ELASTICSEARCH_AWS_REGION' in os.environ:
         result['elasticsearch_aws_region'] = os.environ['ELASTICSEARCH_AWS_REGION']
 

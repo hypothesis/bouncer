@@ -1,11 +1,10 @@
+import certifi
+from elasticsearch import Elasticsearch, RequestsHttpConnection
 from mock import (
     ANY,
     MagicMock,
     patch,
 )
-
-import certifi
-from elasticsearch import Elasticsearch, RequestsHttpConnection
 
 from bouncer.search import get_client, includeme
 

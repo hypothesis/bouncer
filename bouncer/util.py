@@ -129,13 +129,13 @@ def parse_document(document):
             "uri_not_a_string")
 
     return {
-            "authority": authority,
-            "annotation_id": annotation_id,
-            "document_uri": document_uri,
-            "show_metadata": show_metadata,
-            "quote": _escape_quotes(quote),
-            "text": _escape_quotes(text)
-            }
+        "authority": authority,
+        "annotation_id": annotation_id,
+        "document_uri": document_uri,
+        "show_metadata": show_metadata,
+        "quote": _escape_quotes(quote),
+        "text": _escape_quotes(text),
+    }
 
 
 def get_pretty_url(url):
@@ -157,8 +157,7 @@ def get_boilerplate_quote(document_uri):
     pretty_url = get_pretty_url(document_uri)
     if pretty_url:
         return _("Hypothesis annotation for {site}".format(site=pretty_url))
-    else:
-        return ANNOTATION_BOILERPLATE_QUOTE
+    return ANNOTATION_BOILERPLATE_QUOTE
 
 
 def _escape_quotes(string):

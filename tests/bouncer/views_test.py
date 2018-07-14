@@ -1,9 +1,9 @@
 import json
 
 from elasticsearch import exceptions as es_exceptions
-import mock
 from pyramid import httpexceptions
 from pyramid import testing
+import mock
 import pytest
 
 from bouncer import util
@@ -120,7 +120,8 @@ class TestAnnotationController(object):
         template_data = views.AnnotationController(mock_request()).annotation()
         data = json.loads(template_data["data"])
         assert data["viaUrl"] == (
-                "https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
+            "https://via.hypothes.is/http://www.example.com/example.html"
+            "#annotations:AVLlVTs1f9G3pW-EYc6q")
 
     def test_annotation_returns_extension_url(self):
         template_data = views.AnnotationController(mock_request()).annotation()
@@ -138,7 +139,8 @@ class TestAnnotationController(object):
         assert data["extensionUrl"] == (
             "http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
         assert data["viaUrl"] == (
-                "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
+            "https://via.hypothes.is/http://example.com/example.html"
+            "#annotations:AVLlVTs1f9G3pW-EYc6q")
 
     def test_annotation_strips_bare_fragment_identifiers(self, parse_document):
         parse_document.return_value["document_uri"] = (
@@ -150,7 +152,8 @@ class TestAnnotationController(object):
         assert data["extensionUrl"] == (
             "http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
         assert data["viaUrl"] == (
-                "https://via.hypothes.is/http://example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q")
+            "https://via.hypothes.is/http://example.com/example.html#"
+            "annotations:AVLlVTs1f9G3pW-EYc6q")
 
     def test_annotation_omits_via_url_for_third_party_annotations(self, parse_document):
         parse_document.return_value["authority"] = "partner.org"
@@ -188,10 +191,11 @@ class TestGotoUrlController(object):
         ctx = views.goto_url(request)
 
         assert ctx == {'data': json.dumps({
-                         'chromeExtensionId': 'test-extension-id',
-                         'viaUrl': 'https://via.hypothes.is/https://example.com/#annotations:query:',
-                         'extensionUrl': 'https://example.com/#annotations:query:'}),
-                       'pretty_url': 'example.com'}
+            'chromeExtensionId': 'test-extension-id',
+            'viaUrl': 'https://via.hypothes.is/https://example.com/#annotations:query:',
+            'extensionUrl': 'https://example.com/#annotations:query:'}),
+            'pretty_url': 'example.com',
+        }
 
     def test_it_sets_query_in_fragment(self):
         request = mock_request()
