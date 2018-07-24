@@ -4,7 +4,9 @@
 .. image:: https://codecov.io/github/hypothesis/bouncer/coverage.svg?branch=master
     :target: https://codecov.io/github/hypothesis/bouncer?branch=master
     :alt: Test Coverage
-
+.. image:: https://api.dependabot.com/badges/status?host=github&identifier=51847923
+    :target: https://dependabot.com
+    :alt: Dependabot Status
 
 Hypothesis Direct-Link Bouncer Service
 ======================================
