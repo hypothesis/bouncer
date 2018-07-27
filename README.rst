@@ -27,17 +27,13 @@ DEBUG
   variable set in the environment then unexpected Python exceptions will be
   reported to Sentry and a generic error page shown to the user.
 
-ELASTICSEARCH_HOST
-  The hostname of the Elasticsearch server that bouncer will read annotations
-  from (default: localhost)
+ELASTICSEARCH_URL
+  The url (host and port) of the Elasticsearch server that bouncer will read 
+  annotations from (default: localhost:9201)
 
 ELASTICSEARCH_INDEX
   The name of the Elasticsearch index that bouncer will read annotations
   from (default: hypothesis)
-
-ELASTICSEARCH_PORT
-  The port of the Elasticsearch server that bouncer will read annotations
-  from (default: 9200)
 
 ELASTICSEARCH_AWS_{ACCESS_KEY_ID,SECRET_ACCESS_KEY,REGION}
   If all three of these environment variables are set, bouncer will assume that
