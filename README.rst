@@ -29,7 +29,7 @@ DEBUG
 
 ELASTICSEARCH_URL
   The url (host and port) of the Elasticsearch server that bouncer will read 
-  annotations from (default: http://localhost:9201)
+  annotations from (default: http://localhost:9200)
 
 ELASTICSEARCH_INDEX
   The name of the Elasticsearch index that bouncer will read annotations

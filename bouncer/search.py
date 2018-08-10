@@ -13,7 +13,7 @@ def get_client(settings):
 
 def includeme(config):
     settings = config.registry.settings
-    settings.setdefault('elasticsearch_url', 'http://localhost:9201')
+    settings.setdefault('elasticsearch_url', 'http://localhost:9200')
 
     config.registry['es.client'] = get_client(settings)
     config.add_request_method(lambda r: r.registry['es.client'],
