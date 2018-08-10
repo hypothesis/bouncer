@@ -351,7 +351,7 @@ def mock_request():
     request = testing.DummyRequest()
     request.registry.settings = {"chrome_extension_id": "test-extension-id",
                                  "debug": False,
-                                 "elasticsearch_url": "http://localhost:9201",
+                                 "elasticsearch_url": "http://localhost:9200",
                                  "elasticsearch_index": "hypothesis",
                                  "hypothesis_authority": "localhost",
                                  "hypothesis_url": "https://hypothes.is",
