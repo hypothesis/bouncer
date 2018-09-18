@@ -214,7 +214,7 @@ class TestGotoUrlController(object):
                         'file://foo.bar',
 
                         # Malformed URLs.
-                        'http://goo\[g']
+                        r'http://goo\[g']
 
         for url in invalid_urls:
             request = mock_request()
