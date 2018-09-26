@@ -215,17 +215,6 @@ def _is_valid_http_url(url):
         return False
 
 
-def _pretty_url(url):
-    """
-    Return the domain name from `url` for display.
-    """
-    parsed_url = parse.urlparse(url)
-    pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
-    if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
-        pretty_url = pretty_url + jinja2.Markup("&hellip;")
-    return pretty_url
-
-
 def _can_use_proxy(settings, authority):
     """
     Return `True` if an annotation can be shown via the proxy service.
