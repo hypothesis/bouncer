@@ -31,7 +31,7 @@ class TestAnnotationController(object):
 
         try:
             views.AnnotationController(request).annotation()
-        except:
+        except httpexceptions.HTTPNotFound:
             pass
 
         statsd.incr.assert_called_once_with(
@@ -66,7 +66,7 @@ class TestAnnotationController(object):
 
         try:
             views.AnnotationController(mock_request()).annotation()
-        except:
+        except Exception:
             pass
 
         statsd.incr.assert_called_once_with("views.annotation.422.the_reason")
@@ -86,7 +86,7 @@ class TestAnnotationController(object):
 
         try:
             views.AnnotationController(mock_request()).annotation()
-        except:
+        except httpexceptions.HTTPUnprocessableEntity:
             pass
 
         statsd.incr.assert_called_once_with(
@@ -165,7 +165,7 @@ class TestAnnotationController(object):
 def test_index_increments_stat(statsd):
     try:
         views.index(mock_request())
-    except:
+    except httpexceptions.HTTPFound:
         pass
 
     statsd.incr.assert_called_once_with(
