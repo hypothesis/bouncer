@@ -160,6 +160,15 @@ class TestAnnotationController(object):
 
         assert data["viaUrl"] is None
 
+    def test_omits_via_url_if_url_embeds_client(self, url_embeds_client):
+        url_embeds_client.return_value = True
+
+        template_data = views.AnnotationController(mock_request()).annotation()
+        data = json.loads(template_data["data"])
+
+        url_embeds_client.assert_called_with("http://www.example.com/example.html")
+        assert data["viaUrl"] is None
+
 
 @pytest.mark.usefixtures("statsd")
 def test_index_increments_stat(statsd):
@@ -244,6 +253,17 @@ class TestGotoUrlController(object):
         data = json.loads(ctx['data'])
         assert data['viaUrl'] == 'https://via.hypothes.is/https://example.com/#annotations:query:'
         assert data['extensionUrl'] == 'https://example.com/#annotations:query:'
+
+    def test_it_does_not_use_via_if_url_embeds_client(self, url_embeds_client):
+        request = mock_request()
+        request.GET['url'] = 'https://example.com/#foobar'
+        url_embeds_client.return_value = True
+
+        ctx = views.goto_url(request)
+
+        data = json.loads(ctx['data'])
+        url_embeds_client.assert_called_with('https://example.com/')
+        assert data['viaUrl'] is None
 
 
 class TestErrorController(object):
@@ -372,3 +392,14 @@ def mock_request():
     }
     request.raven = mock.Mock()
     return request
+
+
+@pytest.fixture(autouse=True)
+def url_embeds_client():
+    patcher = mock.patch("bouncer.views.url_embeds_client")
+    url_embeds_client = patcher.start()
+    url_embeds_client.return_value = False
+
+    yield url_embeds_client
+
+    patcher.stop()

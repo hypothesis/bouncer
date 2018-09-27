@@ -8,6 +8,7 @@ from pyramid import i18n
 from pyramid import view
 from statsd.defaults.env import statsd
 
+from bouncer.embed_detector import url_embeds_client
 from bouncer import util
 from bouncer import __version__ as bouncer_version
 
@@ -67,7 +68,7 @@ class AnnotationController(object):
                   "document that is not publicly available."))
 
         via_url = None
-        if _can_use_proxy(settings, authority=authority):
+        if _can_use_proxy(settings, authority=authority) and not url_embeds_client(document_uri):
             via_url = "{via_base_url}/{uri}#annotations:{id}".format(
                 via_base_url=settings["via_base_url"],
                 uri=document_uri,
@@ -133,10 +134,13 @@ def goto_url(request):
 
     query = parse.quote(request.params.get('q', ''))
 
-    via_url = '{via_base_url}/{url}#annotations:query:{query}'.format(
-        via_base_url=settings['via_base_url'],
-        url=url,
-        query=query)
+    if not url_embeds_client(url):
+        via_url = '{via_base_url}/{url}#annotations:query:{query}'.format(
+            via_base_url=settings['via_base_url'],
+            url=url,
+            query=query)
+    else:
+        via_url = None
 
     extension_url = '{url}#annotations:query:{query}'.format(
         url=url, query=query)
