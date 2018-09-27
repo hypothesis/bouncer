@@ -25,3 +25,8 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 	rm -f node_modules/.uptodate
+
+
+.PHONY: lint
+lint:
+	flake8 .
