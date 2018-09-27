@@ -1,28 +1,27 @@
+import fnmatch
 import re
 from urllib.parse import urlparse
 
-"""
-Hardcoded URL patterns where client is assumed to be embedded.
-
-Only the hostname and path are included in the pattern. The path must be
-specified.
-
-These are regular expressions so periods must be escaped.
-"""
+# Hardcoded URL patterns where client is assumed to be embedded.
+#
+# Only the hostname and path are included in the pattern. The path must be
+# specified; use "example.com/*" to match all URLs on a particular domain.
+#
+# Patterns are shell-style wildcards ('*' matches any number of chars, '?'
+# matches a single char).
 PATTERNS = [
-    "h\.readthedocs\.io/.*",
-    "web\.hypothes\.is/blog/.*",
+    "h.readthedocs.io/*",
+    "web.hypothes.is/blog/*",
 ]
 
-COMPILED_PATTERNS = [re.compile(pat) for pat in PATTERNS]
+COMPILED_PATTERNS = [re.compile(fnmatch.translate(pat)) for pat in PATTERNS]
 
 
 def url_embeds_client(url):
     """
     Test whether ``url`` is known to embed the client.
 
-    This currently just tests the URL against the hardcoded regex list
-    ``PATTERNS``.
+    This currently just tests the URL against the pattern list ``PATTERNS``.
 
     Only the hostname and path of the URL are tested. Returns false for non-HTTP
     URLs.
