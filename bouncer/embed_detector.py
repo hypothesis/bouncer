@@ -10,8 +10,15 @@ from urllib.parse import urlparse
 # Patterns are shell-style wildcards ('*' matches any number of chars, '?'
 # matches a single char).
 PATTERNS = [
+    # Hypothesis websites.
     "h.readthedocs.io/*",
     "web.hypothes.is/blog/*",
+
+    # Publisher partners:
+
+    # American Psychological Organization.
+    "psycnet.apa.org/fulltext/*",
+    "awspntest.apa.org/fulltext/*",
 ]
 
 COMPILED_PATTERNS = [re.compile(fnmatch.translate(pat)) for pat in PATTERNS]
