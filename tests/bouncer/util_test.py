@@ -7,7 +7,7 @@ def test_parse_document_raises_if_annotated_deleted():
     # When an annotation is deleted in h it isn't immediately removed from the
     # search index. Its Elasticsearch document is temporarily updated to just
     # {'deleted': True}.
-    with pytest.raises(util.DeletedAnnotationError) as exc:
+    with pytest.raises(util.DeletedAnnotationError):
         util.parse_document({
             "_id": "annotation_id",
             "_source": {

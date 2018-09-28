@@ -1,7 +1,6 @@
 import json
 from urllib import parse
 
-import jinja2
 from elasticsearch import exceptions
 from pyramid import httpexceptions
 from pyramid import i18n
@@ -211,7 +210,7 @@ def _is_valid_http_url(url):
     try:
         parsed_url = parse.urlparse(url)
         return parsed_url.scheme == 'http' or parsed_url.scheme == 'https'
-    except:
+    except Exception:
         return False
 
 

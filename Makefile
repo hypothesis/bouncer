@@ -13,7 +13,6 @@ dev:
 test:
 	@pip install -q tox
 	tox
-	./node_modules/.bin/eslint bouncer/scripts
 	./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: docker
@@ -25,3 +24,9 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 	rm -f node_modules/.uptodate
+
+
+.PHONY: lint
+lint:
+	./node_modules/.bin/eslint bouncer/scripts
+	flake8 .
