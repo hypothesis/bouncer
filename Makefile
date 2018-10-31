@@ -20,7 +20,7 @@ dev: node_modules/.uptodate
 	tox -e py36-dev
 
 .PHONY: lint
-lint:
+lint: node_modules/.uptodate
 	tox -e py36-lint
 	./node_modules/.bin/eslint bouncer/scripts
 
