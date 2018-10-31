@@ -144,7 +144,7 @@ def get_pretty_url(url):
     """
     try:
         parsed_url = parse.urlparse(url)
-    except (AttributeError, ValueError) as e:
+    except (AttributeError, ValueError):
         return None
 
     pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
