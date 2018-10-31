@@ -13,15 +13,11 @@ before_cache:
   - rm -f $HOME/.cache/pip/log/debug.log
 before_install:
   - nvm install $NODE_VERSION
-install:
-  - make deps
+install: pip install tox tox-pip-extensions
 jobs:
   include:
     - name: "Test"
-      before_install:
-        - pip install codecov
       script: make test
-      after_success:
-        - codecov
+      after_success: make coverage codecov
     - name: "Lint"
       script: make lint
