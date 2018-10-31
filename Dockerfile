@@ -1,8 +1,8 @@
-FROM gliderlabs/alpine:3.4
+FROM gliderlabs/alpine:3.8
 MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
-RUN apk-install ca-certificates collectd curl nodejs python3 supervisor
+RUN apk-install ca-certificates collectd curl nodejs nodejs-npm python3 supervisor
 
 # Create the bouncer user, group, home directory and package directory.
 RUN addgroup -S bouncer \
@@ -12,8 +12,7 @@ WORKDIR /var/lib/bouncer
 # Copy packaging
 COPY README.rst package.json requirements.txt ./
 
-RUN npm install --production \
-  && npm cache clean
+RUN npm install --production
 
 RUN pip3 install --no-cache-dir -U pip \
   && pip3 install --no-cache-dir -r requirements.txt

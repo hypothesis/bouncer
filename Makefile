@@ -17,33 +17,33 @@ help:
 
 .PHONY: dev
 dev: node_modules/.uptodate
-	tox -e py35-dev
+	tox -e py36-dev
 
 .PHONY: lint
 lint:
-	tox -e py35-lint
+	tox -e py36-lint
 	./node_modules/.bin/eslint bouncer/scripts
 
 .PHONY: test
 test: node_modules/.uptodate
-	tox -e py35-tests
+	tox -e py36-tests
 	./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: coverage
 coverage:
-	tox -e py35-coverage
+	tox -e py36-coverage
 
 .PHONY: codecov
 codecov:
-	tox -e py35-codecov
+	tox -e py36-codecov
 
 .PHONY: docstrings
 docstrings:
-	tox -e py35-docstrings
+	tox -e py36-docstrings
 
 .PHONY: checkdocstrings
 checkdocstrings:
-	tox -e py35-checkdocstrings
+	tox -e py36-checkdocstrings
 
 .PHONY: docker
 docker:

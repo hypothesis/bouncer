@@ -2,7 +2,7 @@ sudo: false
 language:
   - python
 python:
-  - "3.5"
+  - "3.6"
 env:
   - NODE_VERSION="6.9"
 cache:
