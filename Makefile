@@ -1,23 +1,53 @@
-DOCKER_TAG = dev
+.PHONY: default
+default: help
 
-deps:
-	pip install --upgrade pip
-	pip install --upgrade wheel
-	pip install -r requirements-dev.txt
-	npm install
+.PHONY: help
+help:
+	@echo "make help              Show this help message"
+	@echo "make dev               Run the app in the development server"
+	@echo "make lint              Run the code linter(s) and print any warnings"
+	@echo "make test              Run the unit tests"
+	@echo "make coverage          Print the unit test coverage report"
+	@echo "make codecov           Upload the coverage report to codecov.io"
+	@echo "make docstrings        View all the docstrings locally as HTML"
+	@echo "make checkdocstrings   Crash if building the docstrings fails"
+	@echo "make docker            Make the app's Docker image"
+	@echo "make clean             Delete development artefacts (cached files, "
+	@echo "                       dependencies, etc)"
 
-dev:
-	PYRAMID_RELOAD_TEMPLATES=1 gunicorn --reload "bouncer.app:app()"
+.PHONY: dev
+dev: node_modules/.uptodate
+	tox -e py36-dev
+
+.PHONY: lint
+lint:
+	tox -e py36-lint
+	./node_modules/.bin/eslint bouncer/scripts
 
 .PHONY: test
-test:
-	@pip install -q tox
-	tox
+test: node_modules/.uptodate
+	tox -e py36-tests
 	./node_modules/karma/bin/karma start karma.config.js
+
+.PHONY: coverage
+coverage:
+	tox -e py36-coverage
+
+.PHONY: codecov
+codecov:
+	tox -e py36-codecov
+
+.PHONY: docstrings
+docstrings:
+	tox -e py36-docstrings
+
+.PHONY: checkdocstrings
+checkdocstrings:
+	tox -e py36-checkdocstrings
 
 .PHONY: docker
 docker:
-	git archive HEAD | docker build -t hypothesis/bouncer:$(DOCKER_TAG) -
+	git archive --format=tar.gz HEAD | docker build -t hypothesis/hypothesis:$(DOCKER_TAG) -
 
 .PHONY: clean
 clean:
@@ -25,8 +55,9 @@ clean:
 	find . -type d -name "__pycache__" -delete
 	rm -f node_modules/.uptodate
 
+DOCKER_TAG = dev
 
-.PHONY: lint
-lint:
-	./node_modules/.bin/eslint bouncer/scripts
-	flake8 .
+node_modules/.uptodate: package.json
+	@echo installing javascript dependencies
+	@node_modules/.bin/check-dependencies 2>/dev/null || npm install
+	@touch $@

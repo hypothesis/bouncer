@@ -1,0 +1,9 @@
+[run]
+branch = True
+parallel = True
+source =
+    bouncer
+    tests/bouncer
+
+[report]
+show_missing = True
