@@ -1,4 +1,4 @@
-certifi==2018.10.15
+certifi==2018.11.29
 elasticsearch==6.3.1
 gunicorn==19.9.0
 pyramid==1.10.1
