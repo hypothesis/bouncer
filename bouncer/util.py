@@ -19,8 +19,7 @@ ANNOTATION_BOILERPLATE_QUOTE = _("Hypothesis annotation")
 
 #: We map the annotation's `text` field to Description. If it's empty, we fall back
 #: to this minimal version.
-ANNOTATION_BOILERPLATE_TEXT = (
-    _('Follow this link to see the annotation in context'))
+ANNOTATION_BOILERPLATE_TEXT = _("Follow this link to see the annotation in context")
 
 
 class DeletedAnnotationError(Exception):
@@ -73,7 +72,7 @@ def parse_document(document):
     annotation_id = document["_id"]
     annotation = document["_source"]
 
-    if document['_source'].get('deleted', False) is True:
+    if document["_source"].get("deleted", False) is True:
         raise DeletedAnnotationError()
 
     authority = annotation["authority"]
@@ -91,7 +90,7 @@ def parse_document(document):
     quote = None
 
     # This will fill the Description slot in Twitter/OG metadata
-    text = annotation.get('text')
+    text = annotation.get("text")
     if not text:
         text = ANNOTATION_BOILERPLATE_TEXT
 
@@ -99,11 +98,11 @@ def parse_document(document):
         targets = annotation["target"]
         if targets:
             document_uri = targets[0]["source"]
-            selectors = targets[0].get('selector', [])
+            selectors = targets[0].get("selector", [])
             for selector in selectors:
-                if selector.get('type') != 'TextQuoteSelector':
+                if selector.get("type") != "TextQuoteSelector":
                     continue
-                quote = selector.get('exact')
+                quote = selector.get("exact")
     except KeyError:
         pass
 
@@ -121,21 +120,22 @@ def parse_document(document):
 
     if document_uri is None:
         raise InvalidAnnotationError(
-            _("The annotation has no URI"), "annotation_has_no_uri")
+            _("The annotation has no URI"), "annotation_has_no_uri"
+        )
 
     if not isinstance(document_uri, str):
         raise InvalidAnnotationError(
-            _("The annotation has an invalid document URI"),
-            "uri_not_a_string")
+            _("The annotation has an invalid document URI"), "uri_not_a_string"
+        )
 
     return {
-            "authority": authority,
-            "annotation_id": annotation_id,
-            "document_uri": document_uri,
-            "show_metadata": show_metadata,
-            "quote": _escape_quotes(quote),
-            "text": _escape_quotes(text)
-            }
+        "authority": authority,
+        "annotation_id": annotation_id,
+        "document_uri": document_uri,
+        "show_metadata": show_metadata,
+        "quote": _escape_quotes(quote),
+        "text": _escape_quotes(text),
+    }
 
 
 def get_pretty_url(url):
@@ -162,4 +162,4 @@ def get_boilerplate_quote(document_uri):
 
 
 def _escape_quotes(string):
-    return string.replace('"', '\u0022').replace("'", '\u0027')
+    return string.replace('"', "\u0022").replace("'", "\u0027")

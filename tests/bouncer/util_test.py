@@ -8,12 +8,7 @@ def test_parse_document_raises_if_annotated_deleted():
     # search index. Its Elasticsearch document is temporarily updated to just
     # {'deleted': True}.
     with pytest.raises(util.DeletedAnnotationError):
-        util.parse_document({
-            "_id": "annotation_id",
-            "_source": {
-                "deleted": True,
-            },
-        })
+        util.parse_document({"_id": "annotation_id", "_source": {"deleted": True}})
 
 
 def test_parse_document_raises_if_no_uri(es_annotation_doc):
@@ -45,23 +40,26 @@ def test_parse_document_returns_document_uri(es_annotation_doc):
 
 
 def test_parse_document_returns_quote(es_annotation_doc):
-    es_annotation_doc["_source"]["target"][0]["selector"] = [{
-        "type": "TextQuoteSelector",
-        "exact": "test_quote",
-        }]
+    es_annotation_doc["_source"]["target"][0]["selector"] = [
+        {"type": "TextQuoteSelector", "exact": "test_quote"}
+    ]
     quote = util.parse_document(es_annotation_doc)["quote"]
     assert quote == "test_quote"
 
 
-@pytest.mark.parametrize('selector', [
-    # No selector (ie. a page note).
-    None,
-
-    # No quote selector. Allowed by the service even though a quote is required
-    # to anchor the annotation.
-    [{"type": "TextPositionSelector"}],
-])
-def test_parse_document_returns_boilerplate_quote_when_no_quote(es_annotation_doc, selector):
+@pytest.mark.parametrize(
+    "selector",
+    [
+        # No selector (ie. a page note).
+        None,
+        # No quote selector. Allowed by the service even though a quote is required
+        # to anchor the annotation.
+        [{"type": "TextPositionSelector"}],
+    ],
+)
+def test_parse_document_returns_boilerplate_quote_when_no_quote(
+    es_annotation_doc, selector
+):
     if selector:
         es_annotation_doc["_source"]["target"][0]["selector"] = selector
     quote = util.parse_document(es_annotation_doc)["quote"]
@@ -79,7 +77,9 @@ def test_parse_document_returns_boilerplate_when_no_text(es_annotation_doc):
     assert text == util.ANNOTATION_BOILERPLATE_TEXT
 
 
-def test_parse_document_returns_show_metadata_true_when_shared_and_world(es_annotation_doc):
+def test_parse_document_returns_show_metadata_true_when_shared_and_world(
+    es_annotation_doc
+):
     show_metadata = util.parse_document(es_annotation_doc)["show_metadata"]
     assert show_metadata is True
 
@@ -93,7 +93,9 @@ def test_parse_document_returns_document_uri_from_web_uri_when_pdf(es_annotation
     assert document_uri == "http://example.com/foo.pdf"
 
 
-def test_parse_document_raises_when_uri_from_web_uri_not_string_for_pdfs(es_annotation_doc):
+def test_parse_document_raises_when_uri_from_web_uri_not_string_for_pdfs(
+    es_annotation_doc
+):
     es_annotation_doc["_source"]["target"][0]["source"] = "urn:x-pdf:the-fingerprint"
     es_annotation_doc["_source"]["document"] = {"web_uri": 52}
 
@@ -119,12 +121,8 @@ def es_annotation_doc():
         "_id": "annotation_id",
         "_source": {
             "authority": "hypothes.is",
-            "target": [
-                {
-                    "source": "http://example.com/example.html",
-                }
-            ],
+            "target": [{"source": "http://example.com/example.html"}],
             "group": "__world__",
             "shared": True,
-        }
+        },
     }

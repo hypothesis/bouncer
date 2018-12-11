@@ -21,7 +21,6 @@ class FailedHealthcheck(Exception):
 
 @view.view_defaults(renderer="bouncer:templates/annotation.html.jinja2")
 class AnnotationController(object):
-
     def __init__(self, request):
         self.request = request
 
@@ -34,7 +33,8 @@ class AnnotationController(object):
             document = self.request.es.get(
                 index=settings["elasticsearch_index"],
                 doc_type="annotation",
-                id=self.request.matchdict["id"])
+                id=self.request.matchdict["id"],
+            )
         except exceptions.NotFoundError:
             statsd.incr("views.annotation.404.annotation_not_found")
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
@@ -63,18 +63,25 @@ class AnnotationController(object):
         if not _is_valid_http_url(document_uri):
             statsd.incr("views.annotation.422.not_an_http_or_https_document")
             raise httpexceptions.HTTPUnprocessableEntity(
-                _("Sorry, but it looks like this annotation was made on a "
-                  "document that is not publicly available."))
+                _(
+                    "Sorry, but it looks like this annotation was made on a "
+                    "document that is not publicly available."
+                )
+            )
 
         via_url = None
-        if _can_use_proxy(settings, authority=authority) and not url_embeds_client(document_uri):
+        if _can_use_proxy(settings, authority=authority) and not url_embeds_client(
+            document_uri
+        ):
             via_url = "{via_base_url}/{uri}#annotations:{id}".format(
                 via_base_url=settings["via_base_url"],
                 uri=document_uri,
-                id=annotation_id)
+                id=annotation_id,
+            )
 
         extension_url = "{uri}#annotations:{id}".format(
-            uri=document_uri, id=annotation_id)
+            uri=document_uri, id=annotation_id
+        )
 
         pretty_url = util.get_pretty_url(document_uri)
 
@@ -82,31 +89,32 @@ class AnnotationController(object):
 
         statsd.incr("views.annotation.200.annotation_found")
         return {
-            "data": json.dumps({
-                # Warning: variable names change from python_style to
-                # javaScriptStyle here!
-                "chromeExtensionId": settings["chrome_extension_id"],
-                "viaUrl": via_url,
-                "extensionUrl": extension_url,
-            }),
+            "data": json.dumps(
+                {
+                    # Warning: variable names change from python_style to
+                    # javaScriptStyle here!
+                    "chromeExtensionId": settings["chrome_extension_id"],
+                    "viaUrl": via_url,
+                    "extensionUrl": extension_url,
+                }
+            ),
             "show_metadata": show_metadata,
             "pretty_url": pretty_url,
             "quote": quote,
             "text": text,
-            "title": title
+            "title": title,
         }
 
 
-@view.view_config(renderer="bouncer:templates/index.html.jinja2",
-                  route_name="index")
+@view.view_config(renderer="bouncer:templates/index.html.jinja2", route_name="index")
 def index(request):
     statsd.incr("views.index.302.redirected_to_hypothesis")
-    raise httpexceptions.HTTPFound(
-        location=request.registry.settings["hypothesis_url"])
+    raise httpexceptions.HTTPFound(location=request.registry.settings["hypothesis_url"])
 
 
-@view.view_config(renderer="bouncer:templates/annotation.html.jinja2",
-                  route_name="goto_url")
+@view.view_config(
+    renderer="bouncer:templates/annotation.html.jinja2", route_name="goto_url"
+)
 def goto_url(request):
     """
     View that takes the user to a URL with the annotation layer enabled.
@@ -117,48 +125,50 @@ def goto_url(request):
     "q" - Initial query for the filter input in the client.
     """
     settings = request.registry.settings
-    url = request.params.get('url')
+    url = request.params.get("url")
 
     if url is None:
         raise httpexceptions.HTTPBadRequest('"url" parameter is missing')
 
     if not _is_valid_http_url(url):
         raise httpexceptions.HTTPBadRequest(
-            _('Sorry, but this service can only show annotations on '
-              'valid HTTP or HTTPs URLs.'))
+            _(
+                "Sorry, but this service can only show annotations on "
+                "valid HTTP or HTTPs URLs."
+            )
+        )
 
     # Remove any existing #fragment identifier from the URI before we
     # append our own.
     url = parse.urldefrag(url)[0]
 
-    query = parse.quote(request.params.get('q', ''))
+    query = parse.quote(request.params.get("q", ""))
 
     if not url_embeds_client(url):
-        via_url = '{via_base_url}/{url}#annotations:query:{query}'.format(
-            via_base_url=settings['via_base_url'],
-            url=url,
-            query=query)
+        via_url = "{via_base_url}/{url}#annotations:query:{query}".format(
+            via_base_url=settings["via_base_url"], url=url, query=query
+        )
     else:
         via_url = None
 
-    extension_url = '{url}#annotations:query:{query}'.format(
-        url=url, query=query)
+    extension_url = "{url}#annotations:query:{query}".format(url=url, query=query)
 
     pretty_url = util.get_pretty_url(url)
 
     return {
-        'data': json.dumps({
-            'chromeExtensionId': settings['chrome_extension_id'],
-            'viaUrl': via_url,
-            'extensionUrl': extension_url,
-        }),
-        'pretty_url': pretty_url
+        "data": json.dumps(
+            {
+                "chromeExtensionId": settings["chrome_extension_id"],
+                "viaUrl": via_url,
+                "extensionUrl": extension_url,
+            }
+        ),
+        "pretty_url": pretty_url,
     }
 
 
-@view.view_defaults(renderer='bouncer:templates/error.html.jinja2')
+@view.view_defaults(renderer="bouncer:templates/error.html.jinja2")
 class ErrorController(object):
-
     def __init__(self, exc, request):
         self.exc = exc
         self.request = request
@@ -187,21 +197,25 @@ class ErrorController(object):
         # 1. Show the user a generic error page
         # 2. Report the details of the error to Sentry.
         self.request.raven.captureException()
-        return {"message": _("Sorry, but something went wrong with the link. "
-                             "The issue has been reported and we'll try to "
-                             "fix it.")}
+        return {
+            "message": _(
+                "Sorry, but something went wrong with the link. "
+                "The issue has been reported and we'll try to "
+                "fix it."
+            )
+        }
 
 
-@view.view_config(route_name='healthcheck', renderer='json')
+@view.view_config(route_name="healthcheck", renderer="json")
 def healthcheck(request):
-    index = request.registry.settings['elasticsearch_index']
+    index = request.registry.settings["elasticsearch_index"]
     try:
-        status = request.es.cluster.health(index=index)['status']
+        status = request.es.cluster.health(index=index)["status"]
     except exceptions.ElasticsearchException as exc:
-        raise FailedHealthcheck('elasticsearch exception') from exc
-    if status not in ('yellow', 'green'):
-        raise FailedHealthcheck('cluster status was {!r}'.format(status))
-    return {'status': 'ok', 'version': bouncer_version}
+        raise FailedHealthcheck("elasticsearch exception") from exc
+    if status not in ("yellow", "green"):
+        raise FailedHealthcheck("cluster status was {!r}".format(status))
+    return {"status": "ok", "version": bouncer_version}
 
 
 def _is_valid_http_url(url):
@@ -213,7 +227,7 @@ def _is_valid_http_url(url):
     """
     try:
         parsed_url = parse.urlparse(url)
-        return parsed_url.scheme == 'http' or parsed_url.scheme == 'https'
+        return parsed_url.scheme == "http" or parsed_url.scheme == "https"
     except Exception:
         return False
 
@@ -233,7 +247,7 @@ def _can_use_proxy(settings, authority):
     # accounts, because third-party accounts require the host page to supply
     # login information to the client, which in turn relies on the user's cookie
     # session and therefore does not work properly through the proxy.
-    return settings['hypothesis_authority'] == authority
+    return settings["hypothesis_authority"] == authority
 
 
 def includeme(config):
