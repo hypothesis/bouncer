@@ -22,20 +22,17 @@ def settings():
 
     result = {
         "chrome_extension_id": os.environ.get(
-            "CHROME_EXTENSION_ID",
-            "bjfhmglciegochdpefhhlphglcehbmek"),
+            "CHROME_EXTENSION_ID", "bjfhmglciegochdpefhhlphglcehbmek"
+        ),
         "debug": debug,
-        "elasticsearch_index": os.environ.get("ELASTICSEARCH_INDEX",
-                                              "hypothesis"),
-        "hypothesis_authority": os.environ.get("HYPOTHESIS_AUTHORITY",
-                                               "localhost"),
-        "hypothesis_url": os.environ.get("HYPOTHESIS_URL",
-                                         "https://hypothes.is"),
+        "elasticsearch_index": os.environ.get("ELASTICSEARCH_INDEX", "hypothesis"),
+        "hypothesis_authority": os.environ.get("HYPOTHESIS_AUTHORITY", "localhost"),
+        "hypothesis_url": os.environ.get("HYPOTHESIS_URL", "https://hypothes.is"),
         "via_base_url": via_base_url,
     }
 
-    if 'ELASTICSEARCH_URL' in os.environ:
-        result['elasticsearch_url'] = os.environ['ELASTICSEARCH_URL']
+    if "ELASTICSEARCH_URL" in os.environ:
+        result["elasticsearch_url"] = os.environ["ELASTICSEARCH_URL"]
     return result
 
 
@@ -46,7 +43,7 @@ def app():
     config.include("pyramid_jinja2")
     config.registry.settings["jinja2.filters"] = {
         "static_path": "pyramid_jinja2.filters:static_path_filter",
-        "static_url": "pyramid_jinja2.filters:static_url_filter"
+        "static_url": "pyramid_jinja2.filters:static_url_filter",
     }
     config.include("bouncer.search")
     config.include("bouncer.views")

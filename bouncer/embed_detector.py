@@ -13,9 +13,7 @@ PATTERNS = [
     # Hypothesis websites.
     "h.readthedocs.io/*",
     "web.hypothes.is/blog/*",
-
     # Publisher partners:
-
     # American Psychological Organization.
     "psycnet.apa.org/fulltext/*",
     "awspntest.apa.org/fulltext/*",
