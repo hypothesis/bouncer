@@ -21,3 +21,5 @@ jobs:
       after_success: make coverage codecov
     - name: "Lint"
       script: make lint
+    - name: "Check formatting"
+      script: make checkformatting

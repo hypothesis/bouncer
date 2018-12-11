@@ -6,6 +6,8 @@ help:
 	@echo "make help              Show this help message"
 	@echo "make dev               Run the app in the development server"
 	@echo "make lint              Run the code linter(s) and print any warnings"
+	@echo "make format            Correctly format the code"
+	@echo "make checkformatting   Crash if the code isn't correctly formatted"
 	@echo "make test              Run the unit tests"
 	@echo "make coverage          Print the unit test coverage report"
 	@echo "make codecov           Upload the coverage report to codecov.io"
@@ -23,6 +25,14 @@ dev: node_modules/.uptodate
 lint: node_modules/.uptodate
 	tox -e py36-lint
 	./node_modules/.bin/eslint bouncer/scripts
+
+.PHONY: format
+format:
+	tox -e py36-format
+
+.PHONY: checkformatting
+checkformatting:
+	tox -e py36-checkformatting
 
 .PHONY: test
 test: node_modules/.uptodate

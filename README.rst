@@ -7,6 +7,8 @@
 .. image:: https://api.dependabot.com/badges/status?host=github&identifier=51847923
     :target: https://dependabot.com
     :alt: Dependabot Status
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/ambv/black
 
 Hypothesis Direct-Link Bouncer Service
 ======================================
