@@ -1,7 +1,7 @@
 certifi==2018.11.29
 elasticsearch==6.3.1
 gunicorn==19.9.0
-pyramid==1.10.1
+pyramid==1.10.2
 pyramid-jinja2==2.8
 requests==2.21.0
 requests-aws4auth==0.9
