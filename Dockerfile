@@ -1,4 +1,4 @@
-FROM alpine:3.8
+FROM alpine:3.9
 MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
