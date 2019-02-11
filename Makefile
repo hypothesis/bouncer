@@ -19,11 +19,11 @@ help:
 
 .PHONY: dev
 dev: node_modules/.uptodate
-	tox -e py36-dev
+	tox -qe py36-dev
 
 .PHONY: lint
 lint: node_modules/.uptodate
-	tox -e py36-lint
+	tox -qe py36-lint
 	./node_modules/.bin/eslint bouncer/scripts
 
 .PHONY: format
@@ -36,24 +36,24 @@ checkformatting:
 
 .PHONY: test
 test: node_modules/.uptodate
-	tox -e py36-tests
+	tox -qe py36-tests
 	./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: coverage
 coverage:
-	tox -e py36-coverage
+	tox -qe py36-coverage
 
 .PHONY: codecov
 codecov:
-	tox -e py36-codecov
+	tox -qe py36-codecov
 
 .PHONY: docstrings
 docstrings:
-	tox -e py36-docstrings
+	tox -qe py36-docstrings
 
 .PHONY: checkdocstrings
 checkdocstrings:
-	tox -e py36-checkdocstrings
+	tox -qe py36-checkdocstrings
 
 .PHONY: docker
 docker:
