@@ -12,7 +12,7 @@
     "karma-sinon": "^1.0.4",
     "mocha": "^5.2.0",
     "sinon": "^7.2.4",
-    "watchify": "^3.11.0"
+    "watchify": "^3.11.1"
   },
   "license": "BSD-2-Clause",
   "repository": {
