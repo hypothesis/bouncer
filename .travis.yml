@@ -9,7 +9,7 @@ cache:
     - $HOME/.cache/pip
 before_cache:
   - rm -f $HOME/.cache/pip/log/debug.log
-install: pip install tox tox-pip-extensions
+install: pip install tox>=3.8.0
 jobs:
   include:
     - name: "Test"
