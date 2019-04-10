@@ -219,6 +219,31 @@ class TestGotoUrlController(object):
         assert data["viaUrl"].endswith(expected_frag)
         assert data["extensionUrl"].endswith(expected_frag)
 
+    def test_it_sets_group_in_fragment(self):
+        request = mock_request()
+        request.GET["url"] = "https://example.com/article.html"
+        request.GET["group"] = "jj333e"
+
+        ctx = views.goto_url(request)
+
+        data = json.loads(ctx["data"])
+        expected_frag = "#annotations:group:jj333e"
+        assert data["viaUrl"].endswith(expected_frag)
+        assert data["extensionUrl"].endswith(expected_frag)
+
+    def test_it_sets_group_in_fragment_if_both_group_and_query_present(self):
+        request = mock_request()
+        request.GET["url"] = "https://example.com/article.html"
+        request.GET["q"] = "findme"
+        request.GET["group"] = "jj333e"
+
+        ctx = views.goto_url(request)
+
+        data = json.loads(ctx["data"])
+        expected_frag = "#annotations:group:jj333e"
+        assert data["viaUrl"].endswith(expected_frag)
+        assert data["extensionUrl"].endswith(expected_frag)
+
     def test_it_rejects_invalid_or_missing_urls(self):
         invalid_urls = [
             None,
