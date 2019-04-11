@@ -117,12 +117,14 @@ def index(request):
 )
 def goto_url(request):
     """
-    View that takes the user to a URL with the annotation layer enabled.
+    Redirect the user to a specified URL with the annotation client layer
+    activated. This provides a URL-sharing mechanism.
 
-    Optional configuration for the client may be specified via additional query
-    params:
+    Optional querystring parameters can refine the behavior of the annotation
+    client at the target url by identifying:
 
-    "q" - Initial query for the filter input in the client.
+       * "group" - a group to focus; OR
+       * "q" a query to populate the client search with
     """
     settings = request.registry.settings
     url = request.params.get("url")
@@ -142,16 +144,29 @@ def goto_url(request):
     # append our own.
     url = parse.urldefrag(url)[0]
 
+    group = request.params.get("group", "")
     query = parse.quote(request.params.get("q", ""))
 
+    # Translate any refining querystring parameters into a URL fragment
+    # syntax understood by the client
+    fragment = "annotations:"
+
+    # group will supersede query (q) if both are present
+    if group:
+        # focus a specific group in the client
+        fragment = fragment + "group:{group}".format(group=group)
+    else:
+        # populate the client search with a query
+        fragment = fragment + "query:{query}".format(query=query)
+
     if not url_embeds_client(url):
-        via_url = "{via_base_url}/{url}#annotations:query:{query}".format(
-            via_base_url=settings["via_base_url"], url=url, query=query
+        via_url = "{via_base_url}/{url}#{fragment}".format(
+            via_base_url=settings["via_base_url"], url=url, fragment=fragment
         )
     else:
         via_url = None
 
-    extension_url = "{url}#annotations:query:{query}".format(url=url, query=query)
+    extension_url = "{url}#{fragment}".format(url=url, fragment=fragment)
 
     pretty_url = util.get_pretty_url(url)
 
