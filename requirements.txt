@@ -1,5 +1,5 @@
 certifi==2019.3.9
-elasticsearch==6.3.1
+elasticsearch==7.0.0
 gunicorn==19.9.0
 pyramid==1.10.3
 pyramid-jinja2==2.8
