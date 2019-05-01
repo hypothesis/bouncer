@@ -30,7 +30,7 @@ DEBUG
   reported to Sentry and a generic error page shown to the user.
 
 ELASTICSEARCH_URL
-  The url (host and port) of the Elasticsearch server that bouncer will read 
+  The url (host and port) of the Elasticsearch server that bouncer will read
   annotations from (default: http://localhost:9200)
 
 ELASTICSEARCH_INDEX
@@ -69,6 +69,30 @@ VIA_BASE_URL
   don't have the Hypothesis Chrome extension installed
   (default: https://via.hypothes.is)
 
+Route Syntax/API
+----------------
+
+Share Annotations on Page/URL (``/go``)
++++++++++++++++++++++++++++++++++++++
+
+Go to a specified URL and display annotations there. Optionally filter which
+annotations are displayed.
+
+Querystring parameters:
+
+* ``url`` (required): URL of target page/document
+* ``group`` (optional): group ID. Show annotations within a specified group.
+* ``q`` (optional): Search query. Filter annotations at URL to those that match
+  this search query.
+
+Share an Annotation (``/{id}`` or ``/{id}/{url}``)
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+Go to an individual annotation, where ``id`` is the annotation's unique ID.
+
+Optional ``url`` path parameter: URL of the annotation's target document.
+This is intended to enhance the readability of shared annotation URLs and
+is functionally identical to the ``/{id}`` route.
 
 Production Deployment
 ---------------------
