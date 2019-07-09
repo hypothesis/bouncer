@@ -1,15 +1,15 @@
-FROM alpine:3.9.4
+FROM alpine:3.10.0
 MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
-RUN apk add --no-cache \
+RUN apk add --repository http://dl-cdn.alpinelinux.org/alpine/v3.9/main/ --no-cache \
   ca-certificates \
   collectd \
   collectd-disk \
   curl \
   nodejs \
   nodejs-npm \
-  python3 \
+  'python3<3.7' \
   supervisor
 
 # Create the bouncer user, group, home directory and package directory.
@@ -22,8 +22,8 @@ COPY README.rst package.json requirements.txt ./
 
 RUN npm install --production
 
-RUN pip3 install --no-cache-dir -U pip \
-  && pip3 install --no-cache-dir -r requirements.txt
+#RUN pip3 install --no-cache-dir -U pip \
+#  && pip3 install --no-cache-dir -r requirements.txt
 
 # Copy collectd config
 COPY conf/collectd.conf /etc/collectd/collectd.conf
