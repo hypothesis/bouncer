@@ -22,8 +22,8 @@ COPY README.rst package.json requirements.txt ./
 
 RUN npm install --production
 
-RUN pip3 install --no-cache-dir -U pip \
-  && pip3 install --no-cache-dir -r requirements.txt
+#RUN pip3 install --no-cache-dir -U pip \
+#  && pip3 install --no-cache-dir -r requirements.txt
 
 # Copy collectd config
 COPY conf/collectd.conf /etc/collectd/collectd.conf
