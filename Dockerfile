@@ -1,15 +1,13 @@
-FROM alpine:3.9.4
+FROM python:3.6.9-alpine3.10
 MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
 RUN apk add --no-cache \
-  ca-certificates \
   collectd \
   collectd-disk \
   curl \
   nodejs \
   nodejs-npm \
-  python3 \
   supervisor
 
 # Create the bouncer user, group, home directory and package directory.
