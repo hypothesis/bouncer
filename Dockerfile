@@ -16,9 +16,9 @@ RUN addgroup -S bouncer \
 WORKDIR /var/lib/bouncer
 
 # Copy packaging
-COPY README.rst package.json requirements.txt ./
+COPY README.rst package.json package-lock.json requirements.txt ./
 
-RUN npm install --production
+RUN npm ci --production
 
 RUN pip3 install --no-cache-dir -U pip \
   && pip3 install --no-cache-dir -r requirements.txt
