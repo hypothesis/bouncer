@@ -1,6 +1,3 @@
-.PHONY: default
-default: help
-
 .PHONY: help
 help:
 	@echo "make help              Show this help message"
@@ -19,45 +16,45 @@ help:
 	@echo "                       dependencies, etc)"
 
 .PHONY: dev
-dev: node_modules/.uptodate
+dev: node_modules/.uptodate python
 	tox -q -e py36-dev
 
 .PHONY: lint
-lint: node_modules/.uptodate
+lint: node_modules/.uptodate python
 	tox -q -e py36-lint
 	./node_modules/.bin/eslint bouncer/scripts
 
 .PHONY: format
-format:
+format: python
 	tox -e py36-format
 
 .PHONY: checkformatting
-checkformatting:
+checkformatting: python
 	tox -e py36-checkformatting
 
 .PHONY: test
-test: node_modules/.uptodate
+test: node_modules/.uptodate python
 	tox -q -e py36-tests
 	./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: coverage
-coverage:
+coverage: python
 	tox -q -e py36-coverage
 
 .PHONY: codecov
-codecov:
+codecov: python
 	tox -q -e py36-codecov
 
 .PHONY: docstrings
-docstrings:
+docstrings: python
 	tox -q -e py36-docstrings
 
 .PHONY: checkdocstrings
-checkdocstrings:
+checkdocstrings: python
 	tox -q -e py36-checkdocstrings
 
 .PHONY: pip-compile
-pip-compile:
+pip-compile: python
 	tox -q -e py36-dev -- pip-compile --output-file requirements.txt requirements.in
 
 .PHONY: docker
@@ -69,6 +66,10 @@ clean:
 	find . -type f -name "*.py[co]" -delete
 	find . -type d -name "__pycache__" -delete
 	rm -f node_modules/.uptodate
+
+.PHONY: python
+python:
+	@./bin/install-python
 
 DOCKER_TAG = dev
 
