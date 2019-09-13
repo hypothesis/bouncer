@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
-certifi==2019.6.16
+certifi==2019.9.11
 chardet==3.0.4            # via requests
 elasticsearch==6.3.1
 gunicorn==19.9.0
