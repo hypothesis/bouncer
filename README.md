@@ -35,16 +35,6 @@ installation process:
 
     cd bouncer
 
-### Set the environment variables
-
-Set these environment variables in your shell (see
-[Configuration](#configuration) below for documentation of all bouncer's
-environment variables and what they do):
-
-    export DEBUG=yes
-    export HYPOTHESIS_AUTHORITY=localhost
-    export HYPOTHESIS_URL="http://localhost:5000"
-
 ### Start the development server
 
     make dev
