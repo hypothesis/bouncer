@@ -55,7 +55,7 @@ checkdocstrings: python
 
 .PHONY: pip-compile
 pip-compile: python
-	tox -q -e py36-dev -- pip-compile --output-file requirements.txt requirements.in
+	tox -q -e py36-pip-compile
 
 .PHONY: docker
 docker:
