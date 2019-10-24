@@ -2,15 +2,12 @@ import json
 from urllib import parse
 
 from elasticsearch import exceptions
-from pyramid import httpexceptions
-from pyramid import i18n
-from pyramid import view
+from pyramid import httpexceptions, i18n, view
 from statsd.defaults.env import statsd
 
-from bouncer.embed_detector import url_embeds_client
-from bouncer import util
 from bouncer import __version__ as bouncer_version
-
+from bouncer import util
+from bouncer.embed_detector import url_embeds_client
 
 _ = i18n.TranslationStringFactory(__package__)
 

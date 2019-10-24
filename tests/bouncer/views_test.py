@@ -1,13 +1,11 @@
 import json
 
-from elasticsearch import exceptions as es_exceptions
 import mock
-from pyramid import httpexceptions
-from pyramid import testing
 import pytest
+from elasticsearch import exceptions as es_exceptions
+from pyramid import httpexceptions, testing
 
-from bouncer import util
-from bouncer import views
+from bouncer import util, views
 
 
 @pytest.mark.usefixtures("parse_document")
