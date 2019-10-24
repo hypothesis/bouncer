@@ -1,7 +1,7 @@
 from elasticsearch import Elasticsearch
+from mock import ANY, MagicMock, patch
 
 from bouncer.search import get_client, includeme
-from mock import ANY, MagicMock, patch
 
 
 class TestGetClient(object):

@@ -1,10 +1,10 @@
 import json
 
+import mock
 import pytest
 from elasticsearch import exceptions as es_exceptions
 from pyramid import httpexceptions, testing
 
-import mock
 from bouncer import util, views
 
 
