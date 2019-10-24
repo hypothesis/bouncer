@@ -1,7 +1,7 @@
 from urllib import parse
-from pyramid import i18n
-import jinja2
 
+import jinja2
+from pyramid import i18n
 
 _ = i18n.TranslationStringFactory(__package__)
 
