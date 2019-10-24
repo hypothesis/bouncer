@@ -10,8 +10,6 @@ Installing bouncer in a development environment
 
 ### You will need
 
-* [Make](https://www.gnu.org/software/make/)
-
 * [Git](https://git-scm.com/)
 
 * [Node](https://nodejs.org/) and npm.
