@@ -11,6 +11,8 @@ help:
 	@echo "make docstrings        View all the docstrings locally as HTML"
 	@echo "make checkdocstrings   Crash if building the docstrings fails"
 	@echo "make pip-compile       Compile requirements.in to requirements.txt"
+	@echo "make upgrade-package   Upgrade the version of a package in requirements.txt."
+	@echo '                       Usage: `make upgrade-package name=some-package`.'
 	@echo "make docker            Make the app's Docker image"
 	@echo "make clean             Delete development artefacts (cached files, "
 	@echo "                       dependencies, etc)"
@@ -56,6 +58,10 @@ checkdocstrings: python
 .PHONY: pip-compile
 pip-compile: python
 	tox -q -e py36-pip-compile
+
+.PHONY: upgrade-package
+upgrade-package: python
+	@tox -qe py36-pip-compile -- --upgrade-package $(name)
 
 .PHONY: docker
 docker:
