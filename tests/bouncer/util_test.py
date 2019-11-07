@@ -78,7 +78,7 @@ def test_parse_document_returns_boilerplate_when_no_text(es_annotation_doc):
 
 
 def test_parse_document_returns_show_metadata_true_when_shared_and_world(
-    es_annotation_doc
+    es_annotation_doc,
 ):
     show_metadata = util.parse_document(es_annotation_doc)["show_metadata"]
     assert show_metadata is True
@@ -94,7 +94,7 @@ def test_parse_document_returns_document_uri_from_web_uri_when_pdf(es_annotation
 
 
 def test_parse_document_raises_when_uri_from_web_uri_not_string_for_pdfs(
-    es_annotation_doc
+    es_annotation_doc,
 ):
     es_annotation_doc["_source"]["target"][0]["source"] = "urn:x-pdf:the-fingerprint"
     es_annotation_doc["_source"]["document"] = {"web_uri": 52}
