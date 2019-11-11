@@ -7,7 +7,6 @@ help:
 	@echo "make checkformatting   Crash if the code isn't correctly formatted"
 	@echo "make test              Run the unit tests"
 	@echo "make coverage          Print the unit test coverage report"
-	@echo "make codecov           Upload the coverage report to codecov.io"
 	@echo "make docstrings        View all the docstrings locally as HTML"
 	@echo "make checkdocstrings   Crash if building the docstrings fails"
 	@echo "make pip-compile       Compile requirements.in to requirements.txt"
@@ -42,10 +41,6 @@ test: node_modules/.uptodate python
 .PHONY: coverage
 coverage: python
 	tox -q -e py36-coverage
-
-.PHONY: codecov
-codecov: python
-	tox -q -e py36-codecov
 
 .PHONY: docstrings
 docstrings: python
