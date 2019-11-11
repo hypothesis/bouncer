@@ -7,3 +7,5 @@ source =
 
 [report]
 show_missing = True
+precision = 2
+fail_under = 90.38
