@@ -14,7 +14,7 @@ jobs:
   include:
     - name: "Test"
       script: make test
-      after_success: make coverage codecov
+      after_success: make coverage
     - name: "Lint"
       script: make lint
     - name: "Check formatting"
