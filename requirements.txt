@@ -7,7 +7,7 @@
 certifi==2019.9.11
 chardet==3.0.4            # via requests
 elasticsearch==6.3.1
-gunicorn==19.9.0
+gunicorn==20.0.0
 hupper==1.9.1             # via pyramid
 idna==2.8                 # via requests
 jinja2==2.10.3            # via pyramid-jinja2
@@ -29,4 +29,4 @@ zope.deprecation==4.4.0   # via pyramid, pyramid-jinja2
 zope.interface==4.6.0     # via pyramid
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools==41.6.0        # via plaster, pyramid, zope.deprecation, zope.interface
+# setuptools==41.6.0        # via gunicorn, plaster, pyramid, zope.deprecation, zope.interface
