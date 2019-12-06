@@ -13,7 +13,7 @@ node {
     stage('test') {
         testApp(image: img, runArgs: '-u root') {
             sh 'pip install -q tox>=3.8.0'
-            sh 'cd /var/lib/bouncer && tox -e py36-tests'
+            sh 'cd /var/lib/bouncer && tox -e tests'
         }
     }
 
