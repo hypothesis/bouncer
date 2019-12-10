@@ -18,55 +18,55 @@ help:
 
 .PHONY: dev
 dev: node_modules/.uptodate python
-	tox -q -e py36-dev
+	@tox -qe dev
 
 .PHONY: lint
 lint: node_modules/.uptodate python
-	tox -q -e py36-lint
-	./node_modules/.bin/eslint bouncer/scripts
+	@tox -qe lint
+	@./node_modules/.bin/eslint bouncer/scripts
 
 .PHONY: format
 format: python
-	tox -e py36-format
+	@tox -qe format
 
 .PHONY: checkformatting
 checkformatting: python
-	tox -e py36-checkformatting
+	@tox -qe checkformatting
 
 .PHONY: test
 test: node_modules/.uptodate python
-	tox -q -e py36-tests
-	./node_modules/karma/bin/karma start karma.config.js
+	@tox -q
+	@./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: coverage
 coverage: python
-	tox -q -e py36-coverage
+	@tox -qe coverage
 
 .PHONY: docstrings
 docstrings: python
-	tox -q -e py36-docstrings
+	@tox -qe docstrings
 
 .PHONY: checkdocstrings
 checkdocstrings: python
-	tox -q -e py36-checkdocstrings
+	@tox -qe checkdocstrings
 
 .PHONY: pip-compile
 pip-compile: python
-	tox -q -e py36-pip-compile
+	@tox -qe pip-compile
 
 .PHONY: upgrade-package
 upgrade-package: python
-	@tox -qe py36-pip-compile -- --upgrade-package $(name)
+	@tox -qe pip-compile -- --upgrade-package $(name)
 
 .PHONY: docker
 docker:
-	git archive --format=tar.gz HEAD | docker build -t hypothesis/bouncer:$(DOCKER_TAG) -
+	@git archive --format=tar.gz HEAD | docker build -t hypothesis/bouncer:$(DOCKER_TAG) -
 
 .PHONY: clean
 clean:
-	find . -type f -name "*.py[co]" -delete
-	find . -type d -name "__pycache__" -delete
-	rm -f node_modules/.uptodate
+	@find . -type f -name "*.py[co]" -delete
+	@find . -type d -name "__pycache__" -delete
+	@rm -f node_modules/.uptodate
 
 .PHONY: python
 python:
