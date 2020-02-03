@@ -12,7 +12,7 @@ hupper==1.9.1             # via pyramid
 idna==2.8                 # via requests
 jinja2==2.11.1            # via pyramid-jinja2
 markupsafe==1.1.1         # via jinja2, pyramid-jinja2
-pastedeploy==2.0.1        # via plaster-pastedeploy
+pastedeploy==2.1.0        # via plaster-pastedeploy
 plaster-pastedeploy==0.7  # via pyramid
 plaster==1.0              # via plaster-pastedeploy, pyramid
 pyramid-jinja2==2.8
