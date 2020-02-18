@@ -8,7 +8,7 @@ certifi==2019.11.28
 chardet==3.0.4            # via requests
 elasticsearch==6.3.1
 gunicorn==20.0.4
-hupper==1.9.1             # via pyramid
+hupper==1.10              # via pyramid
 idna==2.8                 # via requests
 jinja2==2.11.1            # via pyramid-jinja2
 markupsafe==1.1.1         # via jinja2, pyramid-jinja2
