@@ -3,7 +3,6 @@ from urllib import parse
 
 from elasticsearch import exceptions
 from pyramid import httpexceptions, i18n, view
-from statsd.defaults.env import statsd
 
 from bouncer import __version__ as bouncer_version
 from bouncer import util
@@ -33,7 +32,6 @@ class AnnotationController(object):
                 id=self.request.matchdict["id"],
             )
         except exceptions.NotFoundError:
-            statsd.incr("views.annotation.404.annotation_not_found")
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
         try:
@@ -46,11 +44,9 @@ class AnnotationController(object):
             text = parsed_document["text"]
 
         except util.DeletedAnnotationError:
-            statsd.incr("views.annotation.404.annotation_not_found")
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
 
         except util.InvalidAnnotationError as exc:
-            statsd.incr("views.annotation.422.{}".format(exc.reason))
             raise httpexceptions.HTTPUnprocessableEntity(str(exc))
 
         # Remove any existing #fragment identifier from the URI before we
@@ -58,7 +54,6 @@ class AnnotationController(object):
         document_uri = parse.urldefrag(document_uri)[0]
 
         if not _is_valid_http_url(document_uri):
-            statsd.incr("views.annotation.422.not_an_http_or_https_document")
             raise httpexceptions.HTTPUnprocessableEntity(
                 _(
                     "Sorry, but it looks like this annotation was made on a "
@@ -84,7 +79,6 @@ class AnnotationController(object):
 
         title = util.get_boilerplate_quote(document_uri)
 
-        statsd.incr("views.annotation.200.annotation_found")
         return {
             "data": json.dumps(
                 {
@@ -105,7 +99,6 @@ class AnnotationController(object):
 
 @view.view_config(renderer="bouncer:templates/index.html.jinja2", route_name="index")
 def index(request):
-    statsd.incr("views.index.302.redirected_to_hypothesis")
     raise httpexceptions.HTTPFound(location=request.registry.settings["hypothesis_url"])
 
 

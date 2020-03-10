@@ -84,20 +84,6 @@ will be redirected to (default: <a href="https://hypothes.is" rel="nofollow">htt
 <dd>The DSN (Data Source Name) that bouncer will use to report crashes to
 <a href="https://getsentry.com/" rel="nofollow">Sentry</a></dd>
 
-<dt>STATSD_HOST</dt>
-<dd>The host of the statsd server that bouncer will report stats to
-(default: localhost)</dd>
-
-<dt>STATSD_PORT</dt>
-<dd>The port of the statsd server that bouncer will report stats to
-(default: 8125)</dd>
-
-<dt>STATSD_PREFIX</dt>
-<dd>A string prefix that bouncer will prepend to all metric paths reported to
-statsd (default: none).
-We recommend <code>export STATSD_PREFIX=bouncer</code> so that all bouncer's metrics
-will start with <code>bouncer</code>.</dd>
-
 <dt>VIA_BASE_URL</dt>
 <dd>The base URL of the Via service that bouncer will redirect users to if they
 don't have the Hypothesis Chrome extension installed
