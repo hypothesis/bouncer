@@ -9,7 +9,6 @@ from bouncer import util, views
 
 
 @pytest.mark.usefixtures("parse_document")
-@pytest.mark.usefixtures("statsd")
 class TestAnnotationController(object):
     def test_annotation_calls_get(self):
         request = mock_request()
@@ -18,17 +17,6 @@ class TestAnnotationController(object):
         request.es.get.assert_called_once_with(
             index="hypothesis", doc_type="annotation", id="AVLlVTs1f9G3pW-EYc6q"
         )
-
-    def test_annotation_increments_stat_if_get_raises_not_found_error(self, statsd):
-        request = mock_request()
-        request.es.get.side_effect = es_exceptions.NotFoundError
-
-        try:
-            views.AnnotationController(request).annotation()
-        except httpexceptions.HTTPNotFound:
-            pass
-
-        statsd.incr.assert_called_once_with("views.annotation.404.annotation_not_found")
 
     def test_annotation_raises_http_not_found_if_annotation_deleted(
         self, parse_document
@@ -52,20 +40,6 @@ class TestAnnotationController(object):
 
         parse_document.assert_called_once_with(request.es.get.return_value)
 
-    def test_annotation_bumps_stat_if_parse_document_raises(
-        self, parse_document, statsd
-    ):
-        parse_document.side_effect = util.InvalidAnnotationError(
-            "error message", "the_reason"
-        )
-
-        try:
-            views.AnnotationController(mock_request()).annotation()
-        except Exception:
-            pass
-
-        statsd.incr.assert_called_once_with("views.annotation.422.the_reason")
-
     def test_annotation_raises_if_parse_document_raises(self, parse_document):
         parse_document.side_effect = util.InvalidAnnotationError(
             "error message", "the_reason"
@@ -75,18 +49,6 @@ class TestAnnotationController(object):
             views.AnnotationController(mock_request()).annotation()
         assert str(exc.value) == "error message"
 
-    def test_annotation_increments_stat_for_file_urls(self, parse_document, statsd):
-        parse_document.return_value["document_uri"] = "file:///home/seanh/Foo.pdf"
-
-        try:
-            views.AnnotationController(mock_request()).annotation()
-        except httpexceptions.HTTPUnprocessableEntity:
-            pass
-
-        statsd.incr.assert_called_once_with(
-            "views.annotation.422.not_an_http_or_https_document"
-        )
-
     def test_annotation_raises_http_unprocessable_entity_for_file_urls(
         self, parse_document
     ):
@@ -94,11 +56,6 @@ class TestAnnotationController(object):
 
         with pytest.raises(httpexceptions.HTTPUnprocessableEntity):
             views.AnnotationController(mock_request()).annotation()
-
-    def test_annotation_increments_stat_when_annotation_found(self, statsd):
-        views.AnnotationController(mock_request()).annotation()
-
-        statsd.incr.assert_called_once_with("views.annotation.200.annotation_found")
 
     def test_annotation_returns_chrome_extension_id(self):
         template_data = views.AnnotationController(mock_request()).annotation()
@@ -168,23 +125,6 @@ class TestAnnotationController(object):
 
         url_embeds_client.assert_called_with("http://www.example.com/example.html")
         assert data["viaUrl"] is None
-
-
-@pytest.mark.usefixtures("statsd")
-def test_index_increments_stat(statsd):
-    try:
-        views.index(mock_request())
-    except httpexceptions.HTTPFound:
-        pass
-
-    statsd.incr.assert_called_once_with("views.index.302.redirected_to_hypothesis")
-
-
-@pytest.mark.usefixtures("statsd")
-def test_index_redirects_to_hypothesis():
-    with pytest.raises(httpexceptions.HTTPFound) as exc:
-        views.index(mock_request())
-    assert exc.value.location == "https://hypothes.is"
 
 
 class TestGotoUrlController(object):
@@ -388,14 +328,6 @@ def parse_document(request):
         "text": "test_text",
     }
     return parse_document
-
-
-@pytest.fixture
-def statsd(request):
-    patcher = mock.patch("bouncer.views.statsd")
-    statsd = patcher.start()
-    request.addfinalizer(patcher.stop)
-    return statsd
 
 
 def mock_request():

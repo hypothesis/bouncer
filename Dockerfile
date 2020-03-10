@@ -3,8 +3,6 @@ MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
 RUN apk add --no-cache \
-  collectd \
-  collectd-disk \
   curl \
   nodejs \
   nodejs-npm \
@@ -22,11 +20,6 @@ RUN npm install --production
 
 RUN pip3 install --no-cache-dir -U pip \
   && pip3 install --no-cache-dir -r requirements.txt
-
-# Copy collectd config
-COPY conf/collectd.conf /etc/collectd/collectd.conf
-RUN mkdir /etc/collectd/collectd.conf.d \
- && chown bouncer:bouncer /etc/collectd/collectd.conf.d
 
 COPY . .
 

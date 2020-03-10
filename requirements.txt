@@ -20,7 +20,6 @@ pyramid==1.10.4           # via -r requirements.in, pyramid-jinja2
 raven==6.10.0             # via -r requirements.in
 requests-aws4auth==0.9    # via -r requirements.in
 requests==2.23.0          # via -r requirements.in, requests-aws4auth
-statsd==3.3.0             # via -r requirements.in
 translationstring==1.3    # via pyramid
 urllib3==1.25.8           # via elasticsearch, requests
 venusian==3.0.0           # via pyramid
