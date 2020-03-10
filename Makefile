@@ -13,6 +13,11 @@ help:
 	@echo "make upgrade-package   Upgrade the version of a package in requirements.txt."
 	@echo '                       Usage: `make upgrade-package name=some-package`.'
 	@echo "make docker            Make the app's Docker image"
+	@echo "make run-docker        Run the app's Docker image locally. "
+	@echo "                       This command exists for conveniently testing the Docker image "
+	@echo "                       locally in production mode. It assumes that h's Elasticsearch "
+	@echo "                       service is being run using docker-compose in the 'h_default' "
+	@echo "                       network."
 	@echo "make clean             Delete development artefacts (cached files, "
 	@echo "                       dependencies, etc)"
 
@@ -61,6 +66,14 @@ upgrade-package: python
 .PHONY: docker
 docker:
 	@git archive --format=tar.gz HEAD | docker build -t hypothesis/bouncer:$(DOCKER_TAG) -
+
+.PHONY: run-docker
+run-docker:
+	@docker run \
+		--net h_default \
+		-e "ELASTICSEARCH_URL=http://elasticsearch:9200" \
+		-p 8000:8000 \
+		hypothesis/bouncer:$(DOCKER_TAG)
 
 .PHONY: clean
 clean:
