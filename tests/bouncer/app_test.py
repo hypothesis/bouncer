@@ -21,6 +21,24 @@ def test_the_default_settings(config, pyramid):
     )
 
 
+@pytest.mark.parametrize(
+    "envvar,base_url",
+    [
+        # Trailing slashes should be stripped.
+        ("https://via.example.com/", "https://via.example.com"),
+        # A URL without a trailing slash should go through unmodified.
+        ("http://via.example.com", "http://via.example.com"),
+    ],
+)
+def test_via_base_url(config, os, envvar, base_url, pyramid):
+    os.environ["VIA_BASE_URL"] = envvar
+
+    app()
+
+    settings = pyramid.config.Configurator.call_args_list[0][1]["settings"]
+    assert settings["via_base_url"] == base_url
+
+
 @pytest.fixture
 def config():
     config = mock.create_autospec(Configurator, instance=True)
