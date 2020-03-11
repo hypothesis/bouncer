@@ -9,6 +9,7 @@ help:
 	@echo "make coverage          Print the unit test coverage report"
 	@echo "make docstrings        View all the docstrings locally as HTML"
 	@echo "make checkdocstrings   Crash if building the docstrings fails"
+	@echo "make sure              Make sure that the formatter, linter, tests, etc all pass"
 	@echo "make pip-compile       Compile requirements.in to requirements.txt"
 	@echo "make upgrade-package   Upgrade the version of a package in requirements.txt."
 	@echo '                       Usage: `make upgrade-package name=some-package`.'
@@ -54,6 +55,9 @@ docstrings: python
 .PHONY: checkdocstrings
 checkdocstrings: python
 	@tox -qe checkdocstrings
+
+.PHONY: sure
+sure: checkformatting lint test coverage checkdocstrings
 
 .PHONY: pip-compile
 pip-compile: python
