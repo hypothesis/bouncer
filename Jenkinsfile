@@ -66,5 +66,6 @@ def installDeps() {
 
 /** Run the given command. */
 def run(command) {
+    sh "apk add build-base"
     sh "cd /var/lib/bouncer && ${command}"
 }
