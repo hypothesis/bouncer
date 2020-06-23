@@ -10,10 +10,25 @@ node {
         img = buildApp(name: 'hypothesis/bouncer')
     }
 
+    stage('checkformatting') {
+        testApp(image: img, runArgs: '-u root') {
+            installDeps()
+            run('tox -e checkformatting')
+        }
+    }
+
+    stage('lint') {
+        testApp(image: img, runArgs: '-u root') {
+            installDeps()
+            run('tox -e lint')
+        }
+    }
+
     stage('test') {
         testApp(image: img, runArgs: '-u root') {
-            sh 'pip install -q tox>=3.8.0'
-            sh 'cd /var/lib/bouncer && tox -e tests'
+            installDeps()
+            run('tox')
+            run('tox -e coverage')
         }
     }
 
@@ -36,4 +51,20 @@ onlyOnMaster {
         milestone()
         deployApp(image: img, app: 'bouncer', env: 'prod')
     }
+}
+
+
+/**
+ * Install some common system dependencies.
+ *
+ * These are test dependencies that're need to run most of the stages above
+ * (tests, lint, ...) but that aren't installed in the production Docker image.
+ */
+def installDeps() {
+    sh 'pip install -q tox>=3.8.0'
+}
+
+/** Run the given command. */
+def run(command) {
+    sh "cd /var/lib/bouncer && ${command}"
 }
