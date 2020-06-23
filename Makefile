@@ -7,8 +7,6 @@ help:
 	@echo "make checkformatting   Crash if the code isn't correctly formatted"
 	@echo "make test              Run the unit tests"
 	@echo "make coverage          Print the unit test coverage report"
-	@echo "make docstrings        View all the docstrings locally as HTML"
-	@echo "make checkdocstrings   Crash if building the docstrings fails"
 	@echo "make sure              Make sure that the formatter, linter, tests, etc all pass"
 	@echo "make pip-compile       Compile requirements.in to requirements.txt"
 	@echo "make upgrade-package   Upgrade the version of a package in requirements.txt."
@@ -48,16 +46,8 @@ test: node_modules/.uptodate python
 coverage: python
 	@tox -qe coverage
 
-.PHONY: docstrings
-docstrings: python
-	@tox -qe docstrings
-
-.PHONY: checkdocstrings
-checkdocstrings: python
-	@tox -qe checkdocstrings
-
 .PHONY: sure
-sure: checkformatting lint test coverage checkdocstrings
+sure: checkformatting lint test coverage
 
 .PHONY: pip-compile
 pip-compile: python
