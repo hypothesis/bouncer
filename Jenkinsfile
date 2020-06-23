@@ -10,7 +10,7 @@ node {
         img = buildApp(name: 'hypothesis/bouncer')
     }
 
-    parallel failFast:true,
+    parallel failFast: true,
     "checkformatting": {
         stage('checkformatting') {
             testApp(image: img, runArgs: '-u root') {
