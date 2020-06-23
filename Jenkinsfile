@@ -10,24 +10,29 @@ node {
         img = buildApp(name: 'hypothesis/bouncer')
     }
 
-    stage('checkformatting') {
-        testApp(image: img, runArgs: '-u root') {
-            installDeps()
-            run('make checkformatting')
+    parallel failFast:true,
+    "checkformatting": {
+        stage('checkformatting') {
+            testApp(image: img, runArgs: '-u root') {
+                installDeps()
+                run('make checkformatting')
+            }
         }
-    }
-
-    stage('lint') {
-        testApp(image: img, runArgs: '-u root') {
-            installDeps()
-            run('make lint')
+    },
+    "lint": {
+        stage('lint') {
+            testApp(image: img, runArgs: '-u root') {
+                installDeps()
+                run('make lint')
+            }
         }
-    }
-
-    stage('test') {
-        testApp(image: img, runArgs: '-u root') {
-            installDeps()
-            run('make test coverage')
+    },
+    "tests": {
+        stage('test') {
+            testApp(image: img, runArgs: '-u root') {
+                installDeps()
+                run('make test coverage')
+            }
         }
     }
 
