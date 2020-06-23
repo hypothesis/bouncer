@@ -13,22 +13,21 @@ node {
     stage('checkformatting') {
         testApp(image: img, runArgs: '-u root') {
             installDeps()
-            run('tox -e checkformatting')
+            run('make checkformatting')
         }
     }
 
     stage('lint') {
         testApp(image: img, runArgs: '-u root') {
             installDeps()
-            run('tox -e lint')
+            run('make lint')
         }
     }
 
     stage('test') {
         testApp(image: img, runArgs: '-u root') {
             installDeps()
-            run('tox')
-            run('tox -e coverage')
+            run('make test coverage')
         }
     }
 
