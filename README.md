@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/hypothesis/bouncer.svg?branch=master)](https://travis-ci.org/hypothesis/bouncer)
+[![Build Status](https://github.com/hypothesis/bouncer/workflows/Continuous%20integration/badge.svg?branch=master)](https://github.com/hypothesis/bouncer/actions?query=branch%3Amaster)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 Hypothesis Direct-Link Bouncer Service

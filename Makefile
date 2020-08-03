@@ -25,8 +25,14 @@ dev: node_modules/.uptodate python
 	@tox -qe dev
 
 .PHONY: lint
-lint: node_modules/.uptodate python
+lint: backend-lint frontend-lint
+
+.PHONY: backend-lint
+backend-lint: python
 	@tox -qe lint
+
+.PHONY: frontend-lint
+frontend-lint: node_modules/.uptodate
 	@./node_modules/.bin/eslint bouncer/scripts
 
 .PHONY: format
@@ -38,8 +44,14 @@ checkformatting: python
 	@tox -qe checkformatting
 
 .PHONY: test
-test: node_modules/.uptodate python
+test: backend-test frontend-test
+
+.PHONY: backend-test
+backend-test: python
 	@tox -q
+
+.PHONY: frontend-test
+frontend-test: node_modules/.uptodate
 	@./node_modules/karma/bin/karma start karma.config.js
 
 .PHONY: coverage
