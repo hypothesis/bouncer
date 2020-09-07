@@ -8,9 +8,6 @@ help:
 	@echo "make test              Run the unit tests"
 	@echo "make coverage          Print the unit test coverage report"
 	@echo "make sure              Make sure that the formatter, linter, tests, etc all pass"
-	@echo "make pip-compile       Compile requirements.in to requirements.txt"
-	@echo "make upgrade-package   Upgrade the version of a package in requirements.txt."
-	@echo '                       Usage: `make upgrade-package name=some-package`.'
 	@echo "make docker            Make the app's Docker image"
 	@echo "make run-docker        Run the app's Docker image locally. "
 	@echo "                       This command exists for conveniently testing the Docker image "
@@ -60,14 +57,6 @@ coverage: python
 
 .PHONY: sure
 sure: checkformatting lint test coverage
-
-.PHONY: pip-compile
-pip-compile: python
-	@tox -qe pip-compile
-
-.PHONY: upgrade-package
-upgrade-package: python
-	@tox -qe pip-compile -- --upgrade-package $(name)
 
 .PHONY: docker
 docker:

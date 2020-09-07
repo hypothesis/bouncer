@@ -14,7 +14,7 @@ RUN addgroup -S bouncer \
 WORKDIR /var/lib/bouncer
 
 # Copy packaging
-COPY README.md package.json requirements.txt ./
+COPY README.md package.json requirements/requirements.txt ./
 
 RUN npm install --production
 
