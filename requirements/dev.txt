@@ -26,7 +26,7 @@ plaster-pastedeploy==0.7  # via -r requirements/requirements.txt, pyramid
 plaster==1.0              # via -r requirements/requirements.txt, plaster-pastedeploy, pyramid
 prompt-toolkit==3.0.7     # via ipython
 ptyprocess==0.6.0         # via pexpect
-pygments==2.7.0           # via ipython
+pygments==2.7.1           # via ipython
 pyramid-jinja2==2.8       # via -r requirements/requirements.txt
 pyramid==1.10.4           # via -r requirements/requirements.txt, pyramid-jinja2
 raven==6.10.0             # via -r requirements/requirements.txt
