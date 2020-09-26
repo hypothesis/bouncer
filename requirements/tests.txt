@@ -19,7 +19,6 @@ iniconfig==1.0.1          # via pytest
 jinja2==2.11.2            # via -r requirements/requirements.txt, pyramid-jinja2
 markupsafe==1.1.1         # via -r requirements/requirements.txt, jinja2, pyramid-jinja2
 mock==4.0.2               # via -r requirements/tests.in
-more-itertools==8.5.0     # via pytest
 packaging==20.4           # via pytest
 pastedeploy==2.1.0        # via -r requirements/requirements.txt, plaster-pastedeploy
 plaster-pastedeploy==0.7  # via -r requirements/requirements.txt, pyramid
@@ -29,7 +28,7 @@ py==1.9.0                 # via pytest
 pyparsing==2.4.7          # via packaging
 pyramid-jinja2==2.8       # via -r requirements/requirements.txt
 pyramid==1.10.4           # via -r requirements/requirements.txt, pyramid-jinja2
-pytest==6.0.2             # via -r requirements/tests.in
+pytest==6.1.0             # via -r requirements/tests.in
 python-dateutil==2.8.1    # via faker
 raven==6.10.0             # via -r requirements/requirements.txt
 requests-aws4auth==1.0    # via -r requirements/requirements.txt
