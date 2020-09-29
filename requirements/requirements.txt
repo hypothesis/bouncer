@@ -18,7 +18,7 @@ plaster==1.0              # via plaster-pastedeploy, pyramid
 pyramid-jinja2==2.8       # via -r requirements/requirements.in
 pyramid==1.10.4           # via -r requirements/requirements.in, pyramid-jinja2
 raven==6.10.0             # via -r requirements/requirements.in
-requests-aws4auth==1.0    # via -r requirements/requirements.in
+requests-aws4auth==1.0.1  # via -r requirements/requirements.in
 requests==2.24.0          # via -r requirements/requirements.in, requests-aws4auth
 translationstring==1.4    # via pyramid
 urllib3==1.25.10          # via elasticsearch, requests
