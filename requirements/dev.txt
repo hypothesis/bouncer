@@ -12,7 +12,7 @@ elasticsearch==6.3.1      # via -r requirements/requirements.txt
 gunicorn==20.0.4          # via -r requirements/requirements.txt
 hupper==1.10.2            # via -r requirements/requirements.txt, pyramid
 idna==2.10                # via -r requirements/requirements.txt, requests
-ipdb==0.13.3              # via -r requirements/dev.in
+ipdb==0.13.4              # via -r requirements/dev.in
 ipython-genutils==0.2.0   # via traitlets
 ipython==7.16.1           # via -r requirements/dev.in, ipdb
 jedi==0.17.2              # via ipython
