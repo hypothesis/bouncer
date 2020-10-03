@@ -28,7 +28,7 @@ py==1.9.0                 # via pytest
 pyparsing==2.4.7          # via packaging
 pyramid-jinja2==2.8       # via -r requirements/requirements.txt
 pyramid==1.10.4           # via -r requirements/requirements.txt, pyramid-jinja2
-pytest==6.1.0             # via -r requirements/tests.in
+pytest==6.1.1             # via -r requirements/tests.in
 python-dateutil==2.8.1    # via faker
 raven==6.10.0             # via -r requirements/requirements.txt
 requests-aws4auth==1.0    # via -r requirements/requirements.txt
