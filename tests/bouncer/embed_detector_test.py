@@ -16,6 +16,9 @@ class TestUrlEmbedsClient:
             # Matching URLs with ignored query string / fragment.
             "http://web.hypothes.is/blog/article.foo?ignore_me=1",
             "http://web.hypothes.is/blog/article.foo#ignoreme",
+            # Example matching URLs for various sites on the list.
+            "https://docdrop.org/pdf/1Vsd26C0KuMw4Mj1WEBjBz1T8G75vIhWx-gaQEE.pdf/",
+            "https://docdrop.org/video/AJXGJYl0wJc/",
         ],
     )
     def test_returns_true_for_matching_url(self, url):
