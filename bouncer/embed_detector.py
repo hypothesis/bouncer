@@ -17,6 +17,9 @@ PATTERNS = [
     # American Psychological Organization.
     "psycnet.apa.org/fulltext/*",
     "awspntest.apa.org/fulltext/*",
+    # docdrop.org document hosting.
+    # See https://github.com/hypothesis/bouncer/issues/389.
+    "docdrop.org/*",
 ]
 
 COMPILED_PATTERNS = [re.compile(fnmatch.translate(pat)) for pat in PATTERNS]
