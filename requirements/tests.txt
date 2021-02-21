@@ -72,7 +72,7 @@ pyparsing==2.4.7
     # via packaging
 pyramid-jinja2==2.8
     # via -r requirements/requirements.txt
-pyramid==1.10.5
+pyramid==1.10.7
     # via
     #   -r requirements/requirements.txt
     #   pyramid-jinja2
