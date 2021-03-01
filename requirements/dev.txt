@@ -76,7 +76,7 @@ pygments==2.7.1
     # via ipython
 pyramid-jinja2==2.8
     # via -r requirements/requirements.txt
-pyramid==1.10.7
+pyramid==2.0
     # via
     #   -r requirements/requirements.txt
     #   pyramid-jinja2
