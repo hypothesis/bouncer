@@ -30,7 +30,7 @@ idna==2.10
     # via
     #   -r requirements/requirements.txt
     #   requests
-ipdb==0.13.5
+ipdb==0.13.6
     # via -r requirements/dev.in
 ipython-genutils==0.2.0
     # via traitlets
@@ -86,6 +86,8 @@ requests==2.25.1
     # via -r requirements/requirements.txt
 six==1.15.0
     # via traitlets
+toml==0.10.2
+    # via ipdb
 traitlets==4.3.3
     # via ipython
 translationstring==1.4
