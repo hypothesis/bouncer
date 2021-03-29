@@ -6,14 +6,14 @@
 #
 certifi==2020.12.5
     # via
-    #   -r requirements.in
+    #   -r requirements/requirements.in
     #   requests
 chardet==3.0.4
     # via requests
 elasticsearch==6.3.1
-    # via -r requirements.in
-gunicorn==20.0.4
-    # via -r requirements.in
+    # via -r requirements/requirements.in
+gunicorn==20.1.0
+    # via -r requirements/requirements.in
 hupper==1.10.2
     # via pyramid
 idna==2.10
@@ -33,15 +33,15 @@ plaster==1.0
     #   plaster-pastedeploy
     #   pyramid
 pyramid-jinja2==2.8
-    # via -r requirements.in
+    # via -r requirements/requirements.in
 pyramid==1.10.7
     # via
-    #   -r requirements.in
+    #   -r requirements/requirements.in
     #   pyramid-jinja2
 raven==6.10.0
-    # via -r requirements.in
+    # via -r requirements/requirements.in
 requests==2.25.1
-    # via -r requirements.in
+    # via -r requirements/requirements.in
 translationstring==1.4
     # via pyramid
 urllib3==1.25.10
