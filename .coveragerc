@@ -3,7 +3,7 @@ branch = True
 parallel = True
 source =
     bouncer
-    tests/bouncer
+    tests/unit
 
 [report]
 show_missing = True
