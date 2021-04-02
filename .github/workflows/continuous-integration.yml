@@ -24,7 +24,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-tox-
     - name: Run tox
-      run: tox --parallel auto -e checkformatting,lint,tests,coverage
+      run: tox --parallel auto -e checkformatting,lint,tests,coverage,functests
   frontend:
     runs-on: ubuntu-latest
     steps:
