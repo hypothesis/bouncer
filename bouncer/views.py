@@ -211,15 +211,17 @@ class ErrorController(object):
         }
 
 
-@view.view_config(route_name="healthcheck", renderer="json")
+@view.view_config(route_name="healthcheck", renderer="json", http_cache=0)
 def healthcheck(request):
     index = request.registry.settings["elasticsearch_index"]
     try:
         status = request.es.cluster.health(index=index)["status"]
     except exceptions.ElasticsearchException as exc:
         raise FailedHealthcheck("elasticsearch exception") from exc
+
     if status not in ("yellow", "green"):
         raise FailedHealthcheck("cluster status was {!r}".format(status))
+
     return {"status": "ok", "version": bouncer_version}
 
 
