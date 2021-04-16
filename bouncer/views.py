@@ -1,6 +1,7 @@
 import json
 from urllib import parse
 
+import h_pyramid_sentry
 from elasticsearch import exceptions
 from pyramid import httpexceptions, i18n, view
 
@@ -201,7 +202,7 @@ class ErrorController(object):
         # and:
         # 1. Show the user a generic error page
         # 2. Report the details of the error to Sentry.
-        self.request.raven.captureException()
+        h_pyramid_sentry.report_exception()
         return {
             "message": _(
                 "Sorry, but something went wrong with the link. "
