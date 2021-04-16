@@ -8,11 +8,14 @@ certifi==2020.12.5
     # via
     #   -r requirements/requirements.in
     #   requests
+    #   sentry-sdk
 chardet==3.0.4
     # via requests
 elasticsearch==6.3.1
     # via -r requirements/requirements.in
 gunicorn==20.1.0
+    # via -r requirements/requirements.in
+h-pyramid-sentry==1.2.2
     # via -r requirements/requirements.in
 hupper==1.10.2
     # via pyramid
@@ -37,17 +40,19 @@ pyramid-jinja2==2.8
 pyramid==1.10.7
     # via
     #   -r requirements/requirements.in
+    #   h-pyramid-sentry
     #   pyramid-jinja2
-raven==6.10.0
-    # via -r requirements/requirements.in
 requests==2.25.1
     # via -r requirements/requirements.in
+sentry-sdk==1.0.0
+    # via h-pyramid-sentry
 translationstring==1.4
     # via pyramid
 urllib3==1.25.10
     # via
     #   elasticsearch
     #   requests
+    #   sentry-sdk
 venusian==3.0.0
     # via pyramid
 webob==1.8.6

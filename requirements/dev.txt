@@ -8,52 +8,55 @@ backcall==0.2.0
     # via ipython
 certifi==2020.12.5
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   requests
+    #   sentry-sdk
 chardet==3.0.4
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   requests
 decorator==4.4.2
     # via
     #   ipython
     #   traitlets
 elasticsearch==6.3.1
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
 gunicorn==20.1.0
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
+h-pyramid-sentry==1.2.2
+    # via -r requirements/requirements.txt
 hupper==1.10.2
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 idna==2.10
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   requests
 ipdb==0.13.7
-    # via -r dev.in
+    # via -r requirements/dev.in
 ipython-genutils==0.2.0
     # via traitlets
 ipython==7.16.1
     # via
-    #   -r dev.in
+    #   -r requirements/dev.in
     #   ipdb
 jedi==0.17.2
     # via ipython
 jinja2==2.11.3
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid-jinja2
 markupsafe==1.1.1
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   jinja2
     #   pyramid-jinja2
 parso==0.7.1
     # via jedi
 pastedeploy==2.1.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   plaster-pastedeploy
 pexpect==4.8.0
     # via ipython
@@ -61,11 +64,11 @@ pickleshare==0.7.5
     # via ipython
 plaster-pastedeploy==0.7
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 plaster==1.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   plaster-pastedeploy
     #   pyramid
 prompt-toolkit==3.0.7
@@ -75,15 +78,18 @@ ptyprocess==0.6.0
 pygments==2.7.4
     # via ipython
 pyramid-jinja2==2.8
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
 pyramid==1.10.7
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
+    #   h-pyramid-sentry
     #   pyramid-jinja2
-raven==6.10.0
-    # via -r requirements.txt
 requests==2.25.1
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
+sentry-sdk==1.0.0
+    # via
+    #   -r requirements/requirements.txt
+    #   h-pyramid-sentry
 six==1.15.0
     # via traitlets
 toml==0.10.2
@@ -92,31 +98,32 @@ traitlets==4.3.3
     # via ipython
 translationstring==1.4
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 urllib3==1.25.10
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   elasticsearch
     #   requests
+    #   sentry-sdk
 venusian==3.0.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 wcwidth==0.2.5
     # via prompt-toolkit
 webob==1.8.6
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 zope.deprecation==4.4.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
     #   pyramid-jinja2
 zope.interface==4.7.2
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 
 # The following packages are considered to be unsafe in a requirements file:
