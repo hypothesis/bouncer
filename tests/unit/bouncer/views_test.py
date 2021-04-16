@@ -269,12 +269,12 @@ class TestErrorController(object):
         with pytest.raises(Exception):
             views.ErrorController(Exception(), request).error()
 
-    def test_error_reports_to_sentry(self):
+    def test_error_reports_to_sentry(self, h_pyramid_sentry):
         request = mock_request()
 
         views.ErrorController(Exception(), request).error()
 
-        request.raven.captureException.assert_called_once_with()
+        h_pyramid_sentry.report_exception.assert_called_once_with()
 
     def test_error_returns_error_message(self):
         controller = views.ErrorController(Exception(), mock_request())
@@ -282,6 +282,10 @@ class TestErrorController(object):
         template_data = controller.error()
 
         assert template_data["message"].startswith("Sorry, but")
+
+    @pytest.fixture(autouse=True)
+    def h_pyramid_sentry(self, patch):
+        return patch("bouncer.views.h_pyramid_sentry")
 
 
 class TestHealthcheck(object):

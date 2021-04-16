@@ -47,5 +47,5 @@ def app():
     }
     config.include("bouncer.search")
     config.include("bouncer.views")
-    config.include("bouncer.sentry")
+    config.include("h_pyramid_sentry")
     return config.make_wsgi_app()
