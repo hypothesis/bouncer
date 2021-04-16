@@ -33,10 +33,6 @@ idna==2.10
     # via
     #   -r requirements/requirements.txt
     #   requests
-importlib-metadata==3.10.0
-    # via
-    #   pluggy
-    #   pytest
 iniconfig==1.1.1
     # via pytest
 jinja2==2.11.3
@@ -94,8 +90,6 @@ translationstring==1.4
     # via
     #   -r requirements/requirements.txt
     #   pyramid
-typing-extensions==3.7.4.3
-    # via importlib-metadata
 urllib3==1.25.10
     # via
     #   -r requirements/requirements.txt
@@ -115,8 +109,6 @@ webob==1.8.6
     #   webtest
 webtest==2.0.35
     # via -r requirements/functests.in
-zipp==3.4.1
-    # via importlib-metadata
 zope.deprecation==4.4.0
     # via
     #   -r requirements/requirements.txt
