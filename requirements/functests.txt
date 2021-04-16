@@ -12,6 +12,7 @@ certifi==2020.12.5
     # via
     #   -r requirements/requirements.txt
     #   requests
+    #   sentry-sdk
 chardet==3.0.4
     # via
     #   -r requirements/requirements.txt
@@ -22,6 +23,8 @@ gunicorn==20.1.0
     # via -r requirements/requirements.txt
 h-matchers==1.2.10
     # via -r requirements/functests.in
+h-pyramid-sentry==1.2.2
+    # via -r requirements/requirements.txt
 hupper==1.10.2
     # via
     #   -r requirements/requirements.txt
@@ -71,13 +74,16 @@ pyramid-jinja2==2.8
 pyramid==1.10.7
     # via
     #   -r requirements/requirements.txt
+    #   h-pyramid-sentry
     #   pyramid-jinja2
 pytest==6.2.3
     # via -r requirements/functests.in
-raven==6.10.0
-    # via -r requirements/requirements.txt
 requests==2.25.1
     # via -r requirements/requirements.txt
+sentry-sdk==1.0.0
+    # via
+    #   -r requirements/requirements.txt
+    #   h-pyramid-sentry
 six==1.15.0
     # via webtest
 soupsieve==2.2.1
@@ -95,6 +101,7 @@ urllib3==1.25.10
     #   -r requirements/requirements.txt
     #   elasticsearch
     #   requests
+    #   sentry-sdk
 venusian==3.0.0
     # via
     #   -r requirements/requirements.txt

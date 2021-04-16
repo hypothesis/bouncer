@@ -1,7 +1,7 @@
 certifi
 elasticsearch
 gunicorn
+h-pyramid-sentry
 pyramid
 pyramid-jinja2
 requests
-raven
