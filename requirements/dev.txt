@@ -15,10 +15,8 @@ chardet==3.0.4
     # via
     #   -r requirements/requirements.txt
     #   requests
-decorator==4.4.2
-    # via
-    #   ipython
-    #   traitlets
+decorator==5.0.7
+    # via ipython
 elasticsearch==6.3.1
     # via -r requirements/requirements.txt
 gunicorn==20.1.0
@@ -37,11 +35,11 @@ ipdb==0.13.7
     # via -r requirements/dev.in
 ipython-genutils==0.2.0
     # via traitlets
-ipython==7.16.1
+ipython==7.22.0
     # via
     #   -r requirements/dev.in
     #   ipdb
-jedi==0.17.2
+jedi==0.18.0
     # via ipython
 jinja2==2.11.3
     # via
@@ -52,7 +50,7 @@ markupsafe==1.1.1
     #   -r requirements/requirements.txt
     #   jinja2
     #   pyramid-jinja2
-parso==0.7.1
+parso==0.8.2
     # via jedi
 pastedeploy==2.1.0
     # via
@@ -71,11 +69,11 @@ plaster==1.0
     #   -r requirements/requirements.txt
     #   plaster-pastedeploy
     #   pyramid
-prompt-toolkit==3.0.7
+prompt-toolkit==3.0.18
     # via ipython
-ptyprocess==0.6.0
+ptyprocess==0.7.0
     # via pexpect
-pygments==2.7.4
+pygments==2.8.1
     # via ipython
 pyramid-jinja2==2.8
     # via -r requirements/requirements.txt
@@ -90,11 +88,9 @@ sentry-sdk==1.0.0
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
-six==1.15.0
-    # via traitlets
 toml==0.10.2
     # via ipdb
-traitlets==4.3.3
+traitlets==5.0.5
     # via ipython
 translationstring==1.4
     # via
