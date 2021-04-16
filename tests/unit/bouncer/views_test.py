@@ -295,8 +295,7 @@ class TestHealthcheck(object):
 
         result = views.healthcheck(request)
 
-        assert "status" in result
-        assert result["status"] == "ok"
+        assert result == {"status": "okay"}
 
     def test_failed_es_request(self):
         request = mock_request()
