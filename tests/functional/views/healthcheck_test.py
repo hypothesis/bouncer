@@ -1,7 +1,6 @@
 from unittest.mock import Mock
 
 import pytest
-from h_matchers import Any
 
 
 class TestHealthcheck:
@@ -9,7 +8,7 @@ class TestHealthcheck:
         response = app.get("/_status", status=200)
 
         assert response.content_type == "application/json"
-        assert response.json == {"status": "ok", "version": Any.string()}
+        assert response.json == {"status": "okay"}
         assert (
             response.headers["Cache-Control"]
             == "max-age=0, must-revalidate, no-cache, no-store"

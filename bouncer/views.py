@@ -6,7 +6,6 @@ from elasticsearch import exceptions
 from pyramid import httpexceptions, i18n, view
 from pyramid.httpexceptions import HTTPNoContent
 
-from bouncer import __version__ as bouncer_version
 from bouncer import util
 from bouncer.embed_detector import url_embeds_client
 
@@ -236,7 +235,7 @@ def healthcheck(request):
     if status not in ("yellow", "green"):
         raise FailedHealthcheck("cluster status was {!r}".format(status))
 
-    return {"status": "ok", "version": bouncer_version}
+    return {"status": "okay"}
 
 
 def _is_valid_http_url(url):
