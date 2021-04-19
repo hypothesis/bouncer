@@ -4,6 +4,7 @@ from urllib import parse
 import h_pyramid_sentry
 from elasticsearch import exceptions
 from pyramid import httpexceptions, i18n, view
+from pyramid.httpexceptions import HTTPNoContent
 
 from bouncer import __version__ as bouncer_version
 from bouncer import util
@@ -173,6 +174,17 @@ def goto_url(request):
     }
 
 
+@view.view_config(route_name="crash")
+def crash(request):  # pragma: no-cover
+    """Crash if requested to for testing purposes."""
+
+    # Ensure that no conceivable accident could cause this to be triggered
+    if request.params.get("cid", "") == "a751bb01":
+        raise ValueError("Something has gone wrong")
+
+    return HTTPNoContent()
+
+
 @view.view_defaults(renderer="bouncer:templates/error.html.jinja2")
 class ErrorController(object):
     def __init__(self, exc, request):
@@ -191,18 +203,19 @@ class ErrorController(object):
 
     @view.view_config(context=Exception)
     def error(self):
+        # If code raises a non-HTTPException exception we assume it was a bug
+        # and:
+        # 1. Show the user a generic error page
+        # 2. Report the details of the error to Sentry.
+        self.request.response.status_int = 500
+
+        h_pyramid_sentry.report_exception()
+
         # In debug mode re-raise exceptions so that they get printed in the
         # terminal.
         if self.request.registry.settings["debug"]:
             raise
 
-        self.request.response.status_int = 500
-
-        # If code raises a non-HTTPException exception we assume it was a bug
-        # and:
-        # 1. Show the user a generic error page
-        # 2. Report the details of the error to Sentry.
-        h_pyramid_sentry.report_exception()
         return {
             "message": _(
                 "Sorry, but something went wrong with the link. "
@@ -261,6 +274,7 @@ def _can_use_proxy(settings, authority):
 def includeme(config):
     config.add_route("index", "/")
     config.add_route("healthcheck", "/_status")
+    config.add_route("crash", "/_crash")
     config.add_route("goto_url", "/go")
     config.add_route("annotation_with_url", "/{id}/*url")
     config.add_route("annotation_without_url", "/{id}")
