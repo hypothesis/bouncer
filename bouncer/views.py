@@ -175,7 +175,7 @@ def goto_url(request):
 
 
 @view.view_config(route_name="crash")
-def crash(request):  # pragma: no-cover
+def crash(request):  # pragma: nocover
     """Crash if requested to for testing purposes."""
 
     # Ensure that no conceivable accident could cause this to be triggered
@@ -271,7 +271,7 @@ def _can_use_proxy(settings, authority):
     return settings["hypothesis_authority"] == authority
 
 
-def includeme(config):
+def includeme(config):  # pragma: nocover
     config.add_route("index", "/")
     config.add_route("healthcheck", "/_status")
     config.add_route("crash", "/_crash")
