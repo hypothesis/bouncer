@@ -15,7 +15,7 @@ elasticsearch==6.3.1
     # via -r requirements/requirements.in
 gunicorn==20.1.0
     # via -r requirements/requirements.in
-h-pyramid-sentry==1.2.2
+h-pyramid-sentry==1.2.3
     # via -r requirements/requirements.in
 hupper==1.10.2
     # via pyramid
