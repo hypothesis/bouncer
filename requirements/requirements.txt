@@ -37,7 +37,7 @@ plaster==1.0
     #   pyramid
 pyramid-jinja2==2.8
     # via -r requirements/requirements.in
-pyramid==1.10.7
+pyramid==2.0
     # via
     #   -r requirements/requirements.in
     #   h-pyramid-sentry
