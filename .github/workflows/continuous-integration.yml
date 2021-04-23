@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: Setup python
         uses: actions/setup-python@v2
@@ -24,6 +24,7 @@ jobs:
 
   backend:
     name: Backend
+    needs: metadata
     runs-on: ubuntu-latest
     env:
       TOX_PARALLEL_NO_SPINNER: 1
