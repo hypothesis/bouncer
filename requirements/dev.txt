@@ -35,7 +35,7 @@ ipdb==0.13.7
     # via -r requirements/dev.in
 ipython-genutils==0.2.0
     # via traitlets
-ipython==7.22.0
+ipython==7.23.0
     # via
     #   -r requirements/dev.in
     #   ipdb
@@ -50,6 +50,8 @@ markupsafe==1.1.1
     #   -r requirements/requirements.txt
     #   jinja2
     #   pyramid-jinja2
+matplotlib-inline==0.1.2
+    # via ipython
 parso==0.8.2
     # via jedi
 pastedeploy==2.1.0
@@ -91,7 +93,9 @@ sentry-sdk==1.0.0
 toml==0.10.2
     # via ipdb
 traitlets==5.0.5
-    # via ipython
+    # via
+    #   ipython
+    #   matplotlib-inline
 translationstring==1.4
     # via
     #   -r requirements/requirements.txt
