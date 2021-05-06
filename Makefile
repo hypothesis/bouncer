@@ -15,8 +15,6 @@ help:
 	@echo "                       locally in production mode. It assumes that h's Elasticsearch "
 	@echo "                       service is being run using docker-compose in the 'h_default' "
 	@echo "                       network."
-	@echo "make clean             Delete development artefacts (cached files, "
-	@echo "                       dependencies, etc)"
 
 .PHONY: dev
 dev: node_modules/.uptodate python
@@ -74,12 +72,6 @@ run-docker:
 		-e "ELASTICSEARCH_URL=http://elasticsearch:9200" \
 		-p 8000:8000 \
 		hypothesis/bouncer:$(DOCKER_TAG)
-
-.PHONY: clean
-clean:
-	@find . -type f -name "*.py[co]" -delete
-	@find . -type d -name "__pycache__" -delete
-	@rm -f node_modules/.uptodate
 
 .PHONY: python
 python:
