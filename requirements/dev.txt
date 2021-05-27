@@ -16,7 +16,9 @@ chardet==3.0.4
     #   -r requirements/requirements.txt
     #   requests
 decorator==5.0.7
-    # via ipython
+    # via
+    #   ipdb
+    #   ipython
 elasticsearch==6.3.1
     # via -r requirements/requirements.txt
 gunicorn==20.1.0
@@ -31,7 +33,7 @@ idna==2.10
     # via
     #   -r requirements/requirements.txt
     #   requests
-ipdb==0.13.7
+ipdb==0.13.8
     # via -r requirements/dev.in
 ipython-genutils==0.2.0
     # via traitlets
