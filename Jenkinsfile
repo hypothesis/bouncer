@@ -27,13 +27,13 @@ node {
 onlyOnMaster {
     milestone()
     stage('qa deploy') {
-        deployApp(image: img, app: 'bouncer', env: 'qa')
+        deployApp(image: img, app: 'bouncer', env: 'qa', region: 'us-west-1')
     }
 
     milestone()
     stage('prod deploy') {
         input(message: "Deploy to prod?")
         milestone()
-        deployApp(image: img, app: 'bouncer', env: 'prod')
+        deployApp(image: img, app: 'bouncer', env: 'prod', region: 'us-west-1')
     }
 }
