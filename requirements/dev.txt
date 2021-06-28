@@ -35,12 +35,12 @@ idna==2.10
     #   requests
 ipdb==0.13.9
     # via -r requirements/dev.in
-ipython-genutils==0.2.0
-    # via traitlets
-ipython==7.24.1
+ipython==7.25.0
     # via
     #   -r requirements/dev.in
     #   ipdb
+ipython-genutils==0.2.0
+    # via traitlets
 jedi==0.18.0
     # via ipython
 jinja2==2.11.3
@@ -64,14 +64,14 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-plaster-pastedeploy==0.7
-    # via
-    #   -r requirements/requirements.txt
-    #   pyramid
 plaster==1.0
     # via
     #   -r requirements/requirements.txt
     #   plaster-pastedeploy
+    #   pyramid
+plaster-pastedeploy==0.7
+    # via
+    #   -r requirements/requirements.txt
     #   pyramid
 prompt-toolkit==3.0.18
     # via ipython
@@ -79,13 +79,13 @@ ptyprocess==0.7.0
     # via pexpect
 pygments==2.9.0
     # via ipython
-pyramid-jinja2==2.8
-    # via -r requirements/requirements.txt
 pyramid==2.0
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
     #   pyramid-jinja2
+pyramid-jinja2==2.8
+    # via -r requirements/requirements.txt
 requests==2.25.1
     # via -r requirements/requirements.txt
 sentry-sdk==1.0.0
