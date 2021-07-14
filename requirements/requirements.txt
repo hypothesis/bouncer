@@ -9,7 +9,7 @@ certifi==2021.5.30
     #   -r requirements/requirements.in
     #   requests
     #   sentry-sdk
-chardet==3.0.4
+charset-normalizer==2.0.1
     # via requests
 elasticsearch==6.3.1
     # via -r requirements/requirements.in
@@ -29,20 +29,20 @@ markupsafe==1.1.1
     #   pyramid-jinja2
 pastedeploy==2.1.0
     # via plaster-pastedeploy
-plaster-pastedeploy==0.7
-    # via pyramid
 plaster==1.0
     # via
     #   plaster-pastedeploy
     #   pyramid
-pyramid-jinja2==2.8
-    # via -r requirements/requirements.in
+plaster-pastedeploy==0.7
+    # via pyramid
 pyramid==2.0
     # via
     #   -r requirements/requirements.in
     #   h-pyramid-sentry
     #   pyramid-jinja2
-requests==2.25.1
+pyramid-jinja2==2.8
+    # via -r requirements/requirements.in
+requests==2.26.0
     # via -r requirements/requirements.in
 sentry-sdk==1.0.0
     # via h-pyramid-sentry
