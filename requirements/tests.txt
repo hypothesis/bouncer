@@ -11,7 +11,7 @@ certifi==2021.5.30
     #   -r requirements/requirements.txt
     #   requests
     #   sentry-sdk
-chardet==3.0.4
+charset-normalizer==2.0.1
     # via
     #   -r requirements/requirements.txt
     #   requests
@@ -54,14 +54,14 @@ pastedeploy==2.1.0
     # via
     #   -r requirements/requirements.txt
     #   plaster-pastedeploy
-plaster-pastedeploy==0.7
-    # via
-    #   -r requirements/requirements.txt
-    #   pyramid
 plaster==1.0
     # via
     #   -r requirements/requirements.txt
     #   plaster-pastedeploy
+    #   pyramid
+plaster-pastedeploy==0.7
+    # via
+    #   -r requirements/requirements.txt
     #   pyramid
 pluggy==0.13.1
     # via pytest
@@ -69,18 +69,18 @@ py==1.10.0
     # via pytest
 pyparsing==2.4.7
     # via packaging
-pyramid-jinja2==2.8
-    # via -r requirements/requirements.txt
 pyramid==2.0
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
     #   pyramid-jinja2
+pyramid-jinja2==2.8
+    # via -r requirements/requirements.txt
 pytest==6.2.4
     # via -r requirements/tests.in
 python-dateutil==2.8.1
     # via faker
-requests==2.25.1
+requests==2.26.0
     # via -r requirements/requirements.txt
 sentry-sdk==1.0.0
     # via

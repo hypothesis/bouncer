@@ -11,7 +11,7 @@ certifi==2021.5.30
     #   -r requirements/requirements.txt
     #   requests
     #   sentry-sdk
-chardet==3.0.4
+charset-normalizer==2.0.1
     # via
     #   -r requirements/requirements.txt
     #   requests
@@ -86,7 +86,7 @@ pyramid==2.0
     #   pyramid-jinja2
 pyramid-jinja2==2.8
     # via -r requirements/requirements.txt
-requests==2.25.1
+requests==2.26.0
     # via -r requirements/requirements.txt
 sentry-sdk==1.0.0
     # via
