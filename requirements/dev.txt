@@ -35,7 +35,7 @@ idna==2.10
     #   requests
 ipdb==0.13.9
     # via -r requirements/dev.in
-ipython==7.25.0
+ipython==7.26.0
     # via
     #   -r requirements/dev.in
     #   ipdb
