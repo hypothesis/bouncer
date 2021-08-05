@@ -21,7 +21,7 @@ elasticsearch==6.3.1
     # via -r requirements/requirements.txt
 gunicorn==20.1.0
     # via -r requirements/requirements.txt
-h-matchers==1.2.11
+h_matchers==1.2.12
     # via -r requirements/functests.in
 h-pyramid-sentry==1.2.3
     # via -r requirements/requirements.txt
