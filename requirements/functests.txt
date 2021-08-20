@@ -21,7 +21,7 @@ elasticsearch==6.3.1
     # via -r requirements/requirements.txt
 gunicorn==20.1.0
     # via -r requirements/requirements.txt
-h_matchers==1.2.12
+h-matchers==1.2.12
     # via -r requirements/functests.in
 h-pyramid-sentry==1.2.3
     # via -r requirements/requirements.txt
@@ -80,8 +80,6 @@ sentry-sdk==1.0.0
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
-six==1.15.0
-    # via webtest
 soupsieve==2.2.1
     # via beautifulsoup4
 toml==0.10.2
@@ -107,7 +105,7 @@ webob==1.8.6
     #   -r requirements/requirements.txt
     #   pyramid
     #   webtest
-webtest==2.0.35
+webtest==3.0.0
     # via -r requirements/functests.in
 zope.deprecation==4.4.0
     # via
