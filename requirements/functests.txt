@@ -72,7 +72,7 @@ pyramid==2.0
     #   pyramid-jinja2
 pyramid-jinja2==2.8
     # via -r requirements/requirements.txt
-pytest==6.2.4
+pytest==6.2.5
     # via -r requirements/functests.in
 requests==2.26.0
     # via -r requirements/requirements.txt
