@@ -1,4 +1,4 @@
-FROM python:3.8.11-alpine3.13
+FROM python:3.8.12-alpine3.13
 MAINTAINER Hypothes.is Project and contributors
 
 # Install system build and runtime dependencies.
