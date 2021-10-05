@@ -1,16 +1,11 @@
 module.exports = function (config) {
   config.set({
-    browserify: {
-      debug: true
-    },
     basePath: '',
-    frameworks: ['browserify', 'chai', 'mocha', 'sinon'],
+    frameworks: ['chai', 'mocha', 'sinon'],
     files: [
-      'bouncer/**/*-test.js'
+      { pattern: 'bouncer/scripts/*.js', type: 'module', included: false },
+      { pattern: 'bouncer/**/*-test.js', type: 'module' },
     ],
-    preprocessors: {
-      '**/*-test.js': ['browserify']
-    },
     reporters: ['progress'],
     port: 9876,
     colors: true,

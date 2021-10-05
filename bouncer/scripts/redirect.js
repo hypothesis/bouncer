@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Configuration information for the client-side code that detects the best way
  * to route the user to a URL with Hypothesis activated and specified
@@ -43,7 +41,7 @@ function defaultNavigateTo(url) {
  * @param {(url: string) => void} [navigateTo]
  * @param {Settings} [settings]
  */
-function redirect(navigateTo, settings) {
+export function redirect(navigateTo, settings) {
   navigateTo = navigateTo || defaultNavigateTo; // Test seam
   settings = settings || getSettings(document); // Test seam
 
@@ -84,11 +82,6 @@ function redirect(navigateTo, settings) {
   }
 }
 
-if (typeof module === 'object') {
-  // Browserify is present, this file must be being run by the tests.
-  module.exports = redirect;
-} else {
-  // Browserify is not present, this file must be being run in development or
-  // production.
+if (!('__karma__' in window)) { // Check if in test environment
   redirect();
 }

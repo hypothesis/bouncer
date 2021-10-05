@@ -1,6 +1,4 @@
-'use strict';
-
-var redirect = require('../redirect.js');
+import { redirect } from '../redirect.js';
 
 describe('#redirect', function () {
   var settings;
