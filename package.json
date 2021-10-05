@@ -11,6 +11,7 @@
     "mocha": "^6.2.2",
     "sinon": "^7.5.0"
   },
+  "browserslist": "chrome 70, firefox 70, safari 11",
   "license": "BSD-2-Clause",
   "repository": {
     "type": "git",
