@@ -8,7 +8,7 @@ attrs==20.3.0
     # via pytest
 beautifulsoup4==4.9.3
     # via webtest
-certifi==2021.5.30
+certifi==2021.10.8
     # via
     #   -r requirements/requirements.txt
     #   requests
