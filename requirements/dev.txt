@@ -6,7 +6,7 @@
 #
 backcall==0.2.0
     # via ipython
-certifi==2021.5.30
+certifi==2021.10.8
     # via
     #   -r requirements/requirements.txt
     #   requests
