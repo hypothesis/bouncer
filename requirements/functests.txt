@@ -74,7 +74,7 @@ pyramid-jinja2==2.8
     # via -r requirements/requirements.txt
 pytest==6.2.5
     # via -r requirements/functests.in
-requests==2.26.0
+requests==2.27.1
     # via -r requirements/requirements.txt
 sentry-sdk==1.0.0
     # via
