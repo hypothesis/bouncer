@@ -40,7 +40,7 @@ pyramid==2.0
     #   -r requirements/requirements.in
     #   h-pyramid-sentry
     #   pyramid-jinja2
-pyramid-jinja2==2.9.2
+pyramid-jinja2==2.10
     # via -r requirements/requirements.in
 requests==2.27.1
     # via -r requirements/requirements.in
