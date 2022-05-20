@@ -6,7 +6,7 @@
 #
 attrs==20.3.0
     # via pytest
-certifi==2022.5.18
+certifi==2022.5.18.1
     # via
     #   -r requirements/requirements.txt
     #   requests
