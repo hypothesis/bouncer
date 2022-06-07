@@ -17,14 +17,14 @@ node {
         }
     }
 
-    onlyOnMaster {
+    onlyOnMain {
         stage('release') {
             releaseApp(image: img)
         }
     }
 }
 
-onlyOnMaster {
+onlyOnMain {
     milestone()
     stage('qa deploy') {
         deployApp(image: img, app: 'bouncer', env: 'qa', region: 'us-west-1')
