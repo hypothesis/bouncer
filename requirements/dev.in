@@ -1,3 +1,4 @@
+pip-tools
 ipython
 ipdb
 -r requirements.txt
