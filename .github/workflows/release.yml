@@ -1,0 +1,46 @@
+name: Release
+
+concurrency:
+  group: ${{ github.event.repository.name }}-release
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  continuous-integration:
+    uses: ./.github/workflows/continuous-integration.yml
+    name: continuous integration
+
+  create-image:
+    needs: continuous-integration
+    uses: hypothesis/workflows/.github/workflows/dockerhub.yml@main
+    with:
+      Application: ${{ github.event.repository.name }}
+    secrets: inherit
+
+  qa-us-west-1:
+    needs: create-image
+    name: ${{ github.event.repository.name }}
+    uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
+    with:
+      Application: ${{ github.event.repository.name }}
+      Environment: qa
+      Region: us-west-1
+      Operation: deploy
+      Version: latest
+    secrets: inherit
+
+  prod-us-west-1:
+    needs: qa-us-west-1
+    name: ${{ github.event.repository.name }}
+    uses: hypothesis/workflows/.github/workflows/eb-update.yml@main
+    with:
+      Application: ${{ github.event.repository.name }}
+      Environment: prod
+      Region: us-west-1
+      Operation: deploy
+      Version: latest
+    secrets: inherit
