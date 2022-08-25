@@ -1,6 +1,7 @@
 -r requirements.txt
 
 pip-tools
+pip-sync-faster
 pytest
 webtest
 h_matchers

@@ -16,8 +16,12 @@ packaging==21.3
     # via build
 pep517==0.13.0
     # via build
-pip-tools==6.8.0
+pip-sync-faster==0.0.2
     # via -r requirements/lint.in
+pip-tools==6.8.0
+    # via
+    #   -r requirements/lint.in
+    #   pip-sync-faster
 pycodestyle==2.8.0
     # via flake8
 pyflakes==2.4.0

@@ -1,4 +1,5 @@
 pip-tools
+pip-sync-faster
 coverage
 pytest
 factory-boy
