@@ -62,8 +62,12 @@ pastedeploy==2.1.0
     #   plaster-pastedeploy
 pep517==0.13.0
     # via build
-pip-tools==6.8.0
+pip-sync-faster==0.0.2
     # via -r requirements/tests.in
+pip-tools==6.8.0
+    # via
+    #   -r requirements/tests.in
+    #   pip-sync-faster
 plaster==1.0
     # via
     #   -r requirements/requirements.txt
