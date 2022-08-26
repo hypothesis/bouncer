@@ -112,3 +112,4 @@ Go to an individual annotation, where `id` is the annotation's unique ID.
 Optional `url` path parameter: URL of the annotation's target document.
 This is intended to enhance the readability of shared annotation URLs and
 is functionally identical to the `/{id}` route.
+
