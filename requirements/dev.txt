@@ -31,7 +31,7 @@ executing==0.8.2
     # via stack-data
 gunicorn==20.1.0
     # via -r requirements/requirements.txt
-h-pyramid-sentry==1.2.3
+h-pyramid-sentry==1.2.4
     # via -r requirements/requirements.txt
 hupper==1.10.2
     # via
