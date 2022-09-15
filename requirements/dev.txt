@@ -10,7 +10,7 @@ backcall==0.2.0
     # via ipython
 build==0.8.0
     # via pip-tools
-certifi==2022.6.15
+certifi==2022.9.14
     # via
     #   -r requirements/requirements.txt
     #   requests
