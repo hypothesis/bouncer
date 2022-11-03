@@ -25,7 +25,6 @@ jobs:
 
   QA:
     needs: Docker_Hub
-    name: ${{ github.event.repository.name }}
     uses: hypothesis/workflows/.github/workflows/deploy.yml@main
     with:
       operation: deploy
@@ -39,7 +38,6 @@ jobs:
 
   Production:
     needs: [Docker_Hub, QA]
-    name: ${{ github.event.repository.name }}
     uses: hypothesis/workflows/.github/workflows/deploy.yml@main
     with:
       operation: deploy
