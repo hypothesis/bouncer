@@ -1,46 +1,38 @@
-name: Deploy
+name: Redeploy
 concurrency:
   group: deploy
   cancel-in-progress: true
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+    inputs:
+      qa:
+        type: boolean
+        description: Redeploy QA
+      production:
+        type: boolean
+        description: Redeploy Production
 jobs:
-  ci:
-    name: CI
-    uses: ./.github/workflows/ci.yml
-  docker_hub:
-    name: Docker Hub
-    needs: [ci]
-    uses: hypothesis/workflows/.github/workflows/dockerhub.yml@main
-    with:
-      Application: ${{ github.event.repository.name }}
-    secrets: inherit
   qa:
     name: QA
-    needs: [docker_hub]
+    if: inputs.qa
     uses: hypothesis/workflows/.github/workflows/deploy.yml@main
     with:
-      operation: deploy
+      operation: redeploy
       github_environment_name: QA
       github_environment_url: https://qa.hyp.is/
       aws_region: us-west-1
       elasticbeanstalk_application: bouncer
       elasticbeanstalk_environment: qa
-      docker_tag: ${{ needs.Docker_Hub.outputs.docker_tag }}
     secrets: inherit
   production:
     name: Production
-    needs: [docker_hub, qa]
+    if: inputs.production
     uses: hypothesis/workflows/.github/workflows/deploy.yml@main
     with:
-      operation: deploy
+      operation: redeploy
       github_environment_name: Production
       github_environment_url: https://hyp.is/
       aws_region: us-west-1
       elasticbeanstalk_application: bouncer
       elasticbeanstalk_environment: prod
-      docker_tag: ${{ needs.Docker_Hub.outputs.docker_tag }}
     secrets: inherit
