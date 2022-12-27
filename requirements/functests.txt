@@ -143,7 +143,7 @@ zope-interface==4.7.2
 # The following packages are considered to be unsafe in a requirements file:
 pip==22.2.1
     # via pip-tools
-setuptools==63.2.0
+setuptools==65.5.1
     # via
     #   -r requirements.txt
     #   gunicorn
