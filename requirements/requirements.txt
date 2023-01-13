@@ -6,17 +6,17 @@
 #
 certifi==2022.12.7
     # via
-    #   -r requirements.in
+    #   -r requirements/requirements.in
     #   requests
     #   sentry-sdk
 charset-normalizer==2.0.1
     # via requests
 elasticsearch==6.3.1
-    # via -r requirements.in
+    # via -r requirements/requirements.in
 gunicorn==20.1.0
-    # via -r requirements.in
+    # via -r requirements/requirements.in
 h-pyramid-sentry==1.2.4
-    # via -r requirements.in
+    # via -r requirements/requirements.in
 hupper==1.10.2
     # via pyramid
 idna==2.10
@@ -37,15 +37,22 @@ plaster-pastedeploy==0.7
     # via pyramid
 pyramid==2.0
     # via
-    #   -r requirements.in
+    #   -r requirements/requirements.in
     #   h-pyramid-sentry
     #   pyramid-jinja2
 pyramid-jinja2==2.10
-    # via -r requirements.in
-requests==2.28.1
-    # via -r requirements.in
+    # via -r requirements/requirements.in
+requests==2.28.2
+    # via -r requirements/requirements.in
 sentry-sdk==1.0.0
     # via h-pyramid-sentry
+setuptools==65.5.1
+    # via
+    #   gunicorn
+    #   plaster
+    #   pyramid
+    #   zope-deprecation
+    #   zope-interface
 translationstring==1.4
     # via pyramid
 urllib3==1.26.5
@@ -63,12 +70,3 @@ zope-deprecation==4.4.0
     #   pyramid-jinja2
 zope-interface==4.7.2
     # via pyramid
-
-# The following packages are considered to be unsafe in a requirements file:
-setuptools==65.5.1
-    # via
-    #   gunicorn
-    #   plaster
-    #   pyramid
-    #   zope-deprecation
-    #   zope-interface
