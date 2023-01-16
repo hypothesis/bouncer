@@ -2,6 +2,14 @@ name: Continuous integration
 
 on:
   pull_request:
+    paths-ignore:
+      - '.cookiecutter/*'
+      - 'docs/*'
+      - 'requirements/*.in'
+      - 'requirements/dev.txt'
+      - '**/.gitignore'
+      - '*.md'
+      - 'LICENSE'
   workflow_call:
 
 jobs:

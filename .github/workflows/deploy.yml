@@ -7,6 +7,16 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.cookiecutter/*'
+      - '.github/*'
+      - 'docs/*'
+      - 'requirements/*'
+      - '!requirements/requirements.txt'
+      - 'tests/*'
+      - '**/.gitignore'
+      - '*.md'
+      - 'tox.ini'
 jobs:
   ci:
     name: CI
