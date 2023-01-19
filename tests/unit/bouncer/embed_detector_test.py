@@ -19,6 +19,7 @@ class TestUrlEmbedsClient:
             # Example matching URLs for various sites on the list.
             "https://docdrop.org/pdf/1Vsd26C0KuMw4Mj1WEBjBz1T8G75vIhWx-gaQEE.pdf/",
             "https://docdrop.org/video/AJXGJYl0wJc/",
+            "https://www.semanticscholar.org/reader/5e331bf7887e2e634bf5b12788849d2d2b74bc7f",
         ],
     )
     def test_returns_true_for_matching_url(self, url):
