@@ -18,7 +18,7 @@ PATTERNS = [
     # Publisher partners
     "psycnet.apa.org/fulltext/*",
     "awspntest.apa.org/fulltext/*",
-    "www.semanticscholar.org/reader/*",  # See https://hypothes-is.slack.com/archives/C04F8GLTT7U/p1674065065018549
+    "*.semanticscholar.org/reader/*",  # See https://hypothes-is.slack.com/archives/C04F8GLTT7U/p1674065065018549
 ]
 
 COMPILED_PATTERNS = [re.compile(fnmatch.translate(pat)) for pat in PATTERNS]
