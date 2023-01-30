@@ -87,7 +87,7 @@ pluggy==0.13.1
     # via pytest
 pyparsing==2.4.7
     # via packaging
-pyramid==2.0
+pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry

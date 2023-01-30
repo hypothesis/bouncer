@@ -105,7 +105,7 @@ pygments==2.9.0
     # via ipython
 pyparsing==3.0.9
     # via packaging
-pyramid==2.0
+pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry

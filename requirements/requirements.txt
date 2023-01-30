@@ -35,7 +35,7 @@ plaster==1.0
     #   pyramid
 plaster-pastedeploy==0.7
     # via pyramid
-pyramid==2.0
+pyramid==2.0.1
     # via
     #   -r requirements/requirements.in
     #   h-pyramid-sentry
