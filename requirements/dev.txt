@@ -45,7 +45,7 @@ importlib-metadata==4.12.0
     # via pip-sync-faster
 ipdb==0.13.11
     # via -r requirements/dev.in
-ipython==8.8.0
+ipython==8.9.0
     # via
     #   -r requirements/dev.in
     #   ipdb
@@ -95,7 +95,7 @@ plaster-pastedeploy==0.7
     # via
     #   -r requirements/requirements.txt
     #   pyramid
-prompt-toolkit==3.0.18
+prompt-toolkit==3.0.36
     # via ipython
 ptyprocess==0.7.0
     # via pexpect
