@@ -16,18 +16,14 @@ packaging==21.3
     # via build
 pep517==0.13.0
     # via build
-pip==22.2.1
-    # via pip-tools
 pip-sync-faster==0.0.3
     # via -r requirements/coverage.in
-pip-tools==6.12.1
+pip-tools==6.12.2
     # via
     #   -r requirements/coverage.in
     #   pip-sync-faster
 pyparsing==3.0.9
     # via packaging
-setuptools==65.5.1
-    # via pip-tools
 tomli==2.0.1
     # via
     #   build
