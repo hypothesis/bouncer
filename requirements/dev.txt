@@ -78,11 +78,9 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pip==22.2.1
-    # via pip-tools
 pip-sync-faster==0.0.3
     # via -r requirements/dev.in
-pip-tools==6.12.1
+pip-tools==6.12.2
     # via
     #   -r requirements/dev.in
     #   pip-sync-faster
@@ -118,15 +116,6 @@ sentry-sdk==1.0.0
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
-setuptools==65.5.1
-    # via
-    #   -r requirements/requirements.txt
-    #   gunicorn
-    #   pip-tools
-    #   plaster
-    #   pyramid
-    #   zope-deprecation
-    #   zope-interface
 six==1.16.0
     # via asttokens
 stack-data==0.1.3

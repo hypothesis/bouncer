@@ -62,11 +62,9 @@ pastedeploy==2.1.0
     #   plaster-pastedeploy
 pep517==0.13.0
     # via build
-pip==22.2.1
-    # via pip-tools
 pip-sync-faster==0.0.3
     # via -r requirements/functests.in
-pip-tools==6.12.1
+pip-tools==6.12.2
     # via
     #   -r requirements/functests.in
     #   pip-sync-faster
@@ -98,15 +96,6 @@ sentry-sdk==1.0.0
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
-setuptools==65.5.1
-    # via
-    #   -r requirements/requirements.txt
-    #   gunicorn
-    #   pip-tools
-    #   plaster
-    #   pyramid
-    #   zope-deprecation
-    #   zope-interface
 soupsieve==2.2.1
     # via beautifulsoup4
 tomli==2.0.0
