@@ -1,8 +1,17 @@
 import { redirect } from '../redirect.js';
 
-describe('#redirect', function () {
+describe('#redirect', () => {
+  /**
+   * Error message which a `chrome.runtime.sendMessage` request fails with
+   * if the extension does not exist. This is reported via `chrome.runtime.lastError`
+   * inside the `sendMessage` callback.
+   */
+  const extensionConnectError = {
+    message: 'Could not establish connection. Receiving end does not exist.',
+  };
+
   let settings;
-  beforeEach(function () {
+  beforeEach(() => {
     window.chrome = undefined;
     settings = {
       chromeExtensionId: 'test-extension-id',
@@ -14,11 +23,11 @@ describe('#redirect', function () {
     sinon.stub(window.console, 'error');
   });
 
-  afterEach(function () {
+  afterEach(() => {
     window.console.error.restore();
   });
 
-  it('reads settings from the page by default', function () {
+  it('reads settings from the page', () => {
     const settings = {
       chromeExtensionId: 'a-b-c',
       extensionUrl: 'https://example.org/#annotations:123',
@@ -36,145 +45,87 @@ describe('#redirect', function () {
     assert.isTrue(navigateTo.calledWith(settings.viaUrl));
   });
 
-  it('redirects to Via if not Chrome', function () {
-    window.chrome = undefined; // The user isn't using Chrome.
-    const navigateTo = sinon.stub();
+  [
+    // Browser is not Chrome
+    undefined,
 
-    redirect(navigateTo, settings);
+    // `chrome` global exists, but `runtime` property missing
+    {},
 
-    assert.equal(navigateTo.calledOnce, true);
-    assert.equal(
-      navigateTo.calledWithExactly(
-        'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'
-      ),
-      true
-    );
+    // `chrome.runtime` exists, but `sendMessage` function is missing
+    { runtime: {} },
+  ].forEach(chrome => {
+    it('redirects to Via if `chrome.runtime.sendMessage` API not available', () => {
+      // Some browsers define window.chrome but not chrome.runtime.
+      window.chrome = chrome;
+      const navigateTo = sinon.stub();
+
+      redirect(navigateTo, settings);
+
+      assert.equal(navigateTo.calledOnce, true);
+      assert.equal(
+        navigateTo.calledWithExactly(
+          'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'
+        ),
+        true
+      );
+    });
   });
 
-  it('redirects to Via if window.chrome but no chrome.runtime', function () {
-    // Some browsers define window.chrome but not chrome.runtime.
-    window.chrome = {};
-    const navigateTo = sinon.stub();
-
-    redirect(navigateTo, settings);
-
-    assert.equal(navigateTo.calledOnce, true);
-    assert.equal(
-      navigateTo.calledWithExactly(
-        'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'
-      ),
-      true
-    );
-  });
-
-  it('redirects to Via if window.chrome but no sendMessage', function () {
-    // Some browsers might window.chrome but not chrome.runtime.sendMessage.
-    window.chrome = { runtime: {} };
-    const navigateTo = sinon.stub();
-
-    redirect(navigateTo, settings);
-
-    assert.equal(navigateTo.calledOnce, true);
-    assert.equal(
-      navigateTo.calledWithExactly(
-        'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'
-      ),
-      true
-    );
-  });
-
-  it('redirects to Via if Chrome but no extension', function () {
-    window.chrome = {
-      runtime: {
-        sendMessage: function (id, message, callbackFunction) {
-          callbackFunction(null);
-        },
-      },
-    };
-    const navigateTo = sinon.stub();
-
-    redirect(navigateTo, settings);
-
-    assert.equal(navigateTo.calledOnce, true);
-    assert.equal(
-      navigateTo.calledWithExactly(
-        'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'
-      ),
-      true
-    );
-  });
-
-  it('redirects to Via if lastError is defined', function () {
-    window.chrome = {
-      runtime: {
-        sendMessage: function (id, message, callbackFunction) {
-          callbackFunction('Hey!');
-        },
-        lastError: { message: 'There was an error' },
-      },
-    };
-    const navigateTo = sinon.stub();
-
-    redirect(navigateTo, settings);
-
-    assert.equal(navigateTo.calledOnce, true);
-    assert.equal(
-      navigateTo.calledWithExactly(
-        'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'
-      ),
-      true
-    );
-  });
-
-  it('logs an error if lastError is defined', function () {
-    window.chrome = {
-      runtime: {
-        sendMessage: function (id, message, callbackFunction) {
-          callbackFunction('Hey!');
-        },
-        lastError: { message: 'There was an error' },
-      },
-    };
-
-    redirect(sinon.stub(), settings);
-
-    assert.equal(console.error.called, true);
-  });
-
-  it('calls chrome.runtime.sendMessage correctly', function () {
+  it('sends "ping" request to extension', () => {
     window.chrome = {
       runtime: {
         sendMessage: sinon.stub(),
       },
     };
 
-    redirect(function () {}, settings);
+    redirect(() => {}, settings);
 
-    assert.equal(window.chrome.runtime.sendMessage.calledOnce, true);
-    assert.equal(
-      window.chrome.runtime.sendMessage.firstCall.args[0],
-      'test-extension-id'
-    );
-    assert.deepEqual(window.chrome.runtime.sendMessage.firstCall.args[1], {
-      type: 'ping',
-    });
-    assert.equal(
-      typeof window.chrome.runtime.sendMessage.firstCall.args[2],
-      'function'
+    sinon.assert.calledWith(
+      window.chrome.runtime.sendMessage,
+      'test-extension-id',
+      {
+        type: 'ping',
+        queryFeatures: ['activate'],
+      },
+      sinon.match.func
     );
   });
 
-  it('redirects to Chrome extension if installed', function () {
+  it('redirects to Via if "ping" request to extension fails', async () => {
     window.chrome = {
       runtime: {
-        sendMessage: function (id, message, callbackFunction) {
-          callbackFunction('Hey!');
+        sendMessage: (id, message, callbackFunction) => {
+          callbackFunction();
+        },
+        lastError: extensionConnectError,
+      },
+    };
+    const navigateTo = sinon.stub();
+
+    await redirect(navigateTo, settings);
+
+    sinon.assert.calledWith(console.error, window.chrome.runtime.lastError);
+    assert.equal(navigateTo.calledOnce, true);
+    assert.equal(
+      navigateTo.calledWithExactly(
+        'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q'
+      ),
+      true
+    );
+  });
+
+  it('redirects to extension if "ping" request succeeds and "activate" is not supported', async () => {
+    window.chrome = {
+      runtime: {
+        sendMessage: (id, message, callbackFunction) => {
+          callbackFunction({ type: 'pong' });
         },
       },
     };
     const navigateTo = sinon.stub();
 
-    redirect(navigateTo, settings);
+    await redirect(navigateTo, settings);
 
     assert.equal(navigateTo.calledOnce, true);
     assert.equal(
@@ -185,7 +136,31 @@ describe('#redirect', function () {
     );
   });
 
-  it('redirects to original URL if no Via URL provided', function () {
+  it('navigates to annotation URL using "activate" message to extension', async () => {
+    window.chrome = {
+      runtime: {
+        sendMessage: sinon.spy((id, message, callbackFunction) => {
+          callbackFunction({ type: 'pong', features: ['activate'] });
+        }),
+      },
+    };
+    const navigateTo = sinon.stub();
+
+    await redirect(navigateTo, settings);
+
+    sinon.assert.calledWith(
+      window.chrome.runtime.sendMessage,
+      'test-extension-id',
+      {
+        type: 'activate',
+        url: settings.extensionUrl.replace(/#.*$/, ''),
+        query: new URL(settings.extensionUrl).hash,
+      },
+      sinon.match.func
+    );
+  });
+
+  it('redirects to original URL if no Via URL provided', () => {
     settings.viaUrl = null;
     const navigateTo = sinon.stub();
 
