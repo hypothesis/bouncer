@@ -32,6 +32,29 @@ function defaultNavigateTo(url) {
 }
 
 /**
+ * Wrapper around `chrome.runtime.sendMessage` [1] which returns a Promise.
+ *
+ * [1] https://developer.chrome.com/docs/extensions/mv3/messaging/#external-webpage
+ *
+ * @param {string} extensionId
+ * @param {object} data
+ * @return {Promise} Promise that resolves with the result of the call returned
+ *   by the extension or rejects if an error was reported via `chrome.runtime.lastError`.
+ */
+function sendMessage(extensionId, data) {
+  const chrome = window.chrome;
+  return new Promise((resolve, reject) => {
+    chrome.runtime.sendMessage(extensionId, data, result => {
+      if (chrome.runtime.lastError) {
+        reject(chrome.runtime.lastError);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+}
+
+/**
  * Navigate the browser to the requested annotation.
  *
  * If the browser is Chrome and our Chrome extension is installed then
@@ -39,13 +62,18 @@ function defaultNavigateTo(url) {
  * If the Chrome extension isn't installed or the browser isn't Chrome then
  * navigate to the annotation's Via direct link.
  *
- * @param {(url: string) => void} [navigateTo]
- * @param {Settings} [settings]
+ * Returns a Promise which resolves after the navigation to the annotation's
+ * URL has been initiated.
+ *
+ * @param {(url: string) => void} [navigateTo] - Test seam. Function that
+ *   performs a navigation by modifying `location.href`.
+ * @param {Settings} [settings] - Test seam. Configuration for the extension
+ *   and redirect.
  */
-export function redirect(navigateTo, settings) {
-  navigateTo = navigateTo || defaultNavigateTo; // Test seam
-  settings = settings || getSettings(document); // Test seam
-
+export async function redirect(
+  navigateTo = defaultNavigateTo,
+  settings = getSettings(document)
+) {
   // If the proxy cannot be used with this URL, send the user directly to the
   // original page.
   if (!settings.viaUrl) {
@@ -57,26 +85,43 @@ export function redirect(navigateTo, settings) {
   if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
     // The user is using Chrome, redirect them to our Chrome extension if they
     // have it installed, via otherwise.
-    chrome.runtime.sendMessage(
-      settings.chromeExtensionId,
-      {type: 'ping'},
-      function (response) {
-        let url;
+    try {
+      const response = await sendMessage(settings.chromeExtensionId, {
+        type: 'ping',
+        queryFeatures: ['activate'],
+      });
+      // The user has our Chrome extension installed :)
+      if (response.features && response.features.includes('activate')) {
+        // Extension supports "activate" API that will let it handle
+        // redirection and activation.
+        const parsedURL = new URL(settings.extensionUrl);
+        const query = parsedURL.hash;
+        parsedURL.hash = '';
+        const urlWithoutFragment = parsedURL.toString();
 
-        if (response && !chrome.runtime.lastError) {
-          // The user has our Chrome extension installed :)
-          url = settings.extensionUrl;
-        } else {
-          if (chrome.runtime.lastError) {
-            console.error(chrome.runtime.lastError);
-          }
-          // The user doesn't have our Chrome extension installed :(
-          url = settings.viaUrl;
+        try {
+          await sendMessage(settings.chromeExtensionId, {
+            type: 'activate',
+            url: urlWithoutFragment,
+            query,
+          });
+        } catch (err) {
+          console.error('Failed to activate extension', err);
         }
-
-        navigateTo(url);
+      } else {
+        // For older extensions, fall back to a normal client-side redirect.
+        // The installed extension(s) will notice the URL fragment and
+        // activate. The downside is that if the user has multiple builds
+        // of the Hypothesis extension installed, it is unpredictable as
+        // to which will activate first and "win" the race to inject.
+        navigateTo(settings.extensionUrl);
       }
-    );
+    } catch (err) {
+      // The user doesn't have our Chrome extension installed, or we couldn't
+      // connect to it.
+      console.error(err);
+      navigateTo(settings.viaUrl);
+    }
   } else {
     // The user isn't using Chrome, just redirect them to Via.
     navigateTo(settings.viaUrl);
