@@ -22,7 +22,8 @@
  */
 function getSettings(document) {
   return JSON.parse(
-    document.querySelector('script.js-bouncer-settings').textContent);
+    document.querySelector('script.js-bouncer-settings').textContent
+  );
 }
 
 /** Navigate the browser to the given URL. */
@@ -82,6 +83,7 @@ export function redirect(navigateTo, settings) {
   }
 }
 
-if (!('__karma__' in window)) { // Check if in test environment
+if (!('__karma__' in window)) {
+  // Check if in test environment
   redirect();
 }
