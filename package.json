@@ -16,5 +16,13 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/hypothesis/bouncer.git"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "singleQuote": true,
+    "importOrder": [
+      "^[./]"
+    ],
+    "importOrderSeparation": true
   }
 }
