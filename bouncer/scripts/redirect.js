@@ -53,7 +53,7 @@ export function redirect(navigateTo, settings) {
     return;
   }
 
-  var chrome = window.chrome;
+  const chrome = window.chrome;
   if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
     // The user is using Chrome, redirect them to our Chrome extension if they
     // have it installed, via otherwise.
@@ -61,7 +61,7 @@ export function redirect(navigateTo, settings) {
       settings.chromeExtensionId,
       {type: 'ping'},
       function (response) {
-        var url;
+        let url;
 
         if (response && !chrome.runtime.lastError) {
           // The user has our Chrome extension installed :)
