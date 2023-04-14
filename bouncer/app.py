@@ -1,3 +1,4 @@
+import json
 import os
 
 import pyramid.config
@@ -20,10 +21,18 @@ def settings():
     else:
         debug = False
 
+    extension_ids = os.environ.get(
+        "CHROME_EXTENSION_ID", "bjfhmglciegochdpefhhlphglcehbmek"
+    )
+    if extension_ids.strip().startswith("{"):
+        extension_ids = json.loads(extension_ids)
+        if not extension_ids.get("default"):
+            raise Exception('CHROME_EXTENSION_ID map must have a "default" key')
+    else:
+        extension_ids = {"default": extension_ids}
+
     result = {
-        "chrome_extension_id": os.environ.get(
-            "CHROME_EXTENSION_ID", "bjfhmglciegochdpefhhlphglcehbmek"
-        ),
+        "chrome_extension_id": extension_ids,
         "debug": debug,
         "elasticsearch_index": os.environ.get("ELASTICSEARCH_INDEX", "hypothesis"),
         "hypothesis_authority": os.environ.get("HYPOTHESIS_AUTHORITY", "localhost"),

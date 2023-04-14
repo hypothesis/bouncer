@@ -1,3 +1,4 @@
+import json
 from unittest import mock
 
 import pytest
@@ -11,7 +12,7 @@ def test_the_default_settings(config, pyramid):
 
     pyramid.config.Configurator.assert_called_once_with(
         settings={
-            "chrome_extension_id": "bjfhmglciegochdpefhhlphglcehbmek",
+            "chrome_extension_id": {"default": "bjfhmglciegochdpefhhlphglcehbmek"},
             "debug": False,
             "elasticsearch_index": "hypothesis",
             "hypothesis_authority": "localhost",
@@ -19,6 +20,34 @@ def test_the_default_settings(config, pyramid):
             "via_base_url": "https://via.hypothes.is",
         }
     )
+
+
+@pytest.mark.parametrize(
+    "envvar,extension_id",
+    [
+        ("abc", {"default": "abc"}),
+        (
+            json.dumps({"default": "abc", "bar.com": "def"}),
+            {"default": "abc", "bar.com": "def"},
+        ),
+    ],
+)
+def test_chrome_extension_id(config, os, envvar, extension_id, pyramid):
+    os.environ["CHROME_EXTENSION_ID"] = envvar
+
+    app()
+
+    settings = pyramid.config.Configurator.call_args_list[0][1]["settings"]
+    assert settings["chrome_extension_id"] == extension_id
+
+
+def test_raises_if_chrome_extension_id_invalid(config, os, pyramid):
+    os.environ["CHROME_EXTENSION_ID"] = "{}"
+
+    with pytest.raises(
+        Exception, match='CHROME_EXTENSION_ID map must have a "default" key'
+    ):
+        app()
 
 
 @pytest.mark.parametrize(

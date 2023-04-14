@@ -80,12 +80,15 @@ class AnnotationController(object):
 
         title = util.get_boilerplate_quote(document_uri)
 
+        default_extension = settings["chrome_extension_id"]["default"]
+        extension_id = settings["chrome_extension_id"].get(authority, default_extension)
+
         return {
             "data": json.dumps(
                 {
                     # Warning: variable names change from python_style to
                     # javaScriptStyle here!
-                    "chromeExtensionId": settings["chrome_extension_id"],
+                    "chromeExtensionId": extension_id,
                     "viaUrl": via_url,
                     "extensionUrl": extension_url,
                 }
@@ -164,7 +167,9 @@ def goto_url(request):
     return {
         "data": json.dumps(
             {
-                "chromeExtensionId": settings["chrome_extension_id"],
+                # nb. We always use the default extension ID here, because we
+                # don't have an annotation to determine the authority.
+                "chromeExtensionId": settings["chrome_extension_id"]["default"],
                 "viaUrl": via_url,
                 "extensionUrl": extension_url,
             }
