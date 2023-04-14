@@ -62,6 +62,12 @@ class TestAnnotationController(object):
         data = json.loads(template_data["data"])
         assert data["chromeExtensionId"] == "test-extension-id"
 
+    def test_annotation_returns_chrome_extension_id_for_authority(self, parse_document):
+        parse_document.return_value["authority"] = "alt.authority"
+        template_data = views.AnnotationController(mock_request()).annotation()
+        data = json.loads(template_data["data"])
+        assert data["chromeExtensionId"] == "alt-extension-id"
+
     def test_annotation_returns_quote(self):
         template_data = views.AnnotationController(mock_request()).annotation()
         quote = template_data["quote"]
@@ -336,7 +342,10 @@ def parse_document(request):
 def mock_request():
     request = testing.DummyRequest()
     request.registry.settings = {
-        "chrome_extension_id": "test-extension-id",
+        "chrome_extension_id": {
+            "default": "test-extension-id",
+            "alt.authority": "alt-extension-id",
+        },
         "debug": False,
         "elasticsearch_url": "http://localhost:9200",
         "elasticsearch_index": "hypothesis",
