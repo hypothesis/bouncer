@@ -52,7 +52,7 @@ markupsafe==1.1.1
     #   -r requirements/requirements.txt
     #   jinja2
     #   pyramid-jinja2
-mock==5.0.1
+mock==5.0.2
     # via -r requirements/tests.in
 packaging==20.9
     # via
