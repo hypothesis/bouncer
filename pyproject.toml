@@ -4,6 +4,7 @@ filterwarnings = [
     "error", # Fail the tests if there are any warnings.
     "ignore:^find_module\\(\\) is deprecated and slated for removal in Python 3.12; use find_spec\\(\\) instead$:DeprecationWarning:importlib",
     "ignore:^FileFinder.find_loader\\(\\) is deprecated and slated for removal in Python 3.12; use find_spec\\(\\) instead$:DeprecationWarning:importlib",
+    "ignore:^pkg_resources is deprecated as an API:DeprecationWarning:pkg_resources",
     "ignore:^Deprecated call to .pkg_resources\\.declare_namespace\\('.*'\\).\\.:DeprecationWarning:pkg_resources",
 ]
 
