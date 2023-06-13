@@ -110,7 +110,7 @@ pyramid==2.0.1
     #   pyramid-jinja2
 pyramid-jinja2==2.10
     # via -r requirements/requirements.txt
-requests==2.28.2
+requests==2.31.0
     # via -r requirements/requirements.txt
 sentry-sdk==1.14.0
     # via
