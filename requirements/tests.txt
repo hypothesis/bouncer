@@ -27,7 +27,7 @@ factory-boy==3.2.1
     # via -r requirements/tests.in
 faker==8.1.2
     # via factory-boy
-gunicorn==20.1.0
+gunicorn==21.0.1
     # via -r requirements/requirements.txt
 h-pyramid-sentry==1.2.4
     # via -r requirements/requirements.txt
@@ -54,9 +54,11 @@ markupsafe==1.1.1
     #   pyramid-jinja2
 mock==5.1.0
     # via -r requirements/tests.in
-packaging==20.9
+packaging==23.1
     # via
+    #   -r requirements/requirements.txt
     #   build
+    #   gunicorn
     #   pytest
 pastedeploy==2.1.0
     # via
@@ -81,8 +83,6 @@ plaster-pastedeploy==0.7
     #   pyramid
 pluggy==0.13.1
     # via pytest
-pyparsing==2.4.7
-    # via packaging
 pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
