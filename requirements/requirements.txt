@@ -13,7 +13,7 @@ charset-normalizer==2.0.1
     # via requests
 elasticsearch==6.3.1
     # via -r requirements/requirements.in
-gunicorn==20.1.0
+gunicorn==21.1.0
     # via -r requirements/requirements.in
 h-pyramid-sentry==1.2.4
     # via -r requirements/requirements.in
@@ -27,6 +27,8 @@ markupsafe==1.1.1
     # via
     #   jinja2
     #   pyramid-jinja2
+packaging==23.1
+    # via gunicorn
 pastedeploy==2.1.0
     # via plaster-pastedeploy
 plaster==1.0

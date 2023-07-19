@@ -29,7 +29,7 @@ elasticsearch==6.3.1
     # via -r requirements/requirements.txt
 executing==0.8.2
     # via stack-data
-gunicorn==20.1.0
+gunicorn==21.1.0
     # via -r requirements/requirements.txt
 h-pyramid-sentry==1.2.4
     # via -r requirements/requirements.txt
@@ -64,8 +64,11 @@ markupsafe==1.1.1
     #   pyramid-jinja2
 matplotlib-inline==0.1.2
     # via ipython
-packaging==21.3
-    # via build
+packaging==23.1
+    # via
+    #   -r requirements/requirements.txt
+    #   build
+    #   gunicorn
 parso==0.8.2
     # via jedi
 pastedeploy==2.1.0
@@ -101,8 +104,6 @@ pure-eval==0.2.1
     # via stack-data
 pygments==2.9.0
     # via ipython
-pyparsing==3.0.9
-    # via packaging
 pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
