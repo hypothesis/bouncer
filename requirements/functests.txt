@@ -23,7 +23,7 @@ elasticsearch==6.3.1
     # via -r requirements/requirements.txt
 exceptiongroup==1.0.0rc9
     # via pytest
-gunicorn==20.1.0
+gunicorn==21.2.0
     # via -r requirements/requirements.txt
 h-matchers==1.2.15
     # via -r requirements/functests.in
@@ -50,9 +50,11 @@ markupsafe==1.1.1
     #   -r requirements/requirements.txt
     #   jinja2
     #   pyramid-jinja2
-packaging==20.9
+packaging==23.1
     # via
+    #   -r requirements/requirements.txt
     #   build
+    #   gunicorn
     #   pytest
 pastedeploy==2.1.0
     # via
@@ -77,8 +79,6 @@ plaster-pastedeploy==0.7
     #   pyramid
 pluggy==0.13.1
     # via pytest
-pyparsing==2.4.7
-    # via packaging
 pyramid==2.0.1
     # via
     #   -r requirements/requirements.txt
