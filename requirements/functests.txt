@@ -8,7 +8,7 @@ beautifulsoup4==4.9.3
     # via webtest
 build==0.8.0
     # via pip-tools
-certifi==2023.5.7
+certifi==2023.7.22
     # via
     #   -r requirements/requirements.txt
     #   requests
