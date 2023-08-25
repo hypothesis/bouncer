@@ -6,17 +6,17 @@
 #
 certifi==2023.7.22
     # via
-    #   -r requirements/requirements.in
+    #   -r requirements.in
     #   requests
     #   sentry-sdk
 charset-normalizer==2.0.1
     # via requests
 elasticsearch==6.3.1
-    # via -r requirements/requirements.in
+    # via -r requirements.in
 gunicorn==21.2.0
-    # via -r requirements/requirements.in
+    # via -r requirements.in
 h-pyramid-sentry==1.2.4
-    # via -r requirements/requirements.in
+    # via -r requirements.in
 hupper==1.10.2
     # via pyramid
 idna==2.10
@@ -37,15 +37,15 @@ plaster==1.0
     #   pyramid
 plaster-pastedeploy==0.7
     # via pyramid
-pyramid==2.0.1
+pyramid==2.0.2
     # via
-    #   -r requirements/requirements.in
+    #   -r requirements.in
     #   h-pyramid-sentry
     #   pyramid-jinja2
 pyramid-jinja2==2.10
-    # via -r requirements/requirements.in
+    # via -r requirements.in
 requests==2.31.0
-    # via -r requirements/requirements.in
+    # via -r requirements.in
 sentry-sdk==1.14.0
     # via h-pyramid-sentry
 translationstring==1.4
