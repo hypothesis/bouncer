@@ -83,7 +83,7 @@ plaster-pastedeploy==0.7
     #   pyramid
 pluggy==0.13.1
     # via pytest
-pyramid==2.0.1
+pyramid==2.0.2
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
