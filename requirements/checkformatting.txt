@@ -4,7 +4,7 @@
 #
 #    pip-compile --allow-unsafe requirements/checkformatting.in
 #
-black==23.7.0
+black==23.9.1
     # via -r requirements/checkformatting.in
 build==0.8.0
     # via pip-tools
@@ -38,6 +38,7 @@ tomli==2.0.1
     # via
     #   black
     #   build
+    #   pep517
     #   pip-tools
 typing-extensions==4.3.0
     # via black
