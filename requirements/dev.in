@@ -2,4 +2,5 @@ pip-tools
 pip-sync-faster
 ipython
 ipdb
+supervisor
 -r requirements.txt

@@ -4,11 +4,11 @@ from unittest import mock
 import pytest
 from pyramid.config import Configurator
 
-from bouncer.app import app
+from bouncer.app import create_app
 
 
 def test_the_default_settings(config, pyramid):
-    app()
+    create_app()
 
     pyramid.config.Configurator.assert_called_once_with(
         settings={
@@ -35,7 +35,7 @@ def test_the_default_settings(config, pyramid):
 def test_chrome_extension_id(config, os, envvar, extension_id, pyramid):
     os.environ["CHROME_EXTENSION_ID"] = envvar
 
-    app()
+    create_app()
 
     settings = pyramid.config.Configurator.call_args_list[0][1]["settings"]
     assert settings["chrome_extension_id"] == extension_id
@@ -47,7 +47,7 @@ def test_raises_if_chrome_extension_id_invalid(config, os, pyramid):
     with pytest.raises(
         Exception, match='CHROME_EXTENSION_ID map must have a "default" key'
     ):
-        app()
+        create_app()
 
 
 @pytest.mark.parametrize(
@@ -62,7 +62,7 @@ def test_raises_if_chrome_extension_id_invalid(config, os, pyramid):
 def test_via_base_url(config, os, envvar, base_url, pyramid):
     os.environ["VIA_BASE_URL"] = envvar
 
-    app()
+    create_app()
 
     settings = pyramid.config.Configurator.call_args_list[0][1]["settings"]
     assert settings["via_base_url"] == base_url

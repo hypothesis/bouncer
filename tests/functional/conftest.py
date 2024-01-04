@@ -1,7 +1,7 @@
 import pytest
 from webtest import TestApp
 
-from bouncer.app import app as create_app
+from bouncer.app import create_app
 
 
 @pytest.fixture
