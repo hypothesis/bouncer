@@ -45,7 +45,7 @@ def settings():
     return result
 
 
-def app():
+def create_app(_=None, **_settings):
     """Configure and return the WSGI app."""
     config = pyramid.config.Configurator(settings=settings())
     config.add_static_view(name="static", path="static")

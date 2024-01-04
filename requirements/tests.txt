@@ -54,6 +54,8 @@ markupsafe==1.1.1
     #   pyramid-jinja2
 mock==5.1.0
     # via -r requirements/tests.in
+newrelic==9.4.0
+    # via -r requirements/requirements.txt
 packaging==23.1
     # via
     #   -r requirements/requirements.txt

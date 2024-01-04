@@ -7,3 +7,5 @@
 
 node_modules
 bouncer/static/scripts/bundle.js
+supervisord.log
+supervisord.pid
