@@ -28,7 +28,9 @@ class TestAnnotationController(object):
 
     def test_annotation_raises_http_not_found_if_get_raises_not_found(self):
         request = mock_request()
-        request.es.get.side_effect = es_exceptions.NotFoundError
+        request.es.get.side_effect = es_exceptions.NotFoundError(
+            message="Not found", meta=None, body=None
+        )
 
         with pytest.raises(httpexceptions.HTTPNotFound):
             views.AnnotationController(request).annotation()
@@ -305,7 +307,7 @@ class TestHealthcheck(object):
 
     def test_failed_es_request(self):
         request = mock_request()
-        exc = es_exceptions.ConnectionTimeout()
+        exc = es_exceptions.ConnectionTimeout("ES connection timeout")
         request.es.cluster.health.side_effect = exc
 
         with pytest.raises(views.FailedHealthcheck) as e:

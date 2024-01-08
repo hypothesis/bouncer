@@ -234,7 +234,7 @@ def healthcheck(request):
     index = request.registry.settings["elasticsearch_index"]
     try:
         status = request.es.cluster.health(index=index)["status"]
-    except exceptions.ElasticsearchException as exc:
+    except (exceptions.ApiError, exceptions.TransportError) as exc:
         raise FailedHealthcheck("elasticsearch exception") from exc
 
     if status not in ("yellow", "green"):
