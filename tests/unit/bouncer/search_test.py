@@ -6,7 +6,7 @@ from bouncer.search import get_client, includeme
 
 class TestGetClient(object):
     def test_returns_client(self):
-        client = get_client({"elasticsearch_url": "foo:9200"})
+        client = get_client({"elasticsearch_url": "http://foo:9200"})
 
         assert isinstance(client, Elasticsearch)
 
@@ -19,7 +19,7 @@ class TestGetClient(object):
 
 def test_includeme():
     configurator = MagicMock()
-    configurator.registry.settings = {"elasticsearch_url": "foo:9200"}
+    configurator.registry.settings = {"elasticsearch_url": "http://foo:9200"}
 
     includeme(configurator)
 
