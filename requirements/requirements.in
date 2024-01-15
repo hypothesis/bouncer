@@ -1,5 +1,5 @@
 certifi
-elasticsearch
+elasticsearch==6.3.1
 gunicorn
 h-pyramid-sentry
 pyramid
