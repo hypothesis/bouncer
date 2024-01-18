@@ -5,7 +5,7 @@ MAINTAINER Hypothes.is Project and contributors
 RUN apk add --no-cache \
   curl \
   nodejs \
-  nodejs-npm \
+  npm \
   supervisor
 
 # Create the bouncer user, group, home directory and package directory.
