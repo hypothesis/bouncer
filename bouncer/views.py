@@ -5,6 +5,7 @@ import h_pyramid_sentry
 from elasticsearch import exceptions
 from pyramid import httpexceptions, i18n, view
 from pyramid.httpexceptions import HTTPNoContent
+from sentry_sdk import capture_message
 
 from bouncer import util
 from bouncer.embed_detector import url_embeds_client
@@ -239,6 +240,9 @@ def healthcheck(request):
 
     if status not in ("yellow", "green"):
         raise FailedHealthcheck("cluster status was {!r}".format(status))
+
+    if "sentry" in request.params:
+        capture_message("Test message from the healthcheck() view")
 
     return {"status": "okay"}
 

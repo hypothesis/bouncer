@@ -295,13 +295,14 @@ class TestErrorController(object):
 
 
 class TestHealthcheck(object):
-    def test_ok(self):
+    def test_ok(self, capture_message):
         request = mock_request()
         request.es.cluster.health.return_value = {"status": "green"}
 
         result = views.healthcheck(request)
 
         assert result == {"status": "okay"}
+        capture_message.assert_not_called()
 
     def test_failed_es_request(self):
         request = mock_request()
@@ -321,6 +322,17 @@ class TestHealthcheck(object):
             views.healthcheck(request)
 
         assert "cluster status" in str(e.value)
+
+    def test_sentry(self, capture_message):
+        request = mock_request()
+        request.params["sentry"] = ""
+        request.es.cluster.health.return_value = {"status": "green"}
+
+        views.healthcheck(request)
+
+        capture_message.assert_called_once_with(
+            "Test message from the healthcheck() view"
+        )
 
 
 @pytest.fixture
@@ -377,3 +389,8 @@ def url_embeds_client():
     yield url_embeds_client
 
     patcher.stop()
+
+
+@pytest.fixture(autouse=True)
+def capture_message(patch):
+    return patch("bouncer.views.capture_message")
