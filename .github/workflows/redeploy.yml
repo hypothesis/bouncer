@@ -5,9 +5,6 @@ concurrency:
 on:
   workflow_dispatch:
     inputs:
-      qa:
-        type: boolean
-        description: Redeploy QA
       staging:
         type: boolean
         description: Redeploy Staging
@@ -15,18 +12,6 @@ on:
         type: boolean
         description: Redeploy Production
 jobs:
-  qa:
-    name: QA
-    if: inputs.qa
-    uses: hypothesis/workflows/.github/workflows/deploy.yml@main
-    with:
-      operation: redeploy
-      github_environment_name: QA
-      github_environment_url: https://qa.hyp.is/FiqzonGfEe2o-AfEssZXnw/en.wikipedia.org/wiki/Wikipedia:Terminal_Event_Management_Policy
-      aws_region: us-west-1
-      elasticbeanstalk_application: bouncer
-      elasticbeanstalk_environment: qa
-    secrets: inherit
   staging:
     name: Staging
     if: inputs.staging

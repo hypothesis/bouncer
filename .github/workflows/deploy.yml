@@ -24,19 +24,6 @@ jobs:
     with:
       Application: ${{ github.event.repository.name }}
     secrets: inherit
-  qa:
-    name: QA
-    needs: [docker_hub]
-    uses: hypothesis/workflows/.github/workflows/deploy.yml@main
-    with:
-      operation: deploy
-      github_environment_name: QA
-      github_environment_url: https://qa.hyp.is/FiqzonGfEe2o-AfEssZXnw/en.wikipedia.org/wiki/Wikipedia:Terminal_Event_Management_Policy
-      aws_region: us-west-1
-      elasticbeanstalk_application: bouncer
-      elasticbeanstalk_environment: qa
-      docker_tag: ${{ needs.Docker_Hub.outputs.docker_tag }}
-    secrets: inherit
   staging:
     name: Staging
     needs: [docker_hub]
@@ -52,7 +39,7 @@ jobs:
     secrets: inherit
   production:
     name: Production
-    needs: [docker_hub, qa]
+    needs: [docker_hub, staging]
     uses: hypothesis/workflows/.github/workflows/deploy.yml@main
     with:
       operation: deploy
