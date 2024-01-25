@@ -1,6 +1,6 @@
 from urllib import parse
 
-import jinja2
+from markupsafe import Markup
 from pyramid import i18n
 
 _ = i18n.TranslationStringFactory(__package__)
@@ -148,8 +148,8 @@ def get_pretty_url(url):
         return None
 
     pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
-    if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:  # pragma: nocover
-        pretty_url += jinja2.Markup("&hellip;")
+    if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
+        pretty_url += Markup("&hellip;")
     return pretty_url
 
 

@@ -110,6 +110,12 @@ def test_parse_document_returns_authority(es_annotation_doc):
     assert authority == "hypothes.is"
 
 
+def test_get_pretty_url_for_long_url():
+    long_netloc = "https://www.verylongdomainthatkeepsgoingandgoing.com"
+
+    assert "www.verylongdomainthatkeepsgoi&hellip;" == util.get_pretty_url(long_netloc)
+
+
 @pytest.fixture
 def es_annotation_doc():
     """
