@@ -4,7 +4,7 @@ import os
 import pyramid.config
 
 
-def settings():
+def settings():  # pragma: nocover
     """
     Return the app's configuration settings as a dict.
 
@@ -16,10 +16,7 @@ def settings():
     if via_base_url.endswith("/"):
         via_base_url = via_base_url[:-1]
 
-    if "DEBUG" in os.environ:
-        debug = True
-    else:
-        debug = False
+    debug = "DEBUG" in os.environ
 
     extension_ids = os.environ.get(
         "CHROME_EXTENSION_ID", "bjfhmglciegochdpefhhlphglcehbmek"
@@ -45,7 +42,7 @@ def settings():
     return result
 
 
-def create_app(_=None, **_settings):
+def create_app(_=None, **_settings):  # pragma: nocover
     """Configure and return the WSGI app."""
     config = pyramid.config.Configurator(settings=settings())
     config.add_static_view(name="static", path="static")

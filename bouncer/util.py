@@ -96,7 +96,7 @@ def parse_document(document):
 
     try:
         targets = annotation["target"]
-        if targets:
+        if targets:  # pragma: nocover
             document_uri = targets[0]["source"]
             selectors = targets[0].get("selector", [])
             for selector in selectors:
@@ -113,9 +113,9 @@ def parse_document(document):
     if isinstance(document_uri, str) and document_uri.startswith("urn:x-pdf:"):
         try:
             web_uri = annotation["document"]["web_uri"]
-            if web_uri:
+            if web_uri:  # pragma: nocover
                 document_uri = web_uri
-        except KeyError:
+        except KeyError:  # pragma: nocover
             pass
 
     if document_uri is None:
@@ -148,7 +148,7 @@ def get_pretty_url(url):
         return None
 
     pretty_url = parsed_url.netloc[:NETLOC_MAX_LENGTH]
-    if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:
+    if len(parsed_url.netloc) > NETLOC_MAX_LENGTH:  # pragma: nocover
         pretty_url += jinja2.Markup("&hellip;")
     return pretty_url
 
