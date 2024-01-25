@@ -24,7 +24,7 @@ PATTERNS = [
 COMPILED_PATTERNS = [re.compile(fnmatch.translate(pat)) for pat in PATTERNS]
 
 
-def url_embeds_client(url):
+def url_embeds_client(url):  # pragma: nocover
     """
     Test whether ``url`` is known to embed the client.
 

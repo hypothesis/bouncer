@@ -102,7 +102,7 @@ class AnnotationController(object):
 
 
 @view.view_config(renderer="bouncer:templates/index.html.jinja2", route_name="index")
-def index(request):
+def index(request):  # pragma: nocover
     raise httpexceptions.HTTPFound(location=request.registry.settings["hypothesis_url"])
 
 

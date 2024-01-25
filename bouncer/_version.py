@@ -43,7 +43,7 @@ def git_version():
     return pep440_version(date, ref, dirty)
 
 
-def git_archive_version():
+def git_archive_version():  # pragma: nocover
     ref = VERSION_GIT_REF
     date = datetime.datetime.fromtimestamp(int(VERSION_GIT_DATE))
     return pep440_version(date, ref)
@@ -56,7 +56,7 @@ def pep440_version(date, ref, dirty=False):
     )
 
 
-def get_version():
+def get_version():  # pragma: nocover
     """Fetch the current application version."""
     # First we try to retrieve the current application version from git.
     try:

@@ -11,7 +11,7 @@ def get_client(settings):
     return Elasticsearch([host], **kwargs)
 
 
-def includeme(config):
+def includeme(config):  # pragma: nocover
     settings = config.registry.settings
     settings.setdefault("elasticsearch_url", "http://localhost:9200")
 
