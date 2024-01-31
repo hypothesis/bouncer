@@ -88,9 +88,9 @@ class TestAnnotationController(object):
         )
 
     def test_annotation_strips_fragment_identifiers(self, parse_document):
-        parse_document.return_value[
-            "document_uri"
-        ] = "http://example.com/example.html#foobar"
+        parse_document.return_value["document_uri"] = (
+            "http://example.com/example.html#foobar"
+        )
         template_data = views.AnnotationController(mock_request()).annotation()
 
         data = json.loads(template_data["data"])

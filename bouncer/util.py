@@ -23,12 +23,10 @@ ANNOTATION_BOILERPLATE_TEXT = _("Follow this link to see the annotation in conte
 
 
 class DeletedAnnotationError(Exception):
-
     """Raised if an annotation has been marked as deleted in Elasticsearch."""
 
 
 class InvalidAnnotationError(Exception):
-
     """Raised if an annotation from Elasticsearch can't be parsed."""
 
     def __init__(self, message, reason):
