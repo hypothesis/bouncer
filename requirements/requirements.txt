@@ -49,7 +49,9 @@ pyramid-jinja2==2.10
 requests==2.31.0
     # via -r requirements/requirements.in
 sentry-sdk==1.39.2
-    # via h-pyramid-sentry
+    # via
+    #   -r requirements/requirements.in
+    #   h-pyramid-sentry
 translationstring==1.4
     # via pyramid
 urllib3==2.1.0

@@ -1,6 +1,7 @@
 certifi
 elasticsearch==6.3.1
 gunicorn
+sentry-sdk
 h-pyramid-sentry
 pyramid
 pyramid-jinja2
