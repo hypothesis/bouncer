@@ -105,7 +105,7 @@ pyramid==2.0.2
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
     #   pyramid-jinja2
-pyramid-jinja2==2.10
+pyramid-jinja2==2.10.1
     # via -r requirements/requirements.txt
 requests==2.31.0
     # via -r requirements/requirements.txt
