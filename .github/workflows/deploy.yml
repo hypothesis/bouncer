@@ -31,7 +31,7 @@ jobs:
     with:
       operation: deploy
       github_environment_name: Staging
-      github_environment_url: https://staging.hyp.is/FiqzonGfEe2o-AfEssZXnw/en.wikipedia.org/wiki/Wikipedia:Terminal_Event_Management_Policy
+      github_environment_url: https://staging.hyp.is/b01DwMzhEe6X2ssmLT58kw/en.wikipedia.org/wiki/Wikipedia:Terminal_Event_Management_Policy
       aws_region: us-west-1
       elasticbeanstalk_application: bouncer
       elasticbeanstalk_environment: staging
