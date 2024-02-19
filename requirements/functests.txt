@@ -62,7 +62,7 @@ pastedeploy==3.1.0
     #   plaster-pastedeploy
 pip-sync-faster==0.0.3
     # via -r requirements/functests.in
-pip-tools==7.3.0
+pip-tools==7.4.0
     # via
     #   -r requirements/functests.in
     #   pip-sync-faster
@@ -78,7 +78,9 @@ plaster-pastedeploy==1.0.1
 pluggy==1.3.0
     # via pytest
 pyproject-hooks==1.0.0
-    # via build
+    # via
+    #   build
+    #   pip-tools
 pyramid==2.0.2
     # via
     #   -r requirements/requirements.txt
