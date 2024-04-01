@@ -43,7 +43,7 @@ importlib-metadata==7.0.1
     # via pip-sync-faster
 ipdb==0.13.13
     # via -r requirements/dev.in
-ipython==8.22.2
+ipython==8.23.0
     # via
     #   -r requirements/dev.in
     #   ipdb
@@ -129,6 +129,8 @@ translationstring==1.4
     # via
     #   -r requirements/requirements.txt
     #   pyramid
+typing-extensions==4.10.0
+    # via ipython
 urllib3==2.1.0
     # via
     #   -r requirements/requirements.txt
