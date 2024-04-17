@@ -21,7 +21,7 @@ click==8.1.7
     # via pip-tools
 elasticsearch==6.3.1
     # via -r requirements.txt
-gunicorn==21.2.0
+gunicorn==22.0.0
     # via -r requirements.txt
 h-matchers==1.2.15
     # via -r functests.in
