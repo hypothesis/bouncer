@@ -96,7 +96,7 @@ pytest==8.2.0
     # via -r tests.in
 python-dateutil==2.8.2
     # via faker
-requests==2.31.0
+requests==2.32.0
     # via -r requirements.txt
 sentry-sdk==2.0.1
     # via

@@ -90,7 +90,7 @@ pyramid-jinja2==2.10.1
     # via -r requirements.txt
 pytest==8.2.0
     # via -r functests.in
-requests==2.31.0
+requests==2.32.0
     # via -r requirements.txt
 sentry-sdk==2.0.1
     # via
