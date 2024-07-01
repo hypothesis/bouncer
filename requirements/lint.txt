@@ -16,7 +16,7 @@ mccabe==0.7.0
     # via flake8
 packaging==23.2
     # via build
-pip-sync-faster==0.0.3
+pip-sync-faster==0.0.4
     # via -r requirements/lint.in
 pip-tools==7.4.1
     # via
