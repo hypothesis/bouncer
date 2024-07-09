@@ -149,7 +149,7 @@ webob==1.8.7
     #   pyramid
 wheel==0.42.0
     # via pip-tools
-zipp==3.17.0
+zipp==3.19.1
     # via importlib-metadata
 zope-deprecation==5.0
     # via
