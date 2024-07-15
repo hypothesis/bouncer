@@ -71,7 +71,7 @@ zope-interface==6.1
     # via pyramid
 
 # The following packages are considered to be unsafe in a requirements file:
-setuptools==69.0.3
+setuptools==70.0.0
     # via
     #   pyramid
     #   zope-deprecation
