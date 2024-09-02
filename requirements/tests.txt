@@ -21,7 +21,7 @@ coverage==7.6.0
     # via -r requirements/tests.in
 elasticsearch==6.3.1
     # via -r requirements/requirements.txt
-factory-boy==3.3.0
+factory-boy==3.3.1
     # via -r requirements/tests.in
 faker==22.2.0
     # via factory-boy
