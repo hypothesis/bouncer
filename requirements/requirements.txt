@@ -48,7 +48,7 @@ pyramid-jinja2==2.10.1
     # via -r requirements/requirements.in
 requests==2.32.3
     # via -r requirements/requirements.in
-sentry-sdk==2.13.0
+sentry-sdk==2.14.0
     # via
     #   -r requirements/requirements.in
     #   h-pyramid-sentry
