@@ -11,7 +11,3 @@ filterwarnings = [
     "ignore:^\\'cgi\\' is deprecated and slated for removal in Python 3\\.13:DeprecationWarning:webob",
 
 ]
-
-[tool.hdev]
-project_name = "bouncer"
-project_type = "application"
