@@ -92,7 +92,7 @@ pytest==8.3.3
     # via -r requirements/functests.in
 requests==2.32.3
     # via -r requirements/requirements.txt
-sentry-sdk==2.14.0
+sentry-sdk==2.17.0
     # via
     #   -r requirements/requirements.txt
     #   h-pyramid-sentry
