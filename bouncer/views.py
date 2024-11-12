@@ -2,7 +2,7 @@ import json
 from urllib import parse
 
 import h_pyramid_sentry
-from elasticsearch import exceptions
+from elasticsearch import Elasticsearch, exceptions
 from pyramid import httpexceptions, i18n, view
 from pyramid.httpexceptions import HTTPNoContent
 from sentry_sdk import capture_message
@@ -28,9 +28,15 @@ class AnnotationController(object):
         settings = self.request.registry.settings
 
         try:
+            es7_or_later = _es_server_version(self.request.es) >= 7
             document = self.request.es.get(
                 index=settings["elasticsearch_index"],
-                doc_type="annotation",
+                # Set `doc_type` to the name of the mapping type used by h
+                # when talking to an ES 6 server, or the endpoint name "_doc"
+                # in ES 7+.
+                #
+                # See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/removal-of-types.html
+                doc_type="_doc" if es7_or_later else "annotation",
                 id=self.request.matchdict["id"],
             )
         except exceptions.NotFoundError:
@@ -100,6 +106,13 @@ class AnnotationController(object):
             "text": text,
             "title": title,
         }
+
+
+def _es_server_version(es: Elasticsearch) -> int:
+    """Return the major version of the Elasticsearch server."""
+    server_version = es.info()["version"]["number"]
+    major, *other = server_version.split(".")
+    return int(major)
 
 
 @view.view_config(renderer="bouncer:templates/index.html.jinja2", route_name="index")
