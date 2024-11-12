@@ -10,12 +10,20 @@ from bouncer import util, views
 
 @pytest.mark.usefixtures("parse_document")
 class TestAnnotationController(object):
-    def test_annotation_calls_get(self):
+    @pytest.mark.parametrize(
+        "es_version,doc_type",
+        [
+            ("6.2.0", "annotation"),
+            ("7.10.0", "_doc"),
+        ],
+    )
+    def test_annotation_calls_get(self, es_version, doc_type):
         request = mock_request()
+        request.es.info.return_value["version"]["number"] = es_version
         views.AnnotationController(request).annotation()
 
         request.es.get.assert_called_once_with(
-            index="hypothesis", doc_type="annotation", id="AVLlVTs1f9G3pW-EYc6q"
+            index="hypothesis", doc_type=doc_type, id="AVLlVTs1f9G3pW-EYc6q"
         )
 
     def test_annotation_raises_http_not_found_if_annotation_deleted(
@@ -375,6 +383,11 @@ def mock_request():
             "uri": "http://www.example.com/example.html",
             "group": "__world__",
         },
+    }
+    request.es.info.return_value = {
+        "version": {
+            "number": "6.2.0",
+        }
     }
     request.raven = mock.Mock()
     return request
