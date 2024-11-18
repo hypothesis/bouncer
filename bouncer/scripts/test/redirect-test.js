@@ -169,4 +169,14 @@ describe('#redirect', () => {
     assert.isTrue(navigateTo.calledOnce);
     assert.isTrue(navigateTo.calledWithExactly(settings.extensionUrl));
   });
+
+  it('redirects to Via if `alwaysUseVia` is true', () => {
+    settings.alwaysUseVia = true;
+    const navigateTo = sinon.stub();
+
+    redirect(navigateTo, settings);
+
+    assert.isTrue(navigateTo.calledOnce);
+    assert.isTrue(navigateTo.calledWithExactly(settings.viaUrl));
+  });
 });

@@ -92,15 +92,19 @@ def parse_document(document):
     if not text:
         text = ANNOTATION_BOILERPLATE_TEXT
 
+    has_media_time = False
+
     try:
         targets = annotation["target"]
         if targets:  # pragma: nocover
             document_uri = targets[0]["source"]
             selectors = targets[0].get("selector", [])
             for selector in selectors:
-                if selector.get("type") != "TextQuoteSelector":
-                    continue
-                quote = selector.get("exact")
+                match selector.get("type"):
+                    case "TextQuoteSelector":
+                        quote = selector.get("exact")
+                    case "MediaTimeSelector":
+                        has_media_time = True
     except KeyError:
         pass
 
@@ -133,6 +137,7 @@ def parse_document(document):
         "show_metadata": show_metadata,
         "quote": _escape_quotes(quote),
         "text": _escape_quotes(text),
+        "has_media_time": has_media_time,
     }
 
 

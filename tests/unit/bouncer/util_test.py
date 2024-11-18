@@ -116,6 +116,21 @@ def test_get_pretty_url_for_long_url():
     assert "www.verylongdomainthatkeepsgoi&hellip;" == util.get_pretty_url(long_netloc)
 
 
+@pytest.mark.parametrize(
+    "selectors,has_media_time",
+    [
+        ([{"type": "MediaTimeSelector", "start": 10, "end": 20}], True),
+        ([{}], False),
+    ],
+)
+def test_parse_document_returns_has_media_time(
+    es_annotation_doc, selectors, has_media_time
+):
+    es_annotation_doc["_source"]["target"][0]["selector"] = selectors
+    parsed = util.parse_document(es_annotation_doc)
+    assert parsed["has_media_time"] == has_media_time
+
+
 @pytest.fixture
 def es_annotation_doc():
     """

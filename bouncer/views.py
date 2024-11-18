@@ -50,6 +50,7 @@ class AnnotationController(object):
             show_metadata = parsed_document["show_metadata"]
             quote = parsed_document["quote"]
             text = parsed_document["text"]
+            has_media_time = parsed_document["has_media_time"]
 
         except util.DeletedAnnotationError:
             raise httpexceptions.HTTPNotFound(_("Annotation not found"))
@@ -90,14 +91,24 @@ class AnnotationController(object):
         default_extension = settings["chrome_extension_id"]["default"]
         extension_id = settings["chrome_extension_id"].get(authority, default_extension)
 
+        # If a YouTube annotation has a media time associated, this means it
+        # was made using Via's transcript annotation tool.
+        #
+        # This means we force the use of Via, even if the extension is
+        # installed.
+        always_use_via = False
+        if document_uri.startswith("https://www.youtube.com") and has_media_time:
+            always_use_via = True
+
         return {
             "data": json.dumps(
                 {
                     # Warning: variable names change from python_style to
                     # javaScriptStyle here!
+                    "alwaysUseVia": always_use_via,
                     "chromeExtensionId": extension_id,
-                    "viaUrl": via_url,
                     "extensionUrl": extension_url,
+                    "viaUrl": via_url,
                 }
             ),
             "show_metadata": show_metadata,

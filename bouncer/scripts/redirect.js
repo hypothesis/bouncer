@@ -81,6 +81,11 @@ export async function redirect(
     return;
   }
 
+  if (settings.alwaysUseVia) {
+    navigateTo(settings.viaUrl);
+    return;
+  }
+
   const chrome = window.chrome;
   if (chrome && chrome.runtime && chrome.runtime.sendMessage) {
     // The user is using Chrome, redirect them to our Chrome extension if they

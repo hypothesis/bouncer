@@ -140,6 +140,29 @@ class TestAnnotationController(object):
         url_embeds_client.assert_called_with("http://www.example.com/example.html")
         assert data["viaUrl"] is None
 
+    @pytest.mark.parametrize(
+        "document_uri,has_media_time,use_via",
+        [
+            # Transcript annotation made using Via
+            ("https://www.youtube.com/watch?v=mBtsNNXjBPw", True, True),
+            # Regular annotation made on youtube.com via extension
+            ("https://www.youtube.com/watch?v=mBtsNNXjBPw", False, False),
+            # Media time annotation made on a site not supported by Via's video
+            # transcript feature.
+            ("https://example.com", True, False),
+        ],
+    )
+    def test_always_uses_via_for_transcript_annotations(
+        self, parse_document, document_uri, has_media_time, use_via
+    ):
+        parse_document.return_value["document_uri"] = document_uri
+        parse_document.return_value["has_media_time"] = has_media_time
+        template_data = views.AnnotationController(mock_request()).annotation()
+
+        data = json.loads(template_data["data"])
+
+        assert data["alwaysUseVia"] == use_via
+
 
 class TestGotoUrlController(object):
     def test_it_shows_redirect_page(self):
@@ -352,6 +375,7 @@ def parse_document(request):
         "annotation_id": "AVLlVTs1f9G3pW-EYc6q",
         "authority": "localhost",
         "document_uri": "http://www.example.com/example.html",
+        "has_media_time": False,
         "show_metadata": True,
         "quote": "Hypothesis annotation for www.example.com",
         "text": "test_text",
