@@ -112,14 +112,14 @@ venusian==3.1.0
     # via
     #   -r requirements/requirements.txt
     #   pyramid
-waitress==3.0.1
+waitress==3.0.2
     # via webtest
 webob==1.8.8
     # via
     #   -r requirements/requirements.txt
     #   pyramid
     #   webtest
-webtest==3.0.1
+webtest==3.0.2
     # via -r requirements/functests.in
 wheel==0.42.0
     # via pip-tools
