@@ -4,7 +4,7 @@
 #
 #    pip-compile --allow-unsafe requirements/requirements.in
 #
-certifi==2024.8.30
+certifi==2024.12.14
     # via
     #   -r requirements/requirements.in
     #   requests
