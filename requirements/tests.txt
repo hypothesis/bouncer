@@ -92,7 +92,7 @@ pyramid==2.0.2
     #   pyramid-jinja2
 pyramid-jinja2==2.10.1
     # via -r requirements/requirements.txt
-pytest==8.3.3
+pytest==8.3.4
     # via -r requirements/tests.in
 python-dateutil==2.8.2
     # via faker
