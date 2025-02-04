@@ -75,7 +75,7 @@ pastedeploy==3.1.0
     #   plaster-pastedeploy
 pexpect==4.9.0
     # via ipython
-pip-sync-faster==0.0.4
+pip-sync-faster==0.0.5
     # via -r requirements/dev.in
 pip-tools==7.4.1
     # via
