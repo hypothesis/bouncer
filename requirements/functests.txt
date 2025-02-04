@@ -119,7 +119,7 @@ webob==1.8.8
     #   -r requirements/requirements.txt
     #   pyramid
     #   webtest
-webtest==3.0.2
+webtest==3.0.4
     # via -r requirements/functests.in
 wheel==0.42.0
     # via pip-tools
