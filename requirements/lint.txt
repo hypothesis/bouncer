@@ -8,7 +8,7 @@ build==1.0.3
     # via pip-tools
 click==8.1.7
     # via pip-tools
-flake8==7.1.2
+flake8==7.2.0
     # via -r requirements/lint.in
 importlib-metadata==7.0.1
     # via pip-sync-faster
@@ -22,9 +22,9 @@ pip-tools==7.4.1
     # via
     #   -r requirements/lint.in
     #   pip-sync-faster
-pycodestyle==2.12.0
+pycodestyle==2.13.0
     # via flake8
-pyflakes==3.2.0
+pyflakes==3.3.2
     # via flake8
 pyproject-hooks==1.0.0
     # via
