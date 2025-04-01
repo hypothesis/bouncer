@@ -10,12 +10,12 @@ build==1.0.3
     # via pip-tools
 certifi==2025.1.31
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   requests
     #   sentry-sdk
 charset-normalizer==3.3.2
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   requests
 click==8.1.7
     # via pip-tools
@@ -24,71 +24,73 @@ decorator==5.1.1
     #   ipdb
     #   ipython
 elasticsearch==6.3.1
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
 executing==2.0.1
     # via stack-data
 gunicorn==23.0.0
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
 h-pyramid-sentry==1.2.4
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
 hupper==1.12
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 idna==3.7
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   requests
 importlib-metadata==7.0.1
     # via pip-sync-faster
 ipdb==0.13.13
-    # via -r dev.in
-ipython==8.33.0
+    # via -r requirements/dev.in
+ipython==9.0.2
     # via
-    #   -r dev.in
+    #   -r requirements/dev.in
     #   ipdb
+ipython-pygments-lexers==1.1.1
+    # via ipython
 jedi==0.19.1
     # via ipython
 jinja2==3.1.6
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid-jinja2
 markupsafe==2.1.3
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   jinja2
     #   pyramid-jinja2
 matplotlib-inline==0.1.6
     # via ipython
 newrelic==10.6.0
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
 packaging==23.2
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   build
     #   gunicorn
 parso==0.8.3
     # via jedi
 pastedeploy==3.1.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   plaster-pastedeploy
 pexpect==4.9.0
     # via ipython
 pip-sync-faster==0.0.5
-    # via -r dev.in
+    # via -r requirements/dev.in
 pip-tools==7.4.1
     # via
-    #   -r dev.in
+    #   -r requirements/dev.in
     #   pip-sync-faster
 plaster==1.1.2
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   plaster-pastedeploy
     #   pyramid
 plaster-pastedeploy==1.0.1
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 prompt-toolkit==3.0.43
     # via ipython
@@ -97,55 +99,57 @@ ptyprocess==0.7.0
 pure-eval==0.2.2
     # via stack-data
 pygments==2.17.2
-    # via ipython
+    # via
+    #   ipython
+    #   ipython-pygments-lexers
 pyproject-hooks==1.0.0
     # via
     #   build
     #   pip-tools
 pyramid==2.0.2
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   h-pyramid-sentry
     #   pyramid-jinja2
 pyramid-jinja2==2.10.1
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
 requests==2.32.3
-    # via -r requirements.txt
+    # via -r requirements/requirements.txt
 sentry-sdk==2.22.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   h-pyramid-sentry
 six==1.16.0
     # via asttokens
 stack-data==0.6.3
     # via ipython
 supervisor==4.2.5
-    # via -r dev.in
+    # via -r requirements/dev.in
 traitlets==5.14.1
     # via
     #   ipython
     #   matplotlib-inline
 translationstring==1.4
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 typing-extensions==4.10.0
     # via ipython
 urllib3==2.2.2
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   elasticsearch
     #   requests
     #   sentry-sdk
 venusian==3.1.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 wcwidth==0.2.13
     # via prompt-toolkit
 webob==1.8.8
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 wheel==0.42.0
     # via pip-tools
@@ -153,12 +157,12 @@ zipp==3.19.1
     # via importlib-metadata
 zope-deprecation==5.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
     #   pyramid-jinja2
 zope-interface==6.1
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pyramid
 
 # The following packages are considered to be unsafe in a requirements file:
@@ -166,7 +170,7 @@ pip==23.3.2
     # via pip-tools
 setuptools==70.0.0
     # via
-    #   -r requirements.txt
+    #   -r requirements/requirements.txt
     #   pip-tools
     #   pyramid
     #   supervisor
