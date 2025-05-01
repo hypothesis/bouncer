@@ -43,7 +43,7 @@ importlib-metadata==7.0.1
     # via pip-sync-faster
 ipdb==0.13.13
     # via -r requirements/dev.in
-ipython==9.0.2
+ipython==9.2.0
     # via
     #   -r requirements/dev.in
     #   ipdb
