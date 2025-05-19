@@ -5,7 +5,7 @@
 #    pip-compile --allow-unsafe requirements/checkformatting.in
 #
 black==25.1.0
-    # via -r requirements/checkformatting.in
+    # via -r checkformatting.in
 build==1.0.3
     # via pip-tools
 click==8.1.7
@@ -15,7 +15,7 @@ click==8.1.7
 importlib-metadata==7.0.1
     # via pip-sync-faster
 isort==6.0.1
-    # via -r requirements/checkformatting.in
+    # via -r checkformatting.in
 mypy-extensions==1.0.0
     # via black
 packaging==23.2
@@ -25,10 +25,10 @@ packaging==23.2
 pathspec==0.12.1
     # via black
 pip-sync-faster==0.0.5
-    # via -r requirements/checkformatting.in
+    # via -r checkformatting.in
 pip-tools==7.4.1
     # via
-    #   -r requirements/checkformatting.in
+    #   -r checkformatting.in
     #   pip-sync-faster
 platformdirs==4.1.0
     # via black
@@ -44,5 +44,5 @@ zipp==3.19.1
 # The following packages are considered to be unsafe in a requirements file:
 pip==23.3.2
     # via pip-tools
-setuptools==70.0.0
+setuptools==78.1.1
     # via pip-tools
