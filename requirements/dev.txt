@@ -135,7 +135,7 @@ translationstring==1.4
     #   pyramid
 typing-extensions==4.10.0
     # via ipython
-urllib3==2.2.2
+urllib3==2.5.0
     # via
     #   -r requirements.txt
     #   elasticsearch

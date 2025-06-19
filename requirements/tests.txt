@@ -108,7 +108,7 @@ translationstring==1.4
     # via
     #   -r requirements.txt
     #   pyramid
-urllib3==2.2.2
+urllib3==2.5.0
     # via
     #   -r requirements.txt
     #   elasticsearch
