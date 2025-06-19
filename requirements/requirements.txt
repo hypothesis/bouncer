@@ -54,7 +54,7 @@ sentry-sdk==2.29.1
     #   h-pyramid-sentry
 translationstring==1.4
     # via pyramid
-urllib3==2.2.2
+urllib3==2.5.0
     # via
     #   elasticsearch
     #   requests
