@@ -77,6 +77,8 @@ plaster-pastedeploy==1.0.1
     #   pyramid
 pluggy==1.5.0
     # via pytest
+pygments==2.19.2
+    # via pytest
 pyproject-hooks==1.0.0
     # via
     #   build
@@ -88,7 +90,7 @@ pyramid==2.0.2
     #   pyramid-jinja2
 pyramid-jinja2==2.10.1
     # via -r requirements/requirements.txt
-pytest==8.3.5
+pytest==8.4.1
     # via -r requirements/functests.in
 requests==2.32.4
     # via -r requirements/requirements.txt
