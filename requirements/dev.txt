@@ -123,7 +123,7 @@ six==1.16.0
     # via asttokens
 stack-data==0.6.3
     # via ipython
-supervisor==4.2.5
+supervisor==4.3.0
     # via -r requirements/dev.in
 traitlets==5.14.1
     # via
@@ -173,6 +173,5 @@ setuptools==78.1.1
     #   -r requirements/requirements.txt
     #   pip-tools
     #   pyramid
-    #   supervisor
     #   zope-deprecation
     #   zope-interface
