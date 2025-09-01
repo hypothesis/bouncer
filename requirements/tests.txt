@@ -6,7 +6,7 @@
 #
 build==1.0.3
     # via pip-tools
-certifi==2025.7.14
+certifi==2025.8.3
     # via
     #   -r requirements/requirements.txt
     #   requests
