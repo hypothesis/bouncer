@@ -14,7 +14,7 @@ click==8.1.7
     #   pip-tools
 importlib-metadata==7.0.1
     # via pip-sync-faster
-isort==6.0.1
+isort==7.0.0
     # via -r requirements/format.in
 mypy-extensions==1.0.0
     # via black
