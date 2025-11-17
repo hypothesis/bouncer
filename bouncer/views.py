@@ -96,9 +96,9 @@ class AnnotationController(object):
         #
         # This means we force the use of Via, even if the extension is
         # installed.
-        always_use_via = False
-        if document_uri.startswith("https://www.youtube.com") and has_media_time:
-            always_use_via = True
+        always_use_via = (
+            document_uri.startswith("https://www.youtube.com") and has_media_time
+        )
 
         return {
             "data": json.dumps(

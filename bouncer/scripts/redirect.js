@@ -13,6 +13,8 @@
  *   also used in cases where the original URL embeds the client.
  * @prop {string|null} viaUrl - Proxy URL of `null` if the proxy cannot be used
  *   to display this annotation in context.
+ * @prop {boolean} alwaysUseVia - Enforce the usage of via, ignoring the
+ *   presence of the browser extension.
  */
 
 /**
