@@ -19,6 +19,7 @@ describe('#redirect', () => {
         'http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
       viaUrl:
         'https://via.hypothes.is/http://www.example.com/example.html#annotations:AVLlVTs1f9G3pW-EYc6q',
+      isClientEmbedded: false,
     };
     sinon.stub(window.console, 'error');
   });
@@ -162,6 +163,16 @@ describe('#redirect', () => {
 
   it('redirects to original URL if no Via URL provided', () => {
     settings.viaUrl = null;
+    const navigateTo = sinon.stub();
+
+    redirect(navigateTo, settings);
+
+    assert.isTrue(navigateTo.calledOnce);
+    assert.isTrue(navigateTo.calledWithExactly(settings.extensionUrl));
+  });
+
+  it('redirects to original URL if client is embedded', () => {
+    settings.isClientEmbedded = true;
     const navigateTo = sinon.stub();
 
     redirect(navigateTo, settings);

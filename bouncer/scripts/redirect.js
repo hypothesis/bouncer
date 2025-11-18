@@ -13,6 +13,10 @@
  *   also used in cases where the original URL embeds the client.
  * @prop {string|null} viaUrl - Proxy URL of `null` if the proxy cannot be used
  *   to display this annotation in context.
+ * @prop {boolean} alwaysUseVia - Enforce the usage of via, ignoring the
+ *   presence of the browser extension.
+ * @prop {boolean} isClientEmbedded - Whether the client is embedded in the
+ *   page we are redirecting to or not.
  */
 
 /**
@@ -74,9 +78,9 @@ export async function redirect(
   navigateTo = defaultNavigateTo,
   settings = getSettings(document)
 ) {
-  // If the proxy cannot be used with this URL, send the user directly to the
-  // original page.
-  if (!settings.viaUrl) {
+  // If the proxy cannot be used with this URL, or the page embeds the client,
+  // send the user directly to the original page.
+  if (!settings.viaUrl || settings.isClientEmbedded) {
     navigateTo(settings.extensionUrl);
     return;
   }
