@@ -79,6 +79,12 @@ class TestUrlEmbedsClient:
         with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
             assert page_embeds_client("") is False
 
+    def test_page_embeds_client_with_raised_error(self):
+        with patch(
+            "bouncer.embed_detector.requests.get", side_effect=RuntimeError("fail")
+        ):
+            assert page_embeds_client("") is False
+
 
 def response_mock(lines: list[str], content_type="text/html"):
     """
