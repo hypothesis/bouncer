@@ -1,6 +1,8 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
 
-from bouncer.embed_detector import url_embeds_client
+from bouncer.embed_detector import page_embeds_client, url_embeds_client
 
 
 class TestUrlEmbedsClient:
@@ -40,3 +42,63 @@ class TestUrlEmbedsClient:
     )
     def test_returns_false_for_non_matching_url(self, url):
         assert url_embeds_client(url) is False
+
+    def test_page_embeds_client_for_non_html_response(self):
+        mock_get = response_mock([], "application/pdf")
+        with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
+            assert page_embeds_client("") is False
+
+    def test_page_embeds_client_for_non_embedded_client(self):
+        mock_get = response_mock(["<html>", "</html>"])
+        with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
+            assert page_embeds_client("") is False
+            assert page_embeds_client("") is False
+
+    @pytest.mark.parametrize(
+        "content_block",
+        [
+            '<script src="https://hypothes.is/embed.js"></script>',
+            '<script src="https://cdn.hypothes.is/hypothesis"></script>',
+            '<script class="js-hypothesis-config"></script>',
+        ],
+    )
+    def test_page_embeds_client_for_embedded_client(self, content_block):
+        # Add an empty line to cover logic to ignore empty lines
+        mock_get = response_mock(["<html>", None, content_block, "</html>"])
+        with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
+            assert page_embeds_client("") is True
+
+    def test_page_embeds_client_for_too_many_lines(self):
+        lines = (
+            ["<html>"]
+            + ["some line" for _ in range(300)]
+            # This would usually match, but it's further down the maximum amount of lines
+            + ['<script src="https://hypothes.is/embed.js"></script>', "</html>"]
+        )
+        mock_get = response_mock(lines)
+        with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
+            assert page_embeds_client("") is False
+
+    def test_page_embeds_client_with_raised_error(self):
+        with patch(
+            "bouncer.embed_detector.requests.get", side_effect=RuntimeError("fail")
+        ):
+            assert page_embeds_client("") is False
+
+
+def response_mock(lines: list[str], content_type="text/html"):
+    """
+    Mock a response to return from requests.get
+    """
+    resp = MagicMock()
+    resp.headers = {"Content-Type": content_type}
+    resp.iter_lines.return_value = [
+        ln if ln is None else ln.encode("utf-8") for ln in lines
+    ]
+
+    # Make the response usable as a context manager: `with ...:`
+    cm = MagicMock()
+    cm.__enter__.return_value = resp
+    cm.__exit__.return_value = None
+
+    return cm
