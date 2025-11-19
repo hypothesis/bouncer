@@ -2,8 +2,6 @@ import fnmatch
 import re
 from urllib.parse import urlparse
 
-import requests
-
 # Hardcoded URL patterns where client is assumed to be embedded.
 #
 # Only the hostname and path are included in the pattern. The path must be
@@ -49,41 +47,4 @@ def url_embeds_client(url):  # pragma: nocover
     for pat in COMPILED_PATTERNS:
         if pat.fullmatch(netloc_and_path):
             return True
-    return False
-
-
-def page_embeds_client(page: str) -> bool:
-    """
-    Checks if the client is embedded in provided page
-    - Request is streamed to avoid trying to download a huge file unnecessarily
-    - The page must be html to be evaluated. Anything else is ignored
-    - We wait a maximum of 3 seconds for a response
-    - We will not evaluate more than 300 lines of the response
-    """
-
-    request_timeout = 3
-    max_lines_to_check = 300
-    embedded_client_markers = (
-        "hypothes.is/embed.js",
-        "cdn.hypothes.is/hypothesis",
-        "js-hypothesis-config",
-    )
-
-    with requests.get(page, stream=True, timeout=request_timeout) as r:
-        if "text/html" not in r.headers.get("Content-Type", "").lower():
-            return False
-
-        for line in r.iter_lines():
-            if not line:
-                # filter out keep-alive new lines
-                continue
-
-            max_lines_to_check -= 1
-            if max_lines_to_check <= 0:
-                break
-
-            decoded_line = line.decode("utf-8")
-            if any(marker in decoded_line for marker in embedded_client_markers):
-                return True
-
     return False
