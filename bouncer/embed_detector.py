@@ -71,21 +71,24 @@ def page_embeds_client(page: str) -> bool:
 
     try:
         with requests.get(page, stream=True, timeout=request_timeout) as r:
-            if "text/html" not in r.headers.get("Content-Type", "").lower():
+            if (
+                r.status_code != 200
+                or "text/html" not in r.headers.get("Content-Type", "").lower()
+            ):
                 return False
 
-        for line in r.iter_lines():
-            if not line:
-                # filter out keep-alive new lines
-                continue
+            for line in r.iter_lines():
+                if not line:
+                    # filter out keep-alive new lines
+                    continue
 
-            max_lines_to_check -= 1
-            if max_lines_to_check <= 0:
-                break
+                max_lines_to_check -= 1
+                if max_lines_to_check <= 0:
+                    break
 
-            decoded_line = line.decode("utf-8")
-            if any(marker in decoded_line for marker in embedded_client_markers):
-                return True
+                decoded_line = line.decode("utf-8")
+                if any(marker in decoded_line for marker in embedded_client_markers):
+                    return True
     except Exception:
         # If the request fails in any way, we simply ignore the error and
         # continue as if the client was not embedded in the page

@@ -43,6 +43,11 @@ class TestUrlEmbedsClient:
     def test_returns_false_for_non_matching_url(self, url):
         assert url_embeds_client(url) is False
 
+    def test_page_embeds_client_for_non_successfull_status_code(self):
+        mock_get = response_mock([], status_code=404)
+        with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
+            assert page_embeds_client("") is False
+
     def test_page_embeds_client_for_non_html_response(self):
         mock_get = response_mock([], "application/pdf")
         with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
@@ -86,11 +91,14 @@ class TestUrlEmbedsClient:
             assert page_embeds_client("") is False
 
 
-def response_mock(lines: list[str], content_type="text/html"):
+def response_mock(
+    lines: list[str], content_type="text/html", status_code=200
+) -> MagicMock:
     """
     Mock a response to return from requests.get
     """
     resp = MagicMock()
+    resp.status_code = status_code
     resp.headers = {"Content-Type": content_type}
     resp.iter_lines.return_value = [
         ln if ln is None else ln.encode("utf-8") for ln in lines
