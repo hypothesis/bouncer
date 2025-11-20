@@ -9,7 +9,7 @@ build==1.0.3
 click==8.1.7
     # via pip-tools
 flake8==7.3.0
-    # via -r requirements/lint.in
+    # via -r lint.in
 importlib-metadata==7.0.1
     # via pip-sync-faster
 mccabe==0.7.0
@@ -17,10 +17,10 @@ mccabe==0.7.0
 packaging==23.2
     # via build
 pip-sync-faster==0.0.5
-    # via -r requirements/lint.in
-pip-tools==7.5.1
+    # via -r lint.in
+pip-tools==7.5.2
     # via
-    #   -r requirements/lint.in
+    #   -r lint.in
     #   pip-sync-faster
 pycodestyle==2.14.0
     # via flake8
@@ -36,7 +36,7 @@ zipp==3.19.1
     # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-pip==25.2
+pip==25.3
     # via pip-tools
 setuptools==78.1.1
     # via pip-tools
