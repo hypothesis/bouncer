@@ -18,7 +18,7 @@ packaging==23.2
     # via build
 pip-sync-faster==0.0.5
     # via -r lint.in
-pip-tools==7.5.1
+pip-tools==7.5.2
     # via
     #   -r lint.in
     #   pip-sync-faster
