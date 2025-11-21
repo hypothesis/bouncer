@@ -76,7 +76,7 @@ class TestUrlEmbedsClient:
     def test_page_embeds_client_for_too_many_lines(self):
         lines = (
             ["<html>"]
-            + ["some line" for _ in range(300)]
+            + ["some line" for _ in range(5000)]
             # This would usually match, but it's further down the maximum amount of lines
             + ['<script src="https://hypothes.is/embed.js"></script>', "</html>"]
         )

@@ -58,11 +58,11 @@ def page_embeds_client(page: str) -> bool:
     - Request is streamed to avoid trying to download a huge file unnecessarily
     - The page must be html to be evaluated. Anything else is ignored
     - We wait a maximum of 1.5 seconds for a response
-    - We will not evaluate more than 300 lines of the response
+    - We will not evaluate more than 5000 lines of the response
     """
 
     request_timeout = 1.5
-    max_lines_to_check = 300
+    max_lines_to_check = 5000
     embedded_client_markers = (
         "hypothes.is/embed.js",
         "cdn.hypothes.is/hypothesis",
