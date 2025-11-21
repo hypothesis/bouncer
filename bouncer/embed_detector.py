@@ -68,9 +68,12 @@ def page_embeds_client(page: str) -> bool:
         "cdn.hypothes.is/hypothesis",
         "js-hypothesis-config",
     )
+    headers = {"User-Agent": "Hypothesis/1.0 (bouncer)"}
 
     try:
-        with requests.get(page, stream=True, timeout=request_timeout) as r:
+        with requests.get(
+            page, stream=True, timeout=request_timeout, headers=headers
+        ) as r:
             if (
                 r.status_code != 200
                 or "text/html" not in r.headers.get("Content-Type", "").lower()
