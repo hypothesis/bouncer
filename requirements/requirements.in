@@ -1,4 +1,5 @@
 certifi
+cachetools
 elasticsearch==6.3.1
 gunicorn
 sentry-sdk

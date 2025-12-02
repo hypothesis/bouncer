@@ -6,6 +6,8 @@
 #
 build==1.0.3
     # via pip-tools
+cachetools==6.2.2
+    # via -r requirements/requirements.txt
 certifi==2025.10.5
     # via
     #   -r requirements/requirements.txt
