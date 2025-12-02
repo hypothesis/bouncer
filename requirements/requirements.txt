@@ -4,6 +4,8 @@
 #
 #    pip-compile --allow-unsafe requirements/requirements.in
 #
+cachetools==6.2.2
+    # via -r requirements/requirements.in
 certifi==2025.10.5
     # via
     #   -r requirements/requirements.in

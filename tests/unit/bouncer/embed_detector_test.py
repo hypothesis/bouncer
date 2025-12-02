@@ -1,3 +1,4 @@
+import secrets
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -46,18 +47,17 @@ class TestUrlEmbedsClient:
     def test_page_embeds_client_for_non_successfull_status_code(self):
         mock_get = response_mock([], status_code=404)
         with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
-            assert page_embeds_client("") is False
+            assert page_embeds_client(random_string_urlsafe()) is False
 
     def test_page_embeds_client_for_non_html_response(self):
         mock_get = response_mock([], "application/pdf")
         with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
-            assert page_embeds_client("") is False
+            assert page_embeds_client(random_string_urlsafe()) is False
 
     def test_page_embeds_client_for_non_embedded_client(self):
         mock_get = response_mock(["<html>", "</html>"])
         with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
-            assert page_embeds_client("") is False
-            assert page_embeds_client("") is False
+            assert page_embeds_client(random_string_urlsafe()) is False
 
     @pytest.mark.parametrize(
         "content_block",
@@ -71,7 +71,7 @@ class TestUrlEmbedsClient:
         # Add an empty line to cover logic to ignore empty lines
         mock_get = response_mock(["<html>", None, content_block, "</html>"])
         with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
-            assert page_embeds_client("") is True
+            assert page_embeds_client(random_string_urlsafe()) is True
 
     def test_page_embeds_client_for_too_many_lines(self):
         lines = (
@@ -82,13 +82,18 @@ class TestUrlEmbedsClient:
         )
         mock_get = response_mock(lines)
         with patch("bouncer.embed_detector.requests.get", return_value=mock_get):
-            assert page_embeds_client("") is False
+            assert page_embeds_client(random_string_urlsafe()) is False
 
     def test_page_embeds_client_with_raised_error(self):
         with patch(
             "bouncer.embed_detector.requests.get", side_effect=RuntimeError("fail")
         ):
-            assert page_embeds_client("") is False
+            assert page_embeds_client(random_string_urlsafe()) is False
+
+
+def random_string_urlsafe(length: int = 16) -> str:
+    """Generate a random string to use when calling page_embeds_client, to bypass the LRU cache"""
+    return secrets.token_urlsafe(length)[:length]
 
 
 def response_mock(
