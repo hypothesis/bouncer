@@ -53,8 +53,8 @@ def url_embeds_client(url):  # pragma: nocover
     return False
 
 
-# Cache up to 10,000 page-lookups, but never for more than 1 hour
-@cached(cache=TTLCache(maxsize=10000, ttl=3600))
+# Cache up to 10,000 page-lookups, but never for more than 24 hours
+@cached(cache=TTLCache(maxsize=10000, ttl=86400))
 def page_embeds_client(page: str) -> bool:
     """
     Checks if the client is embedded in provided page
