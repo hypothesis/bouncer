@@ -22,6 +22,10 @@ PATTERNS = [
     "psycnet.apa.org/fulltext/*",
     "awspntest.apa.org/fulltext/*",
     "*.semanticscholar.org/reader/*",  # See https://hypothes-is.slack.com/archives/C04F8GLTT7U/p1674065065018549
+    # BioRxiv
+    "biotome.hypothes.is/*",
+    "www.biorxiv.org/*",
+    "www.medrxiv.org/*",
 ]
 
 COMPILED_PATTERNS = [re.compile(fnmatch.translate(pat)) for pat in PATTERNS]
