@@ -8,7 +8,7 @@ from pyramid.httpexceptions import HTTPNoContent
 from sentry_sdk import capture_message
 
 from bouncer import util
-from bouncer.embed_detector import page_embeds_client, url_embeds_client
+from bouncer.embed_detector import url_embeds_client
 
 _ = i18n.TranslationStringFactory(__package__)
 
@@ -100,7 +100,8 @@ class AnnotationController(object):
         if document_uri.startswith("https://www.youtube.com") and has_media_time:
             always_use_via = True
 
-        is_client_embedded = not always_use_via and page_embeds_client(document_uri)
+        # is_client_embedded = not always_use_via and page_embeds_client(document_uri)
+        is_client_embedded = False
 
         return {
             "data": json.dumps(
