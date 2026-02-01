@@ -4,7 +4,7 @@
 #
 #    pip-compile --allow-unsafe requirements/checkformatting.in
 #
-black==25.11.0
+black==26.1.0
     # via -r requirements/checkformatting.in
 build==1.0.3
     # via pip-tools
@@ -22,7 +22,7 @@ packaging==23.2
     # via
     #   black
     #   build
-pathspec==0.12.1
+pathspec==1.0.4
     # via black
 pip-sync-faster==0.0.5
     # via -r requirements/checkformatting.in
