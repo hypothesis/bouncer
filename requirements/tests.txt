@@ -27,7 +27,7 @@ factory-boy==3.3.3
     # via -r requirements/tests.in
 faker==22.2.0
     # via factory-boy
-gunicorn==23.0.0
+gunicorn==24.1.1
     # via -r requirements/requirements.txt
 h-pyramid-sentry==1.2.4
     # via -r requirements/requirements.txt
