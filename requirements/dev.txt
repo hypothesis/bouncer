@@ -29,7 +29,7 @@ elasticsearch==6.3.1
     # via -r requirements/requirements.txt
 executing==2.0.1
     # via stack-data
-gunicorn==23.0.0
+gunicorn==25.1.0
     # via -r requirements/requirements.txt
 h-pyramid-sentry==1.2.4
     # via -r requirements/requirements.txt
