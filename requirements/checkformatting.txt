@@ -4,8 +4,8 @@
 #
 #    pip-compile --allow-unsafe requirements/checkformatting.in
 #
-black==25.11.0
-    # via -r requirements/checkformatting.in
+black==26.3.1
+    # via -r checkformatting.in
 build==1.0.3
     # via pip-tools
 click==8.1.7
@@ -15,20 +15,20 @@ click==8.1.7
 importlib-metadata==7.0.1
     # via pip-sync-faster
 isort==7.0.0
-    # via -r requirements/checkformatting.in
+    # via -r checkformatting.in
 mypy-extensions==1.0.0
     # via black
 packaging==23.2
     # via
     #   black
     #   build
-pathspec==0.12.1
+pathspec==1.0.4
     # via black
 pip-sync-faster==0.0.5
-    # via -r requirements/checkformatting.in
+    # via -r checkformatting.in
 pip-tools==7.5.2
     # via
-    #   -r requirements/checkformatting.in
+    #   -r checkformatting.in
     #   pip-sync-faster
 platformdirs==4.1.0
     # via black
@@ -36,7 +36,7 @@ pyproject-hooks==1.0.0
     # via
     #   build
     #   pip-tools
-pytokens==0.3.0
+pytokens==0.4.1
     # via black
 wheel==0.42.0
     # via pip-tools
