@@ -166,7 +166,7 @@ def goto_url(request):
     # append our own.
     url = parse.urldefrag(url)[0]
 
-    group = request.params.get("group", "")
+    group = parse.quote(request.params.get("group", ""), safe="")
     query = parse.quote(request.params.get("q", ""))
 
     # Translate any refining querystring parameters into a URL fragment
