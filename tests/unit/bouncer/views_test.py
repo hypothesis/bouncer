@@ -219,6 +219,45 @@ class TestGotoUrlController(object):
         assert data["viaUrl"].endswith(expected_frag)
         assert data["extensionUrl"].endswith(expected_frag)
 
+    def test_it_percent_encodes_group_with_special_characters(self):
+        request = mock_request()
+        request.GET["url"] = "https://example.com/article.html"
+        request.GET["group"] = '<script>alert("xss")</script>'
+
+        ctx = views.goto_url(request)
+
+        data = json.loads(ctx["data"])
+        # The group value must be percent-encoded; raw '<', '>', '"' must not appear
+        assert "<" not in data["viaUrl"]
+        assert "<" not in data["extensionUrl"]
+        expected_frag = "#annotations:group:%3Cscript%3Ealert%28%22xss%22%29%3C%2Fscript%3E"
+        assert data["viaUrl"].endswith(expected_frag)
+        assert data["extensionUrl"].endswith(expected_frag)
+
+    def test_it_percent_encodes_group_with_angle_brackets_and_quotes(self):
+        request = mock_request()
+        request.GET["url"] = "https://example.com/article.html"
+        request.GET["group"] = '<"group">'
+
+        ctx = views.goto_url(request)
+
+        data = json.loads(ctx["data"])
+        expected_frag = "#annotations:group:%3C%22group%22%3E"
+        assert data["viaUrl"].endswith(expected_frag)
+        assert data["extensionUrl"].endswith(expected_frag)
+
+    def test_it_percent_encodes_group_with_ampersand_and_equals(self):
+        request = mock_request()
+        request.GET["url"] = "https://example.com/article.html"
+        request.GET["group"] = "group&id=1"
+
+        ctx = views.goto_url(request)
+
+        data = json.loads(ctx["data"])
+        expected_frag = "#annotations:group:group%26id%3D1"
+        assert data["viaUrl"].endswith(expected_frag)
+        assert data["extensionUrl"].endswith(expected_frag)
+
     def test_it_rejects_invalid_or_missing_urls(self):
         invalid_urls = [
             None,
