@@ -1,5 +1,6 @@
 import fnmatch
 import re
+import time
 from urllib.parse import urlparse
 
 import requests
@@ -29,6 +30,22 @@ PATTERNS = [
 ]
 
 COMPILED_PATTERNS = [re.compile(fnmatch.translate(pat)) for pat in PATTERNS]
+
+#: Byte strings whose presence in a page indicates that it embeds the client.
+EMBEDDED_CLIENT_MARKERS = (
+    b"hypothes.is/embed.js",
+    b"cdn.hypothes.is/hypothesis",
+    b"js-hypothesis-config",
+)
+
+#: Size of each chunk read from the page when looking for the markers.
+CHUNK_SIZE = 64 * 1024
+
+#: Never read more than this many bytes of a page.
+MAX_BYTES_TO_CHECK = 1024 * 1024
+
+#: Never spend more than this many seconds reading a page, in total.
+MAX_SECONDS_TO_CHECK = 3.0
 
 
 def url_embeds_client(url):  # pragma: nocover
@@ -64,18 +81,24 @@ def page_embeds_client(page: str) -> bool:
     Checks if the client is embedded in provided page
     - Request is streamed to avoid trying to download a huge file unnecessarily
     - The page must be html to be evaluated. Anything else is ignored
-    - We wait a maximum of 1.5 seconds for a response
-    - We will not evaluate more than 5000 lines of the response
+    - We wait a maximum of 1.5 seconds between bytes from the server
+    - We will not read more than ``MAX_BYTES_TO_CHECK`` bytes of the response
+    - We will not spend more than ``MAX_SECONDS_TO_CHECK`` seconds reading it
+
+    The response is scanned in fixed-size chunks rather than line by line.
+    ``Response.iter_lines()`` re-joins its buffer on every 512-byte read, which
+    is quadratic for very long lines: a single multi-megabyte line (e.g. a
+    self-contained HTML page with inlined images) could take tens of seconds
+    of CPU, tying up a worker until it was killed. Because the worker was
+    killed before returning, the result was never cached either.
     """
 
     request_timeout = 1.5
-    max_lines_to_check = 5000
-    embedded_client_markers = (
-        "hypothes.is/embed.js",
-        "cdn.hypothes.is/hypothesis",
-        "js-hypothesis-config",
-    )
     headers = {"User-Agent": "Hypothesis/1.0 (bouncer)"}
+    deadline = time.monotonic() + MAX_SECONDS_TO_CHECK
+    # Keep the tail of the previous chunk so we still find a marker that is
+    # split across two chunks.
+    overlap = max(len(marker) for marker in EMBEDDED_CLIENT_MARKERS) - 1
 
     try:
         with requests.get(
@@ -87,18 +110,21 @@ def page_embeds_client(page: str) -> bool:
             ):
                 return False
 
-            for line in r.iter_lines():
-                if not line:
-                    # filter out keep-alive new lines
+            bytes_read = 0
+            tail = b""
+            for chunk in r.iter_content(chunk_size=CHUNK_SIZE):
+                if not chunk:
                     continue
 
-                max_lines_to_check -= 1
-                if max_lines_to_check <= 0:
+                window = tail + chunk
+                if any(marker in window for marker in EMBEDDED_CLIENT_MARKERS):
+                    return True
+
+                bytes_read += len(chunk)
+                if bytes_read >= MAX_BYTES_TO_CHECK or time.monotonic() > deadline:
                     break
 
-                decoded_line = line.decode("utf-8")
-                if any(marker in decoded_line for marker in embedded_client_markers):
-                    return True
+                tail = window[-overlap:]
     except Exception:
         # If the request fails in any way, we simply ignore the error and
         # continue as if the client was not embedded in the page
