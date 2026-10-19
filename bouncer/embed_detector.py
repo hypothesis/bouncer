@@ -42,7 +42,7 @@ EMBEDDED_CLIENT_MARKERS = (
 CHUNK_SIZE = 64 * 1024
 
 #: Never read more than this many bytes of a page.
-MAX_BYTES_TO_CHECK = 1024 * 1024
+MAX_BYTES_TO_CHECK = 2 * 1024 * 1024
 
 #: Never spend more than this many seconds reading a page, in total.
 MAX_SECONDS_TO_CHECK = 3.0
