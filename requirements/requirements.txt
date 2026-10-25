@@ -6,7 +6,7 @@
 #
 cachetools==6.2.2
     # via -r requirements.in
-certifi==2026.2.25
+certifi==2026.10.19
     # via
     #   -r requirements.in
     #   requests
