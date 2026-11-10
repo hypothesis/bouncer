@@ -9,7 +9,7 @@ build==1.0.3
 click==8.1.7
     # via pip-tools
 flake8==7.3.0
-    # via -r requirements/lint.in
+    # via -r lint.in
 mccabe==0.7.0
     # via flake8
 packaging==26.3
@@ -17,10 +17,10 @@ packaging==26.3
     #   build
     #   wheel
 pip-sync-faster==0.0.5
-    # via -r requirements/lint.in
+    # via -r lint.in
 pip-tools==7.6.2
     # via
-    #   -r requirements/lint.in
+    #   -r lint.in
     #   pip-sync-faster
 pycodestyle==2.14.0
     # via flake8
@@ -36,5 +36,5 @@ wheel==0.48.0
 # The following packages are considered to be unsafe in a requirements file:
 pip==26.3
     # via pip-tools
-setuptools==84.2.1
+setuptools==84.1.0
     # via pip-tools

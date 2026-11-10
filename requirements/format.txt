@@ -5,7 +5,7 @@
 #    pip-compile --allow-unsafe requirements/format.in
 #
 black==26.10.1
-    # via -r requirements/format.in
+    # via -r format.in
 build==1.0.3
     # via pip-tools
 click==8.1.7
@@ -13,7 +13,7 @@ click==8.1.7
     #   black
     #   pip-tools
 isort==7.0.0
-    # via -r requirements/format.in
+    # via -r format.in
 mypy-extensions==1.0.0
     # via black
 packaging==26.3
@@ -24,10 +24,10 @@ packaging==26.3
 pathspec==1.1.1
     # via black
 pip-sync-faster==0.0.5
-    # via -r requirements/format.in
+    # via -r format.in
 pip-tools==7.6.2
     # via
-    #   -r requirements/format.in
+    #   -r format.in
     #   pip-sync-faster
 platformdirs==4.1.0
     # via black
@@ -43,5 +43,5 @@ wheel==0.48.0
 # The following packages are considered to be unsafe in a requirements file:
 pip==26.3
     # via pip-tools
-setuptools==84.2.1
+setuptools==84.1.0
     # via pip-tools
